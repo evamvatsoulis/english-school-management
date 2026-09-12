@@ -1,9 +1,11 @@
 const express = require("express");
 const config = require("./config/config");
+const studentRoutes = require('./routes/studentRoutes');
 
 const app = express();
 
 app.use(express.json());
+app.use('/students', studentRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Student Service is running" });
