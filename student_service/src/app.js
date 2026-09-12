@@ -1,6 +1,7 @@
 const express = require("express");
 const config = require("./config/config");
 const studentRoutes = require('./routes/studentRoutes');
+const { testDbConnection } = require('./config/db');
 
 const app = express();
 
@@ -14,3 +15,5 @@ app.get("/", (req, res) => {
 app.listen(config.studentServicePort, config.host, () => {
   console.log(`Student Service is running at http://${config.host}:${config.studentServicePort}`);
 });
+
+testDbConnection();
