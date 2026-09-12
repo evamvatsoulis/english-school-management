@@ -1,5 +1,6 @@
 const { pool } = require("../config/db");
 const { createStudentSchema, updateStudentSchema } = require('../schemas/studentSchema');
+const { findAllStudents, createNewStudent, updateStudentDetails } = require('../repositories/studentRepository');
 
 const studentDoesNotExist = (student) => student.rows.length === 0;
 
@@ -14,10 +15,10 @@ const updatedStudentData = (value, student) => {
 
 const getStudents = async (req, res) => {
     try {
-        const result = await pool.query("SELECT * FROM students");
-        return res.status(200).json(result.rows);
+        const result = await findAllStudents();
+        return res.status(200).json(result);
     } catch (err) {
-        return res.status(500).json({ error: "Failed to fetch students" });
+        return res.status(500).json({ error: err.message });
     }
 };
 
@@ -30,15 +31,9 @@ const createStudent = async (req, res) => {
         }
 
         const { firstName, lastName, phone, email } = value;
+        const result = await createNewStudent(firstName, lastName, phone, email);
 
-        const result = await pool.query(
-            `INSERT INTO students (first_name, last_name, phone, email)
-            VALUES ($1, $2, $3, $4)
-            RETURNING *`,
-            [firstName, lastName, phone, email]
-        );
-
-        return res.status(201).json(result.rows[0]);
+        return res.status(201).json(result);
     } catch (err) {
         return res.status(500).json({ error: "Failed to create student" });
     }
@@ -60,19 +55,9 @@ const updateStudent = async (req, res) => {
         }
 
         const { firstName, lastName, phone, email } = updatedStudentData(value, currentStudent.rows[0]);
-
-        const result = await pool.query(
-            `UPDATE students
-            SET first_name = $1,
-                last_name = $2,
-                phone = $3,
-                email = $4
-            WHERE id = $5
-            RETURNING *`,
-            [firstName, lastName, phone, email, id]
-        );
-
-        return res.status(200).json(result.rows[0]);
+        const result = await updateStudentDetails(firstName, lastName, phone, email, id);
+        
+        return res.status(200).json(result);
     } catch (err) {
         return res.status(500).json({ error: "Failed to update student" });
     }
