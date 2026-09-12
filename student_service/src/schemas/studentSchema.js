@@ -7,4 +7,11 @@ const createStudentSchema = Joi.object({
     email: Joi.string().trim().email().allow("", null)
 });
 
-module.exports = { createStudentSchema };
+const updateStudentSchema = Joi.object({
+    firstName: Joi.string().trim().min(2).max(100),
+    lastName: Joi.string().trim().min(2).max(100),
+    phone: Joi.string().trim().max(30).allow("", null),
+    email: Joi.string().trim().email().allow("", null)
+}).min(1);
+
+module.exports = { createStudentSchema, updateStudentSchema };
