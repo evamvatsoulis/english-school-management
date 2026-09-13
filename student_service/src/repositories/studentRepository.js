@@ -7,7 +7,7 @@ const findAllStudents = async () => {
     return result.rows;
 };
 
-const createNewStudent = async (firstName, lastName, phone, email) => {
+const createStudent = async (firstName, lastName, phone, email) => {
     const result = await pool.query(
         `INSERT INTO students (first_name, last_name, phone, email)
             VALUES ($1, $2, $3, $4)
@@ -17,7 +17,7 @@ const createNewStudent = async (firstName, lastName, phone, email) => {
     return result.rows[0];
 };
 
-const updateStudentDetails = async (firstName, lastName, phone, email, id) => {
+const updateStudent = async (firstName, lastName, phone, email, id) => {
     const result = await pool.query(
         `UPDATE students
         SET first_name = $1,
@@ -42,4 +42,15 @@ const deactivateStudent = async (id) => {
     return result.rows[0];
 };
 
-module.exports = { findStudent, findAllStudents, createNewStudent, updateStudentDetails, deactivateStudent };
+const activateStudent = async (id) => {
+    const result = await pool.query(
+        `UPDATE students
+        SET active = TRUE
+        WHERE id = $1
+        RETURNING *`,
+        [id]
+    );
+    return result.rows[0];
+};
+
+module.exports = { findStudent, findAllStudents, createStudent, updateStudent, deactivateStudent, activateStudent };

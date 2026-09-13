@@ -1,6 +1,13 @@
 const { pool } = require("../config/db");
 const { createStudentSchema, updateStudentSchema } = require('../schemas/studentSchema');
-const { findAllStudents, createNewStudent, findStudent, updateStudentDetails, deactivateStudent: deactivateStudentRepository } = require('../repositories/studentRepository');
+const {
+    findAllStudents,
+    createStudent: createStudentRepository,
+    findStudent,
+    updateStudent: updateStudentRepository,
+    deactivateStudent: deactivateStudentRepository,
+    activateStudent: activateStudentRepository
+} = require('../repositories/studentRepository');
 
 const studentDoesNotExist = (student) => student.rows.length === 0;
 
@@ -31,7 +38,7 @@ const createStudent = async (req, res) => {
         }
 
         const { firstName, lastName, phone, email } = value;
-        const result = await createNewStudent(firstName, lastName, phone, email);
+        const result = await createStudentRepository(firstName, lastName, phone, email);
 
         return res.status(201).json(result);
     } catch (err) {
@@ -55,8 +62,8 @@ const updateStudent = async (req, res) => {
         }
 
         const { firstName, lastName, phone, email } = updatedStudentData(value, currentStudent.rows[0]);
-        const result = await updateStudentDetails(firstName, lastName, phone, email, id);
-        
+        const result = await updateStudentRepository(firstName, lastName, phone, email, id);
+
         return res.status(200).json(result);
     } catch (err) {
         return res.status(500).json({ error: err.message });
@@ -76,9 +83,27 @@ const deactivateStudent = async (req, res) => {
         const result = await deactivateStudentRepository(id);
 
         return res.status(200).json(result);
-    } catch(err) {
+    } catch (err) {
         return res.status(500).json({ error: "Failed to deactivate student" });
     }
-}
+};
 
-module.exports = { getStudents, createStudent, updateStudent, deactivateStudent };
+const activateStudent = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const currentStudent = await findStudent(id);
+
+        if (studentDoesNotExist(currentStudent)) {
+            return res.status(404).json({ error: "Student not found" });
+        }
+
+        const result = await activateStudentRepository(id);
+
+        return res.status(200).json(result);
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to activate student" });
+    }
+};
+
+module.exports = { getStudents, createStudent, updateStudent, deactivateStudent, activateStudent };
