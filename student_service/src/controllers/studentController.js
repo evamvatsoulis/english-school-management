@@ -1,6 +1,6 @@
 const { pool } = require("../config/db");
 const { createStudentSchema, updateStudentSchema } = require('../schemas/studentSchema');
-const { findAllStudents, createNewStudent, updateStudentDetails } = require('../repositories/studentRepository');
+const { findAllStudents, createNewStudent, findStudent, updateStudentDetails, deactivateStudent: deactivateStudentRepository } = require('../repositories/studentRepository');
 
 const studentDoesNotExist = (student) => student.rows.length === 0;
 
@@ -48,7 +48,7 @@ const updateStudent = async (req, res) => {
             return res.status(400).json({ err: error.details[0].message });
         }
 
-        const currentStudent = await pool.query("SELECT * FROM students WHERE id=$1", [id]);
+        const currentStudent = await findStudent(id);
 
         if (studentDoesNotExist(currentStudent)) {
             return res.status(404).json({ error: "Student not found" });
@@ -59,8 +59,26 @@ const updateStudent = async (req, res) => {
         
         return res.status(200).json(result);
     } catch (err) {
-        return res.status(500).json({ error: "Failed to update student" });
+        return res.status(500).json({ error: err.message });
     }
 };
 
-module.exports = { getStudents, createStudent, updateStudent };
+const deactivateStudent = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const currentStudent = await findStudent(id);
+
+        if (studentDoesNotExist(currentStudent)) {
+            return res.status(404).json({ error: "Student not found" });
+        }
+
+        const result = await deactivateStudentRepository(id);
+
+        return res.status(200).json(result);
+    } catch(err) {
+        return res.status(500).json({ error: "Failed to deactivate student" });
+    }
+}
+
+module.exports = { getStudents, createStudent, updateStudent, deactivateStudent };

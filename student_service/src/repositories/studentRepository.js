@@ -1,5 +1,7 @@
 const { pool } = require('../config/db');
 
+const findStudent = async (id) => result = await pool.query("SELECT * FROM students WHERE id = $1", [id]);
+
 const findAllStudents = async () => {
     const result = await pool.query("SELECT * FROM students");
     return result.rows;
@@ -29,4 +31,15 @@ const updateStudentDetails = async (firstName, lastName, phone, email, id) => {
     return result.rows[0];
 };
 
-module.exports = { findAllStudents, createNewStudent, updateStudentDetails };
+const deactivateStudent = async (id) => {
+    const result = await pool.query(
+        `UPDATE students
+        SET active = FALSE
+        WHERE id = $1
+        RETURNING *`,
+        [id]
+    );
+    return result.rows[0];
+};
+
+module.exports = { findStudent, findAllStudents, createNewStudent, updateStudentDetails, deactivateStudent };
