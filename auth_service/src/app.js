@@ -2,17 +2,15 @@ const express = require("express");
 const config = require("./config/config");
 const registerRoutes = require('./routes/registerRoutes');
 const loginRoutes = require('./routes/loginRoutes');
+const healthRoutes = require('./routes/healthRoutes');
 const { testDbConnection } = require('./config/db');
 
 const app = express();
 
 app.use(express.json());
-app.use('/register', registerRoutes);
+app.use('/', registerRoutes);
 app.use('/login', loginRoutes);
-
-app.get("/", (req, res) => {
-  res.json({ message: "Auth Service is running" });
-});
+app.use('/health', healthRoutes);
 
 app.listen(config.authServicePort, config.host, () => {
   console.log(`Auth Service is running at http://${config.host}:${config.authServicePort}`);
