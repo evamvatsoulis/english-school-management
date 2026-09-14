@@ -1,7 +1,14 @@
 const config = require('../config/config');
 const { services } = require('../config/config');
 
-const getServiceHealth = async (serviceName, port) => {
+const getPortByServiceName = (serviceName) => {
+    const service = services.find(service => service.name === serviceName);
+    if (service) {
+        return service.port;
+    }
+};
+
+const checkServiceHealth = async (serviceName, port) => {
     try {
         const response = await fetch(`http://${config.host}:${port}/health`);
         return await response.json();
@@ -17,9 +24,19 @@ const getServiceHealth = async (serviceName, port) => {
 const getAllHealths = async (req, res) => {
     const healths = [];
     for (const service of services) {
-        healths.push(await getServiceHealth(service.name, service.port));
+        healths.push(await checkServiceHealth(service.name, service.port));
     }
     res.status(200).json(healths);
 };
 
-module.exports = { getAllHealths };
+const getServiceHealth = async (req, res) => {
+    const { serviceName } = req.params;
+    const servicePort = getPortByServiceName(serviceName);
+
+    if (!servicePort) {
+        return res.status(404).json({ error: "Service not found" });
+    }
+    res.status(200).json(await checkServiceHealth(serviceName, servicePort));
+};
+
+module.exports = { getAllHealths, getServiceHealth };
