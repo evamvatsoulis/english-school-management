@@ -30,4 +30,32 @@ const paymentSchema = Joi.object({
         .allow("", null)
 });
 
-module.exports = { paymentSchema };
+const updatePaymentSchema = Joi.object({
+    studentId: Joi.number().integer().positive(),
+
+    amount: Joi.number().positive().precision(2),
+
+    paymentMonth: Joi.number()
+        .integer()
+        .min(1)
+        .max(12),
+
+    paymentYear: Joi.number()
+        .integer()
+        .min(2000)
+        .max(2100),
+
+    paymentDate: Joi.date(),
+
+    paymentMethod: Joi.string()
+        .trim()
+        .max(50)
+        .allow("", null),
+
+    notes: Joi.string()
+        .trim()
+        .max(500)
+        .allow("", null)
+}).min(1);
+
+module.exports = { paymentSchema, updatePaymentSchema };
