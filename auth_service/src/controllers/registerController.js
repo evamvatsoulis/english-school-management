@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { register: registerRepository } = require('../repositories/registerRepository');
+const { register: registerRepository, getUsers: getUsersRepository } = require('../repositories/registerRepository');
 
 const encryptPassword = async (password) => bcrypt.hash(password, 10);
 
@@ -16,4 +16,13 @@ const register = async (req, res) => {
     }
 };
 
-module.exports = { register };
+const getUsers = async (req, res) => {
+    try {
+        const result = await getUsersRepository();
+        return res.status(200).json(result.rows);
+    } catch (error) {
+        return res.status(500).json({ error: error.message})
+    }
+};
+
+module.exports = { register, getUsers };

@@ -10,4 +10,8 @@ const register = async (email, passwordHash, role) => {
     return result;
 };
 
-module.exports = { register };
+const getUsers = async () => {
+    return await pool.query("SELECT * FROM users");
+};
+
+module.exports = { register, getUsers };
