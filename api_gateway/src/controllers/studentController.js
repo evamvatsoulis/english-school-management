@@ -4,13 +4,30 @@ const getStudents = async (req, res) => {
     try {
         const response = await fetch(`http://${config.host}:${config.studentServicePort}/students`);
         const result = await response.json();
-        if(!response.ok){
-            return res.status(400).json({ error: result.error });
-        }
-        return res.status(200).json(result);
+        
+        return res.status(response.status).json(result);
     } catch (error) {
         return res.status(500).json({ error: "Failed to fetch students" });
     }
 };
 
-module.exports = { getStudents };
+const createStudent = async (req, res) => {
+    try {
+        const response = await fetch(
+            `http://${config.host}:${config.studentServicePort}/students`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(req.body)
+            }
+        );
+        const result = await response.json();
+        return res.status(response.status).json(result);
+    } catch (error) {
+        return res.status(503).json({ error: "Failed to create student" });
+    }
+};
+
+module.exports = { getStudents, createStudent };
