@@ -1,12 +1,14 @@
 const express = require("express");
 const config = require("./config/config");
 const registerRoutes = require('./routes/registerRoutes');
+const loginRoutes = require('./routes/loginRoutes');
 const { testDbConnection } = require('./config/db');
 
 const app = express();
 
 app.use(express.json());
 app.use('/register', registerRoutes);
+app.use('/login', loginRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Auth Service is running" });
