@@ -1,4 +1,3 @@
-const { pool } = require("../config/db");
 const { createStudentSchema, updateStudentSchema } = require('../schemas/studentSchema');
 const {
     findAllStudents,
