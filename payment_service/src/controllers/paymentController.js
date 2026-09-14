@@ -1,5 +1,11 @@
 const { paymentSchema } = require('../schemas/paymentSchema');
-const { getPayments: getPaymentsRepository, createPayment: createPaymentRepository } = require('../repositories/paymentRepository');
+const {
+    getPayments: getPaymentsRepository,
+    createPayment: createPaymentRepository,
+    getPaymentById: getPaymentByIdRepository
+} = require('../repositories/paymentRepository');
+
+const paymentDoesNotExist = (payment) => payment.rows.length === 0;
 
 const getPayments = async (req, res) => {
     try {
@@ -27,4 +33,20 @@ const createPayment = async (req, res) => {
     }
 };
 
-module.exports = { getPayments, createPayment };
+const getPaymentById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const payment = await getPaymentByIdRepository(id);
+
+        if(paymentDoesNotExist(payment)){
+            return res.status(404).json({ error: "Payment not found" });
+        }
+
+        return res.status(200).json(payment.rows[0]);
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to fetch payment" });
+    }
+};
+
+module.exports = { getPayments, createPayment, getPaymentById };

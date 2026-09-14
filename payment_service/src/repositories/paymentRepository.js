@@ -15,4 +15,12 @@ const createPayment = async (studentId, amount, paymentMonth, paymentYear, payme
     return result.rows[0];
 };
 
-module.exports = { getPayments, createPayment };
+const getPaymentById = async (id) => {
+    const result = await pool.query(
+        `SELECT * FROM payments
+        WHERE id = $1`, [id]
+    );
+    return result;
+};
+
+module.exports = { getPayments, createPayment, getPaymentById };
