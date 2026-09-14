@@ -23,4 +23,12 @@ const getPaymentById = async (id) => {
     return result;
 };
 
-module.exports = { getPayments, createPayment, getPaymentById };
+const getPaymentByStudentId = async (studentId) => {
+    const result = await pool.query(
+        `SELECT * FROM payments
+        WHERE student_id = $1`, [studentId]
+    );
+    return result;
+}
+
+module.exports = { getPayments, createPayment, getPaymentById, getPaymentByStudentId };

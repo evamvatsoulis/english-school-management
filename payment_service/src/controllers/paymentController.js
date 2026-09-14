@@ -2,7 +2,8 @@ const { paymentSchema } = require('../schemas/paymentSchema');
 const {
     getPayments: getPaymentsRepository,
     createPayment: createPaymentRepository,
-    getPaymentById: getPaymentByIdRepository
+    getPaymentById: getPaymentByIdRepository,
+    getPaymentByStudentId: getPaymentByStudentIdRepository
 } = require('../repositories/paymentRepository');
 
 const paymentDoesNotExist = (payment) => payment.rows.length === 0;
@@ -39,7 +40,7 @@ const getPaymentById = async (req, res) => {
 
         const payment = await getPaymentByIdRepository(id);
 
-        if(paymentDoesNotExist(payment)){
+        if (paymentDoesNotExist(payment)) {
             return res.status(404).json({ error: "Payment not found" });
         }
 
@@ -49,4 +50,19 @@ const getPaymentById = async (req, res) => {
     }
 };
 
-module.exports = { getPayments, createPayment, getPaymentById };
+const getPaymentByStudentId = async (req, res) => {
+    try {
+        const { studentId } = req.params;
+        const payment = await getPaymentByStudentIdRepository(studentId);
+
+        if (paymentDoesNotExist(payment)) {
+            return res.status(404).json({ error: "Payment not found" });
+        }
+
+        return res.status(200).json(payment.rows[0]);
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to fetch payment" });
+    }
+}
+
+module.exports = { getPayments, createPayment, getPaymentById, getPaymentByStudentId };
