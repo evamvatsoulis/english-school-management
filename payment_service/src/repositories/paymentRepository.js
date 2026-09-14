@@ -29,6 +29,23 @@ const getPaymentByStudentId = async (studentId) => {
         WHERE student_id = $1`, [studentId]
     );
     return result;
+};
+
+const updatePayment = async (studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes, id) => {
+    const result = await pool.query(
+        `UPDATE payments
+        SET student_id = $1,
+            amount = $2,
+            payment_month = $3,
+            payment_year = $4,
+            payment_date = $5,
+            payment_method = $6,
+            notes = $7
+        WHERE id = $8
+        RETURNING *`,
+        [studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes, id]
+    );
+    return result;
 }
 
-module.exports = { getPayments, createPayment, getPaymentById, getPaymentByStudentId };
+module.exports = { getPayments, createPayment, getPaymentById, getPaymentByStudentId, updatePayment };
