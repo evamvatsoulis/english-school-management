@@ -40,4 +40,15 @@ const getPaymentById = async (req, res) => {
     }
 };
 
-module.exports = { getPayments, createPayment, getPaymentById };
+const getPaymentByStudentId = async (req, res) => {
+    try {
+        const { studentId } = req.params;
+        const response = await fetch(`http://${config.host}:${config.paymentServicePort}/payments/students/${studentId}`);
+        const result = await response.json();
+        return res.status(response.status).json(result);
+    } catch (error) {
+        return res.status(503).json({ error: "Failed to fetch payment" });
+    }
+};
+
+module.exports = { getPayments, createPayment, getPaymentById, getPaymentByStudentId };
