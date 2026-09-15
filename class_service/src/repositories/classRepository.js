@@ -20,4 +20,17 @@ const getClass = async (id) => {
     return result.rows[0];
 };
 
-module.exports = { createClass, getClasses, getClass };
+const updateClass = async (name, schoolYear, monthlyFee, id) => {
+    const result = await pool.query(
+        `UPDATE classes
+        SET name = $1,
+            school_year = $2,
+            monthly_fee = $3
+        WHERE id = $4
+        RETURNING *`,
+        [name, schoolYear, monthlyFee, id]
+    );
+    return result.rows[0];
+};
+
+module.exports = { createClass, getClasses, getClass, updateClass };
