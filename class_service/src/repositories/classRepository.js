@@ -33,4 +33,14 @@ const updateClass = async (name, schoolYear, monthlyFee, id) => {
     return result.rows[0];
 };
 
-module.exports = { createClass, getClasses, getClass, updateClass };
+const deactivateClass = async (id) => {
+    const result = await pool.query(`UPDATE classes SET active = FALSE WHERE id = $1 RETURNING *`, [id]);
+    return result.rows[0];
+};
+
+const activateClass = async (id) => {
+    const result = await pool.query(`UPDATE classes SET active = TRUE WHERE id = $1 RETURNING *`, [id]);
+    return result.rows[0];
+};
+
+module.exports = { createClass, getClasses, getClass, updateClass, deactivateClass, activateClass };

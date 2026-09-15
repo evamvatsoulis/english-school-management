@@ -3,7 +3,9 @@ const {
     createClass: createClassRepository,
     getClasses: getClassesRepository,
     getClass: getClassRepository,
-    updateClass: updateClassRepository
+    updateClass: updateClassRepository,
+    deactivateClass: deactivateClassRepository,
+    activateClass: activateClassRepository
 } = require('../repositories/classRepository');
 
 const updateClassData = (value, className) => {
@@ -78,4 +80,34 @@ const updateClass = async (req, res) => {
     }
 };
 
-module.exports = { createClass, getClasses, getClass, updateClass };
+const deactivateClass = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const currentClass = await getClassRepository(id);
+
+        if (!currentClass) {
+            return res.status(404).json({ error: "Class not found" });
+        }
+        const result = await deactivateClassRepository(id);
+        return res.status(200).json(result);
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+};
+
+const activateClass = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const currentClass = await getClassRepository(id);
+
+        if (!currentClass) {
+            return res.status(404).json({ error: "Class not found" });
+        }
+        const result = await activateClassRepository(id);
+        return res.status(200).json(result);
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+};
+
+module.exports = { createClass, getClasses, getClass, updateClass, deactivateClass, activateClass };
