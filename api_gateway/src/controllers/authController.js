@@ -10,6 +10,25 @@ const getUsers = async (req, res) => {
     }
 };
 
+const createUser = async (req, res) => {
+    try {
+        const response = await fetch(
+            `http://${config.host}:${config.authServicePort}/auth/register`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(req.body)
+            }
+        );
+        const result = await response.json();
+        return res.status(response.status).json(result);
+    } catch (error) {
+        return res.status(503).json({ error: "Failed to create user" });
+    }
+};
+
 const login = async (req, res) => {
     try {
         const response = await fetch(
@@ -29,4 +48,4 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { getUsers, login };
+module.exports = { getUsers, createUser, login };
