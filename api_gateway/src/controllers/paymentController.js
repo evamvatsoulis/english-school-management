@@ -27,6 +27,17 @@ const createPayment = async (req, res) => {
     } catch (error) {
         return res.status(503).json({ error: "Failed to create payment" });
     }
-}
+};
 
-module.exports = { getPayments, createPayment };
+const getPaymentById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const response = await fetch(`http://${config.host}:${config.paymentServicePort}/payments/${id}`);
+        const result = await response.json();
+        return res.status(response.status).json(result);
+    } catch (error) {
+        return res.status(503).json({ error: "Failed to fetch payment" });
+    }
+};
+
+module.exports = { getPayments, createPayment, getPaymentById };
