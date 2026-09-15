@@ -1,5 +1,9 @@
 const { classSchema } = require('../schemas/classSchema');
-const { createClass: createClassRepository, getClasses: getClassesRepository } = require('../repositories/classRepository');
+const {
+    createClass: createClassRepository,
+    getClasses: getClassesRepository,
+    getClass: getClassRepository
+} = require('../repositories/classRepository');
 
 const createClass = async (req, res) => {
     try {
@@ -27,4 +31,18 @@ const getClasses = async (req, res) => {
     }
 };
 
-module.exports = { createClass, getClasses };
+const getClass = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await getClassRepository(id);
+
+        if (!result) {
+            return res.status(404).json({ error: "Class not found" });
+        }
+        return res.status(200).json(result);
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+}
+
+module.exports = { createClass, getClasses, getClass };

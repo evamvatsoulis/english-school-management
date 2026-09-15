@@ -13,6 +13,11 @@ const createClass = async (name, schoolYear, monthlyFee) => {
 const getClasses = async () => {
     const result = await pool.query("SELECT * FROM classes");
     return result.rows;
-}
+};
 
-module.exports = { createClass, getClasses };
+const getClass = async (id) => {
+    const result = await pool.query(`SELECT * FROM classes WHERE id = $1`, [id]);
+    return result.rows[0];
+};
+
+module.exports = { createClass, getClasses, getClass };
