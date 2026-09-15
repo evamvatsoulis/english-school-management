@@ -12,8 +12,12 @@ const services = [
   {
     name: "auth-service",
     port: process.env.AUTH_SERVICE_PORT
+  },
+  {
+    name: "class-service",
+    port: process.env.CLASS_SERVICE_PORT
   }
-]
+];
 
 module.exports = {
   apiGatewayPort: process.env.API_GATEWAY_PORT,
