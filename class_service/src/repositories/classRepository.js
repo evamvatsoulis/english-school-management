@@ -10,4 +10,9 @@ const createClass = async (name, schoolYear, monthlyFee) => {
     return result.rows[0];
 };
 
-module.exports = { createClass };
+const getClasses = async () => {
+    const result = await pool.query("SELECT * FROM classes");
+    return result.rows;
+}
+
+module.exports = { createClass, getClasses };
