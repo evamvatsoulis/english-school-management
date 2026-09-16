@@ -1,3 +1,5 @@
+const config = require('../config/config');
+
 const { enrollmentSchema } = require('../schemas/enrollmentSchema');
 const {
     createEnrollment: createEnrollmentRepository,
@@ -7,12 +9,20 @@ const {
 
 const zeroRows = (result) => result.length === 0;
 
+const fetchStudent = async (studentId) => await fetch(`http://${config.host}:${config.studentServicePort}/students/${studentId}`);
+
 const createEnrollment = async (req, res) => {
     try {
         const { error, value } = enrollmentSchema.validate(req.body);
 
         if (error) {
             return res.status(400).json({ err: error.details[0].message });
+        }
+
+        const studentResponse = await fetchStudent(value.studentId);
+
+        if (!studentResponse.ok) {
+            return res.status(studentResponse.status).json(await studentResponse.json());
         }
 
         const { studentId, classId } = value;
