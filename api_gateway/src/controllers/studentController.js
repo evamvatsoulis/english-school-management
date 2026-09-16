@@ -7,7 +7,7 @@ const getStudents = async (req, res) => {
 
         return res.status(response.status).json(result);
     } catch (error) {
-        return res.status(500).json({ error: "Failed to fetch students" });
+        return res.status(503).json({ error: "Failed to fetch students" });
     }
 };
 
@@ -46,7 +46,7 @@ const updateStudent = async (req, res) => {
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
-        return res.status(503).json({ error: "Failed to create student" });
+        return res.status(503).json({ error: "Failed to update student" });
     }
 };
 
