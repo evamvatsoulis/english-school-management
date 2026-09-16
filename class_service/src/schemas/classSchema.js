@@ -4,7 +4,6 @@ const classSchema = Joi.object({
     name: Joi.string()
         .trim()
         .min(2)
-        .max(100)
         .required(),
 
     schoolYear: Joi.string()
@@ -20,8 +19,7 @@ const classSchema = Joi.object({
 const updateClassSchema = Joi.object({
     name: Joi.string()
         .trim()
-        .min(2)
-        .max(100),
+        .min(2),
 
     schoolYear: Joi.string()
         .pattern(/^\d{4}-\d{4}$/),

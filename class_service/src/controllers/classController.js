@@ -2,7 +2,7 @@ const { classSchema, updateClassSchema } = require('../schemas/classSchema');
 const {
     createClass: createClassRepository,
     getClasses: getClassesRepository,
-    getClass: getClassRepository,
+    getClassById: getClassByIdRepository,
     updateClass: updateClassRepository,
     deactivateClass: deactivateClassRepository,
     activateClass: activateClassRepository
@@ -29,7 +29,7 @@ const createClass = async (req, res) => {
 
         return res.status(201).json(result);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: "Failed to create class" });
     }
 };
 
@@ -38,21 +38,21 @@ const getClasses = async (req, res) => {
         const result = await getClassesRepository();
         return res.status(201).json(result);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: "Failed to fetch classes" });
     }
 };
 
-const getClass = async (req, res) => {
+const getClassById = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await getClassRepository(id);
+        const result = await getClassByIdRepository(id);
 
         if (!result) {
             return res.status(404).json({ error: "Class not found" });
         }
         return res.status(200).json(result);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: "Failed to get class" });
     }
 };
 
@@ -65,7 +65,7 @@ const updateClass = async (req, res) => {
             return res.status(400).json({ err: error.details[0].message });
         }
 
-        const currentClass = await getClassRepository(id);
+        const currentClass = await getClassByIdRepository(id);
 
         if (!currentClass) {
             return res.status(404).json({ error: "Class not found" });
@@ -76,14 +76,14 @@ const updateClass = async (req, res) => {
 
         return res.status(200).json(result);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: "Failed to update class" });
     }
 };
 
 const deactivateClass = async (req, res) => {
     try {
         const { id } = req.params;
-        const currentClass = await getClassRepository(id);
+        const currentClass = await getClassByIdRepository(id);
 
         if (!currentClass) {
             return res.status(404).json({ error: "Class not found" });
@@ -91,14 +91,14 @@ const deactivateClass = async (req, res) => {
         const result = await deactivateClassRepository(id);
         return res.status(200).json(result);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: "Failed to deactivate class" });
     }
 };
 
 const activateClass = async (req, res) => {
     try {
         const { id } = req.params;
-        const currentClass = await getClassRepository(id);
+        const currentClass = await getClassByIdRepository(id);
 
         if (!currentClass) {
             return res.status(404).json({ error: "Class not found" });
@@ -106,8 +106,8 @@ const activateClass = async (req, res) => {
         const result = await activateClassRepository(id);
         return res.status(200).json(result);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: "Failed to activate class" });
     }
 };
 
-module.exports = { createClass, getClasses, getClass, updateClass, deactivateClass, activateClass };
+module.exports = { createClass, getClasses, getClassById, updateClass, deactivateClass, activateClass };

@@ -11,11 +11,11 @@ const createClass = async (name, schoolYear, monthlyFee) => {
 };
 
 const getClasses = async () => {
-    const result = await pool.query("SELECT * FROM classes");
+    const result = await pool.query("SELECT * FROM classes ORDER BY id");
     return result.rows;
 };
 
-const getClass = async (id) => {
+const getClassById = async (id) => {
     const result = await pool.query(`SELECT * FROM classes WHERE id = $1`, [id]);
     return result.rows[0];
 };
@@ -43,4 +43,4 @@ const activateClass = async (id) => {
     return result.rows[0];
 };
 
-module.exports = { createClass, getClasses, getClass, updateClass, deactivateClass, activateClass };
+module.exports = { createClass, getClasses, getClassById, updateClass, deactivateClass, activateClass };
