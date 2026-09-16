@@ -2,10 +2,10 @@ const { pool } = require('../config/db');
 
 const createClass = async (name, schoolYear, monthlyFee) => {
     const result = await pool.query(
-        `INSERT INTO classes (name, school_year, monthly_fee)
-            VALUES ($1, $2, $3)
+        `INSERT INTO classes (name, school_year)
+            VALUES ($1, $2)
             RETURNING *`,
-        [name, schoolYear, monthlyFee]
+        [name, schoolYear]
     );
     return result.rows[0];
 };
@@ -20,15 +20,14 @@ const getClassById = async (id) => {
     return result.rows[0];
 };
 
-const updateClass = async (name, schoolYear, monthlyFee, id) => {
+const updateClass = async (name, schoolYear, id) => {
     const result = await pool.query(
         `UPDATE classes
         SET name = $1,
-            school_year = $2,
-            monthly_fee = $3
-        WHERE id = $4
+            school_year = $2
+        WHERE id = $3
         RETURNING *`,
-        [name, schoolYear, monthlyFee, id]
+        [name, schoolYear, id]
     );
     return result.rows[0];
 };

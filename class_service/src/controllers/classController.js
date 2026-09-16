@@ -11,7 +11,6 @@ const {
 const updateClassData = (value, className) => {
     const name = value.name ?? className.name;
     const schoolYear = value.schoolYear ?? className.school_year;
-    const monthlyFee = value.monthlyFee ?? className.monthly_fee;
 
     return { name, schoolYear, monthlyFee };
 };
@@ -24,8 +23,8 @@ const createClass = async (req, res) => {
             return res.status(400).json({ err: error.details[0].message });
         }
 
-        const { name, schoolYear, monthlyFee } = value;
-        const result = await createClassRepository(name, schoolYear, monthlyFee);
+        const { name, schoolYear } = value;
+        const result = await createClassRepository(name, schoolYear);
 
         return res.status(201).json(result);
     } catch (err) {
@@ -71,8 +70,8 @@ const updateClass = async (req, res) => {
             return res.status(404).json({ error: "Class not found" });
         }
 
-        const { name, schoolYear, monthlyFee } = updateClassData(value, currentClass);
-        const result = await updateClassRepository(name, schoolYear, monthlyFee, id);
+        const { name, schoolYear } = updateClassData(value, currentClass);
+        const result = await updateClassRepository(name, schoolYear, id);
 
         return res.status(200).json(result);
     } catch (err) {
