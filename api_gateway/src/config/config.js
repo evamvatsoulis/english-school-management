@@ -24,6 +24,7 @@ module.exports = {
   studentServicePort: process.env.STUDENT_SERVICE_PORT,
   paymentServicePort: process.env.PAYMENT_SERVICE_PORT,
   authServicePort: process.env.AUTH_SERVICE_PORT,
+  classServicePort: process.env.CLASS_SERVICE_PORT,
   host: process.env.HOST,
   services
 };
