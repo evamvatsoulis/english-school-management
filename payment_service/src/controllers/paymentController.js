@@ -1,3 +1,4 @@
+const config = require('../config/config');
 const { paymentSchema, updatePaymentSchema } = require('../schemas/paymentSchema');
 const {
     getPayments: getPaymentsRepository,
@@ -21,6 +22,8 @@ const updatePaymentData = (value, payment) => {
     return { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes };
 };
 
+const fetchStudent = async (studentId) => await fetch(`http://${config.host}:${config.studentServicePort}/students/${studentId}`);
+
 const getPayments = async (req, res) => {
     try {
         const result = await getPaymentsRepository();
@@ -36,6 +39,12 @@ const createPayment = async (req, res) => {
 
         if (error) {
             return res.status(400).json({ err: error.details[0].message });
+        }
+
+        const response = await fetchStudent(value.studentId);
+
+        if(!response.ok) {
+            return res.status(response.status).json(await response.json());
         }
 
         const { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes } = value;
