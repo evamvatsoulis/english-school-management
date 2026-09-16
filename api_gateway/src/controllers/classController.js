@@ -40,4 +40,24 @@ const getClassById = async (req, res) => {
     };
 };
 
-module.exports = { createClass, getClasses, getClassById };
+const updateClass = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const response = await fetch(
+            `http://${config.host}:${config.classServicePort}/classes/${id}`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(req.body)
+            }
+        );
+        const result = await response.json();
+        return res.status(response.status).json(result);
+    } catch (err) {
+        return res.status(503).json({ error: err.message });
+    }
+};
+
+module.exports = { createClass, getClasses, getClassById, updateClass };
