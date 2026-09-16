@@ -8,11 +8,6 @@ const classSchema = Joi.object({
 
     schoolYear: Joi.string()
         .pattern(/^\d{4}-\d{4}$/)
-        .required(),
-
-    monthlyFee: Joi.number()
-        .positive()
-        .precision(2)
         .required()
 });
 
@@ -22,11 +17,7 @@ const updateClassSchema = Joi.object({
         .min(2),
 
     schoolYear: Joi.string()
-        .pattern(/^\d{4}-\d{4}$/),
-
-    monthlyFee: Joi.number()
-        .positive()
-        .precision(2)
+        .pattern(/^\d{4}-\d{4}$/)
 }).min(1);
 
 module.exports = { classSchema, updateClassSchema };
