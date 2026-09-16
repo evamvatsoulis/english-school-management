@@ -3,7 +3,7 @@ const {
     getPayments: getPaymentsRepository,
     createPayment: createPaymentRepository,
     getPaymentById: getPaymentByIdRepository,
-    getPaymentByStudentId: getPaymentByStudentIdRepository,
+    getPaymentsByStudentId: getPaymentsByStudentIdRepository,
     updatePayment: updatePaymentRepository
 } = require('../repositories/paymentRepository');
 
@@ -63,10 +63,10 @@ const getPaymentById = async (req, res) => {
     }
 };
 
-const getPaymentByStudentId = async (req, res) => {
+const getPaymentsByStudentId = async (req, res) => {
     try {
         const { studentId } = req.params;
-        const payment = await getPaymentByStudentIdRepository(studentId);
+        const payment = await getPaymentsByStudentIdRepository(studentId);
 
         if (paymentDoesNotExist(payment)) {
             return res.status(404).json({ error: "Payment not found" });
@@ -101,4 +101,4 @@ const updatePayment = async (req, res) => {
     }
 };
 
-module.exports = { getPayments, createPayment, getPaymentById, getPaymentByStudentId, updatePayment };
+module.exports = { getPayments, createPayment, getPaymentById, getPaymentsByStudentId, updatePayment };

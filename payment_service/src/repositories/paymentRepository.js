@@ -20,7 +20,7 @@ const getPaymentById = async (id) => {
     return result;
 };
 
-const getPaymentByStudentId = async (studentId) => {
+const getPaymentsByStudentId = async (studentId) => {
     const result = await pool.query(`SELECT * FROM payments WHERE student_id = $1 ORDER BY id`, [studentId]);
     return result;
 };
@@ -42,4 +42,4 @@ const updatePayment = async (studentId, amount, paymentMonth, paymentYear, payme
     return result.rows[0];
 };
 
-module.exports = { getPayments, createPayment, getPaymentById, getPaymentByStudentId, updatePayment };
+module.exports = { getPayments, createPayment, getPaymentById, getPaymentsByStudentId, updatePayment };
