@@ -1,6 +1,7 @@
 const config = require('../config/config');
 
 const { enrollmentSchema } = require('../schemas/enrollmentSchema');
+const { getClassById } = require('../repositories/classRepository');
 const {
     createEnrollment: createEnrollmentRepository,
     getEnrollmentsByStudent: getEnrollmentsByStudentRepository,
@@ -23,6 +24,12 @@ const createEnrollment = async (req, res) => {
 
         if (!studentResponse.ok) {
             return res.status(studentResponse.status).json(await studentResponse.json());
+        }
+
+        const classResponse = await getClassById(value.classId);
+
+        if (!classResponse) {
+            return res.status(404).json({ error: "Class not found" });
         }
 
         const { studentId, classId } = value;
