@@ -21,12 +21,10 @@ const paymentSchema = Joi.object({
 
     paymentMethod: Joi.string()
         .trim()
-        .max(50)
         .allow("", null),
 
     notes: Joi.string()
         .trim()
-        .max(500)
         .allow("", null)
 });
 
@@ -49,12 +47,10 @@ const updatePaymentSchema = Joi.object({
 
     paymentMethod: Joi.string()
         .trim()
-        .max(50)
         .allow("", null),
 
     notes: Joi.string()
         .trim()
-        .max(500)
         .allow("", null)
 }).min(1);
 

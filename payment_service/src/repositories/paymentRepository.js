@@ -1,33 +1,27 @@
 const { pool } = require('../config/db');
 
 const getPayments = async () => {
-    const result = await pool.query("SELECT * FROM payments");
+    const result = await pool.query("SELECT * FROM payments ORDER BY id");
     return result.rows;
-}
+};
 
 const createPayment = async (studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes) => {
     const result = await pool.query(
         `INSERT INTO payments (student_id, amount, payment_month, payment_year, payment_date, payment_method, notes)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
-            RETURNING *`,
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING *`,
         [studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes]
     );
     return result.rows[0];
 };
 
 const getPaymentById = async (id) => {
-    const result = await pool.query(
-        `SELECT * FROM payments
-        WHERE id = $1`, [id]
-    );
+    const result = await pool.query(`SELECT * FROM payments WHERE id = $1`, [id]);
     return result;
 };
 
 const getPaymentByStudentId = async (studentId) => {
-    const result = await pool.query(
-        `SELECT * FROM payments
-        WHERE student_id = $1`, [studentId]
-    );
+    const result = await pool.query(`SELECT * FROM payments WHERE student_id = $1 ORDER BY id`, [studentId]);
     return result;
 };
 
@@ -45,7 +39,7 @@ const updatePayment = async (studentId, amount, paymentMonth, paymentYear, payme
         RETURNING *`,
         [studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes, id]
     );
-    return result;
-}
+    return result.rows[0];
+};
 
 module.exports = { getPayments, createPayment, getPaymentById, getPaymentByStudentId, updatePayment };

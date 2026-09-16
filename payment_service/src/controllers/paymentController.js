@@ -28,7 +28,7 @@ const getPayments = async (req, res) => {
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch payments" });
     }
-}
+};
 
 const createPayment = async (req, res) => {
     try {
@@ -43,7 +43,7 @@ const createPayment = async (req, res) => {
 
         return res.status(201).json(result);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: "Failed to create payment" });
     }
 };
 
@@ -72,7 +72,7 @@ const getPaymentByStudentId = async (req, res) => {
             return res.status(404).json({ error: "Payment not found" });
         }
 
-        return res.status(200).json(payment.rows[0]);
+        return res.status(200).json(payment.rows);
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch payment" });
     }
@@ -95,9 +95,9 @@ const updatePayment = async (req, res) => {
         const { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes } = updatePaymentData(value, currentPayment.rows[0]);
         const result = await updatePaymentRepository(studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes, id);
 
-        return res.status(200).json(result.rows[0]);
+        return res.status(200).json(result);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: "Failed to update payment" });
     }
 };
 

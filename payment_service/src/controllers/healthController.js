@@ -1,5 +1,5 @@
 const getHealth = async (req, res) => {
-    res.status(200).json({
+    return res.status(200).json({
         status: "OK",
         service: "Payment Service",
         lastTimeChecked: new Date().toISOString()
