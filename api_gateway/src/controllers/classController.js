@@ -19,4 +19,14 @@ const createClass = async (req, res) => {
     }
 };
 
-module.exports = {createClass};
+const getClasses = async (req, res) => {
+    try {
+        const response = await fetch(`http://${config.host}:${config.classServicePort}/classes`);
+        const result = await response.json();
+        return res.status(response.status).json(result);
+    } catch (err) {
+        return res.status(503).json({ error: err.message });
+    };
+};
+
+module.exports = { createClass, getClasses };
