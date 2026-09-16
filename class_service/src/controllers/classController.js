@@ -12,7 +12,7 @@ const updateClassData = (value, className) => {
     const name = value.name ?? className.name;
     const schoolYear = value.schoolYear ?? className.school_year;
 
-    return { name, schoolYear, monthlyFee };
+    return { name, schoolYear };
 };
 
 const createClass = async (req, res) => {

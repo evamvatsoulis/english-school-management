@@ -1,6 +1,6 @@
 const { pool } = require('../config/db');
 
-const createClass = async (name, schoolYear, monthlyFee) => {
+const createClass = async (name, schoolYear) => {
     const result = await pool.query(
         `INSERT INTO classes (name, school_year)
             VALUES ($1, $2)
