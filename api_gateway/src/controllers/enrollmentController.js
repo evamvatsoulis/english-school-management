@@ -30,4 +30,15 @@ const getEnrollmentsByStudent = async (req, res) => {
     }
 };
 
-module.exports = { createEnrollment, getEnrollmentsByStudent };
+const getEnrollmentsByClass = async (req, res) => {
+    try {
+        const { classId } = req.params;
+        const response = await fetch(`http://${config.host}:${config.classServicePort}/enrollments/class/${classId}`);
+        const result = await response.json();
+        return res.status(response.status).json(result);
+    } catch (err) {
+        return res.status(503).json({ error: err.message });
+    }
+};
+
+module.exports = { createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass };
