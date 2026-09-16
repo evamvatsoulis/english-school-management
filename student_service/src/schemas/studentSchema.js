@@ -1,17 +1,17 @@
 const Joi = require("joi");
 
-const createStudentSchema = Joi.object({
-    firstName: Joi.string().trim().min(2).max(100).required(),
-    lastName: Joi.string().trim().min(2).max(100).required(),
-    phone: Joi.string().trim().max(30).allow("", null),
+const studentSchema = Joi.object({
+    firstName: Joi.string().trim().min(2).required(),
+    lastName: Joi.string().trim().min(2).required(),
+    phone: Joi.string().trim().allow("", null),
     email: Joi.string().trim().email().allow("", null)
 });
 
 const updateStudentSchema = Joi.object({
-    firstName: Joi.string().trim().min(2).max(100),
-    lastName: Joi.string().trim().min(2).max(100),
-    phone: Joi.string().trim().max(30).allow("", null),
+    firstName: Joi.string().trim().min(2),
+    lastName: Joi.string().trim().min(2),
+    phone: Joi.string().trim().allow("", null),
     email: Joi.string().trim().email().allow("", null)
 }).min(1);
 
-module.exports = { createStudentSchema, updateStudentSchema };
+module.exports = { studentSchema, updateStudentSchema };
