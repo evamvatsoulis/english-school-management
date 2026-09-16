@@ -75,15 +75,21 @@ const getPaymentById = async (req, res) => {
 const getPaymentsByStudentId = async (req, res) => {
     try {
         const { studentId } = req.params;
+        const response = await fetchStudent(studentId);
+
+        if(!response.ok) {
+            return res.status(response.status).json(await response.json());
+        }
+
         const payment = await getPaymentsByStudentIdRepository(studentId);
 
         if (paymentDoesNotExist(payment)) {
-            return res.status(404).json({ error: "Payment not found" });
+            return res.status(404).json({ error: "Payments not found" });
         }
 
         return res.status(200).json(payment.rows);
     } catch (err) {
-        return res.status(500).json({ error: "Failed to fetch payment" });
+        return res.status(500).json({ error: "Failed to fetch payments" });
     }
 };
 
