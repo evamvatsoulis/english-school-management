@@ -20,7 +20,7 @@ const createEnrollment = async (req, res) => {
 
         return res.status(201).json(result);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: "Failed to create enrollment" });
     }
 };
 
@@ -29,13 +29,13 @@ const getEnrollmentsByStudent = async (req, res) => {
         const { studentId } = req.params;
         const result = await getEnrollmentsByStudentRepository(studentId);
 
-        if(zeroRows(result)) {
+        if (zeroRows(result)) {
             return res.status(404).json({ error: "Student not found or student does not have enrollments" });
         }
 
         return res.status(200).json(result);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: "Failed to fetch enrollments" });
     }
 };
 
@@ -44,13 +44,13 @@ const getEnrollmentsByClass = async (req, res) => {
         const { classId } = req.params;
         const result = await getEnrollmentsByClassRepository(classId);
 
-        if(zeroRows(result)) {
+        if (zeroRows(result)) {
             return res.status(404).json({ error: "Class not found or student does not have students" });
         }
 
         return res.status(200).json(result);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: "Failed to fetch enrollments" });
     }
 };
 
