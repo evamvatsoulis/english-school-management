@@ -1,6 +1,6 @@
 const { studentSchema, updateStudentSchema } = require('../schemas/studentSchema');
 const {
-    getStudentById,
+    getStudentById: getStudentByIdRepository,
     getStudents: getStudentsRepository,
     createStudent: createStudentRepository,
     updateStudent: updateStudentRepository,
@@ -25,6 +25,21 @@ const getStudents = async (req, res) => {
         return res.status(200).json(result);
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch students" });
+    }
+};
+
+const getStudentById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await getStudentByIdRepository(id);
+
+        if(studentDoesNotExist(result)) {
+            return res.status(404).json({ error: "Student not found" });
+        }
+
+        return res.status(200).json(result.rows[0]);
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to fetch student" });
     }
 };
 
@@ -54,7 +69,7 @@ const updateStudent = async (req, res) => {
             return res.status(400).json({ err: error.details[0].message });
         }
 
-        const currentStudent = await getStudentById(id);
+        const currentStudent = await getStudentByIdRepository(id);
 
         if (studentDoesNotExist(currentStudent)) {
             return res.status(404).json({ error: "Student not found" });
@@ -73,7 +88,7 @@ const deactivateStudent = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const currentStudent = await getStudentById(id);
+        const currentStudent = await getStudentByIdRepository(id);
 
         if (studentDoesNotExist(currentStudent)) {
             return res.status(404).json({ error: "Student not found" });
@@ -91,7 +106,7 @@ const activateStudent = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const currentStudent = await getStudentById(id);
+        const currentStudent = await getStudentByIdRepository(id);
 
         if (studentDoesNotExist(currentStudent)) {
             return res.status(404).json({ error: "Student not found" });
@@ -105,4 +120,4 @@ const activateStudent = async (req, res) => {
     }
 };
 
-module.exports = { getStudents, createStudent, updateStudent, deactivateStudent, activateStudent };
+module.exports = { getStudents, getStudentById, createStudent, updateStudent, deactivateStudent, activateStudent };
