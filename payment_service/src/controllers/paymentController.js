@@ -22,7 +22,18 @@ const updatePaymentData = (value, payment) => {
     return { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes };
 };
 
-const fetchStudent = async (studentId) => await fetch(`http://${config.host}:${config.services.student.port}/students/${studentId}`);
+const fetchStudent = async (studentId) => {
+    try {
+        const response = await fetch(`http://${config.host}:${config.services.student.port}/students/${studentId}`);
+        const result = await response.json();
+        if (!response.ok) {
+            return { status: response.status, error: result };
+        }
+        return null;
+    } catch (error) {
+        return { status: 503, error: 'Student service is currently unavailable' }
+    }
+};
 
 const getPayments = async (req, res) => {
     try {
@@ -41,10 +52,10 @@ const createPayment = async (req, res) => {
             return res.status(400).json({ err: error.details[0].message });
         }
 
-        const response = await fetchStudent(value.studentId);
+        const studentError = await fetchStudent(value.studentId);
 
-        if (!response.ok) {
-            return res.status(response.status).json(await response.json());
+        if (studentError) {
+            return res.status(studentError.status).json({ error: studentError.error });
         }
 
         const { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes } = value;
@@ -75,10 +86,11 @@ const getPaymentById = async (req, res) => {
 const getPaymentsByStudentId = async (req, res) => {
     try {
         const { studentId } = req.params;
-        const response = await fetchStudent(studentId);
 
-        if (!response.ok) {
-            return res.status(response.status).json(await response.json());
+        const studentError = await fetchStudent(studentId);
+
+        if (studentError) {
+            return res.status(studentError.status).json({ error: studentError.error });
         }
 
         const payment = await getPaymentsByStudentIdRepository(studentId);
