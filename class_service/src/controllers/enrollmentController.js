@@ -10,7 +10,7 @@ const {
 
 const zeroRows = (result) => result.length === 0;
 
-const fetchStudent = async (studentId) => await fetch(`http://${config.host}:${config.studentServicePort}/students/${studentId}`);
+const fetchStudent = async (studentId) => await fetch(`http://${config.host}:${config.services.student.port}/students/${studentId}`);
 
 const createEnrollment = async (req, res) => {
     try {
@@ -88,7 +88,7 @@ const getEnrollmentsByClass = async (req, res) => {
 
         return res.status(200).json(result);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: "Failed to fetch enrollments" });
     }
 };
 
