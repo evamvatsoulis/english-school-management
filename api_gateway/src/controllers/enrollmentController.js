@@ -3,7 +3,7 @@ const config = require('../config/config');
 const createEnrollment = async (req, res) => {
     try {
         const response = await fetch(
-            `http://${config.host}:${config.classServicePort}/enrollments`,
+            `http://${config.host}:${config.services.class.port}/enrollments`,
             {
                 method: "POST",
                 headers: {
@@ -15,29 +15,29 @@ const createEnrollment = async (req, res) => {
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (err) {
-        return res.status(503).json({ error: err.message });
+        return res.status(503).json({ error: "Class service is currently unavailable" });
     }
 };
 
 const getEnrollmentsByStudent = async (req, res) => {
     try {
         const { studentId } = req.params;
-        const response = await fetch(`http://${config.host}:${config.classServicePort}/enrollments/students/${studentId}`);
+        const response = await fetch(`http://${config.host}:${config.services.class.port}/enrollments/students/${studentId}`);
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (err) {
-        return res.status(503).json({ error: err.message });
+        return res.status(503).json({ error: "Class service is currently unavailable" });
     }
 };
 
 const getEnrollmentsByClass = async (req, res) => {
     try {
         const { classId } = req.params;
-        const response = await fetch(`http://${config.host}:${config.classServicePort}/enrollments/class/${classId}`);
+        const response = await fetch(`http://${config.host}:${config.services.class.port}/enrollments/class/${classId}`);
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (err) {
-        return res.status(503).json({ error: err.message });
+        return res.status(503).json({ error: "Class service is currently unavailable" });
     }
 };
 

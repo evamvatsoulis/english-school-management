@@ -2,18 +2,18 @@ const config = require('../config/config');
 
 const getUsers = async (req, res) => {
     try {
-        const response = await fetch(`http://${config.host}:${config.authServicePort}/auth/users`);
+        const response = await fetch(`http://${config.host}:${config.services.auth.port}/auth/users`);
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
-        return res.status(503).json({ error: "Failed to fetch users" });
+        return res.status(503).json({ error: "Auth service is currently unavailable" });
     }
 };
 
 const createUser = async (req, res) => {
     try {
         const response = await fetch(
-            `http://${config.host}:${config.authServicePort}/auth/register`,
+            `http://${config.host}:${config.services.auth.port}/auth/register`,
             {
                 method: "POST",
                 headers: {
@@ -25,14 +25,14 @@ const createUser = async (req, res) => {
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
-        return res.status(503).json({ error: "Failed to create user" });
+        return res.status(503).json({ error: "Auth service is currently unavailable" });
     }
 };
 
 const login = async (req, res) => {
     try {
         const response = await fetch(
-            `http://${config.host}:${config.authServicePort}/auth/login`,
+            `http://${config.host}:${config.services.auth.port}/auth/login`,
             {
                 method: "POST",
                 headers: {
@@ -44,7 +44,7 @@ const login = async (req, res) => {
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
-        return res.status(503).json({ error: "Login failed" });
+        return res.status(503).json({ error: "Auth service is currently unavailable" });
     }
 };
 

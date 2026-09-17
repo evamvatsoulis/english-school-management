@@ -2,19 +2,19 @@ const config = require('../config/config');
 
 const getStudents = async (req, res) => {
     try {
-        const response = await fetch(`http://${config.host}:${config.studentServicePort}/students`);
+        const response = await fetch(`http://${config.host}:${config.services.student.port}/students`);
         const result = await response.json();
 
         return res.status(response.status).json(result);
     } catch (error) {
-        return res.status(503).json({ error: "Failed to fetch students" });
+        return res.status(503).json({ error: "Student service is currently unavailable" });
     }
 };
 
 const createStudent = async (req, res) => {
     try {
         const response = await fetch(
-            `http://${config.host}:${config.studentServicePort}/students`,
+            `http://${config.host}:${config.services.student.port}/students`,
             {
                 method: "POST",
                 headers: {
@@ -26,7 +26,7 @@ const createStudent = async (req, res) => {
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
-        return res.status(503).json({ error: "Failed to create student" });
+        return res.status(503).json({ error: "Student service is currently unavailable" });
     }
 };
 
@@ -34,7 +34,7 @@ const updateStudent = async (req, res) => {
     try {
         const { id } = req.params;
         const response = await fetch(
-            `http://${config.host}:${config.studentServicePort}/students/${id}`,
+            `http://${config.host}:${config.services.student.port}/students/${id}`,
             {
                 method: "PATCH",
                 headers: {
@@ -46,7 +46,7 @@ const updateStudent = async (req, res) => {
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
-        return res.status(503).json({ error: "Failed to update student" });
+        return res.status(503).json({ error: "Student service is currently unavailable" });
     }
 };
 
@@ -54,7 +54,7 @@ const deactivateStudent = async (req, res) => {
     try {
         const { id } = req.params;
         const response = await fetch(
-            `http://${config.host}:${config.studentServicePort}/students/${id}/deactivate`,
+            `http://${config.host}:${config.services.student.port}/students/${id}/deactivate`,
             {
                 method: "PATCH",
                 headers: {
@@ -67,7 +67,7 @@ const deactivateStudent = async (req, res) => {
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
-        return res.status(503).json({ error: "Failed to deactivate student" });
+        return res.status(503).json({ error: "Student service is currently unavailable" });
     }
 };
 
@@ -75,7 +75,7 @@ const activateStudent = async (req, res) => {
     try {
         const { id } = req.params;
         const response = await fetch(
-            `http://${config.host}:${config.studentServicePort}/students/${id}/activate`,
+            `http://${config.host}:${config.services.student.port}/students/${id}/activate`,
             {
                 method: "PATCH",
                 headers: {
@@ -88,7 +88,7 @@ const activateStudent = async (req, res) => {
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
-        return res.status(503).json({ error: "Failed to activate student" });
+        return res.status(503).json({ error: "Student service is currently unavailable" });
     }
 };
 

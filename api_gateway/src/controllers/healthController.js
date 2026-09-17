@@ -2,7 +2,7 @@ const config = require('../config/config');
 const { services } = require('../config/config');
 
 const getPortByServiceName = (serviceName) => {
-    const service = services.find(service => service.name === serviceName);
+    const service = Object.values(services).find(service => service.name === serviceName);
     if (service) {
         return service.port;
     }
@@ -23,7 +23,7 @@ const checkServiceHealth = async (serviceName, port) => {
 
 const getAllHealths = async (req, res) => {
     const healths = [];
-    for (const service of services) {
+    for (const service of Object.values(services)) {
         healths.push(await checkServiceHealth(service.name, service.port));
     }
     res.status(200).json(healths);
