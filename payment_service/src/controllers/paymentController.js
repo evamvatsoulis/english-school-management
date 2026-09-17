@@ -22,7 +22,7 @@ const updatePaymentData = (value, payment) => {
     return { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes };
 };
 
-const fetchStudent = async (studentId) => await fetch(`http://${config.host}:${config.studentServicePort}/students/${studentId}`);
+const fetchStudent = async (studentId) => await fetch(`http://${config.host}:${config.services.student.port}/students/${studentId}`);
 
 const getPayments = async (req, res) => {
     try {
@@ -43,7 +43,7 @@ const createPayment = async (req, res) => {
 
         const response = await fetchStudent(value.studentId);
 
-        if(!response.ok) {
+        if (!response.ok) {
             return res.status(response.status).json(await response.json());
         }
 
@@ -77,7 +77,7 @@ const getPaymentsByStudentId = async (req, res) => {
         const { studentId } = req.params;
         const response = await fetchStudent(studentId);
 
-        if(!response.ok) {
+        if (!response.ok) {
             return res.status(response.status).json(await response.json());
         }
 
