@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { register: registerRepository, getUsers: getUsersRepository, findUserByEmail } = require('../repositories/authRepository');
+const { register: registerRepository, getUsers: getUsersRepository, findUserByUsername } = require('../repositories/authRepository');
 
 const encryptPassword = async (password) => bcrypt.hash(password, 10);
 
@@ -10,7 +10,7 @@ const generateToken = (user) => {
     const token = jwt.sign(
         {
             userId: user.id,
-            email: user.email,
+            username: user.username,
             role: user.role
         },
         process.env.JWT_SECRET,
@@ -24,35 +24,35 @@ const generateToken = (user) => {
 
 const register = async (req, res) => {
     try {
-        const { email, password, role } = req.body;
+        const { username, password, role } = req.body;
 
         const passwordHash = await encryptPassword(password);
-        const result = await registerRepository(email, passwordHash, role);
+        const result = await registerRepository(username, passwordHash, role);
 
-        return res.status(201).json(result.rows[0]);
+        return res.status(201).json(result);
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: "Failed to create user" });
     }
 };
 
 const getUsers = async (req, res) => {
     try {
         const result = await getUsersRepository();
-        return res.status(200).json(result.rows);
+        return res.status(200).json(result);
     } catch (error) {
-        return res.status(500).json({ error: error.message })
+        return res.status(500).json({ error: "Failed to fetch users" })
     }
 };
 
 const login = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { username, password } = req.body;
 
-        const result = await findUserByEmail(email);
+        const result = await findUserByUsername(username);
         const user = result.rows[0];
 
         if (!user) {
-            return res.status(401).json({ error: "Invalid email or password" });
+            return res.status(401).json({ error: "Invalid username or password" });
         }
 
         if (!await passwordMatches(password, user.password_hash)) {
@@ -63,7 +63,7 @@ const login = async (req, res) => {
 
         return res.status(200).json({ message: "Login succesfull", token });
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: "Login failed" });
     }
 };
 
