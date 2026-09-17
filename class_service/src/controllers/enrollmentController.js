@@ -10,7 +10,18 @@ const {
 
 const zeroRows = (result) => result.length === 0;
 
-const fetchStudent = async (studentId) => await fetch(`http://${config.host}:${config.services.student.port}/students/${studentId}`);
+const fetchStudent = async (studentId) => {
+    try {
+        const response = await fetch(`http://${config.host}:${config.services.student.port}/students/${studentId}`);
+        const result = await response.json();
+        if (!response.ok) {
+            return { status: response.status, error: result };
+        }
+        return { status: 200, data: result };
+    } catch (error) {
+        return { status: 503, error: 'Student service is currently unavailable' }
+    }
+};
 
 const createEnrollment = async (req, res) => {
     try {
@@ -20,10 +31,10 @@ const createEnrollment = async (req, res) => {
             return res.status(400).json({ err: error.details[0].message });
         }
 
-        const studentResponse = await fetchStudent(value.studentId);
+        const studentError = await fetchStudent(value.studentId);
 
-        if (!studentResponse.ok) {
-            return res.status(studentResponse.status).json(await studentResponse.json());
+        if (studentError.status !== 200) {
+            return res.status(studentError.status).json({ error: studentError.error });
         }
 
         const classResponse = await getClassById(value.classId);
@@ -45,10 +56,10 @@ const getEnrollmentsByStudent = async (req, res) => {
     try {
         const { studentId } = req.params;
 
-        const studentResponse = await fetchStudent(studentId);
+        const studentError = await fetchStudent(studentId);
 
-        if (!studentResponse.ok) {
-            return res.status(studentResponse.status).json(await studentResponse.json());
+        if (studentError.status !== 200) {
+            return res.status(studentError.status).json({ error: studentError.error });
         }
 
         const result = await getEnrollmentsByStudentRepository(studentId);
@@ -81,9 +92,13 @@ const getEnrollmentsByClass = async (req, res) => {
 
         const result = [];
 
-        for(const enrollment of enrollments) {
+        for (const enrollment of enrollments) {
             const student = await fetchStudent(enrollment.student_id);
-            result.push(await student.json());
+            if (student.status === 200) {
+                result.push(student.data);
+            } else {
+                res.status(student.status).json({ error: student.error });
+            }
         }
 
         return res.status(200).json(result);
