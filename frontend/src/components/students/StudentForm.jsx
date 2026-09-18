@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function StudentForm({ addStudent, setShowForm }) {
+function StudentForm({ addStudent, closeCreateForm }) {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
@@ -23,7 +23,7 @@ function StudentForm({ addStudent, setShowForm }) {
 
             <button className="student-form-save" type="submit">Save</button>
 
-            <button type="button" className="student-form-cancel" onClick={() => setShowForm(false)}>Cancel</button>
+            <button type="button" className="student-form-cancel" onClick={closeCreateForm}>Cancel</button>
         </form>
     );
 }

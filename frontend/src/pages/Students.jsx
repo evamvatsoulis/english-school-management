@@ -40,6 +40,10 @@ function Students() {
         setShowForm(false);
     };
 
+    const openCreateForm = () => setShowForm(true);
+
+    const closeCreateForm = () => setShowForm(false);
+
     useEffect(() => {
         loadStudents();
     }, [])
@@ -51,14 +55,14 @@ function Students() {
             <div className="page-content">
                 <h1>Students</h1>
 
-                <button onClick={() => setShowForm(true)}>Add new student</button>
+                <button className="add-student-button" onClick={openCreateForm}>Add new student</button>
 
                 {showForm && (
                     <div className="modal-overlay">
                         <div className="modal-content">
                             <StudentForm
                                 addStudent={addStudent}
-                                setShowForm={setShowForm}
+                                closeCreateForm={closeCreateForm}
                             />
                         </div>
                     </div>
