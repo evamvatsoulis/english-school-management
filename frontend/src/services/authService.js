@@ -13,6 +13,6 @@ export const login = async (username, password) => {
     });
 
     const data = await response.json();
-    
+
     return { status: response.status, ok: response.ok, data };
 };

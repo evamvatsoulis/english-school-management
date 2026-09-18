@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from '../services/authService';
+import LoginCard from "../components/LoginCard";
 import '../styles/pages/login.css';
 
 function Login() {
@@ -21,7 +22,7 @@ function Login() {
                 setError(response.data.error);
             } else {
                 localStorage.setItem("token", response.data.token);
-                console.log(response.data);
+                console.log(response.data.message);
                 navigate("/dashboard");
             }
         } catch (error) {
@@ -31,34 +32,14 @@ function Login() {
 
     return (
         <div className="login-page">
-            <div className="login-card">
-                <h1>Login</h1>
-
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label>Username</label>
-                        <input
-                            type="text"
-                            value={username}
-                            onChange={(event) => setUsername(event.target.value)}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Password</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(event) => setPassword(event.target.value)}
-                        />
-                        {error && <p className="login-error">{error}</p>}
-                    </div>
-
-                    <button className="login-button" type="submit">
-                        Login
-                    </button>
-                </form>
-            </div>
+            <LoginCard
+                username={username}
+                password={password}
+                setUsername={setUsername}
+                setPassword={setPassword}
+                error={error}
+                handleSubmit={handleSubmit}
+            />
         </div>
     );
 }

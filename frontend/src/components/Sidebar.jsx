@@ -6,6 +6,7 @@ function Sidebar() {
 
     const handleLogout = () => {
         localStorage.removeItem("token");
+        console.log("Logged out successfully");
         navigate("/login");
     };
 
@@ -20,14 +21,6 @@ function Sidebar() {
 
                 <NavLink to="/students">
                     Students
-                </NavLink>
-
-                <NavLink to="/classes">
-                    Classes
-                </NavLink>
-
-                <NavLink to="/payments">
-                    Payments
                 </NavLink>
             </nav>
 

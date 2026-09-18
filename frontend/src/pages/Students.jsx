@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getStudents } from "../services/studentService";
 import Sidebar from "../components/Sidebar";
+import StudentsList from '../components/StudentsList';
 import '../styles/pages/students.css'
 
 function Students() {
@@ -31,24 +32,7 @@ function Students() {
             <div className="page-content">
                 <h1>Students</h1>
 
-                {!error && (
-                    <div className="students-list">
-                        <div className="students-header">
-                            <span>Firstname</span>
-                            <span>Lastname</span>
-                            <span>Phone</span>
-                            <span>Email</span>
-                        </div>
-                        {!error && students.map((student) => (
-                            <div className="student-row" key={student.id}>
-                                <span>{student.first_name}</span>
-                                <span>{student.last_name}</span>
-                                <span>{student.phone}</span>
-                                <span>{student.email}</span>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                {!error && <StudentsList students={students} />}
             </div>
         </div>
     );
