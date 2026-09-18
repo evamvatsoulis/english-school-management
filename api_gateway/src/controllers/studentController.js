@@ -11,6 +11,18 @@ const getStudents = async (req, res) => {
     }
 };
 
+const getStudentById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const response = await fetch(`http://${config.host}:${config.services.student.port}/students/${id}`);
+        const result = await response.json();
+
+        return res.status(response.status).json(result);
+    } catch (error) {
+        return res.status(503).json({ error: "Student service is currently unavailable" });
+    }
+};
+
 const createStudent = async (req, res) => {
     try {
         const response = await fetch(
@@ -92,4 +104,4 @@ const activateStudent = async (req, res) => {
     }
 };
 
-module.exports = { getStudents, createStudent, updateStudent, deactivateStudent, activateStudent };
+module.exports = { getStudents, getStudentById, createStudent, updateStudent, deactivateStudent, activateStudent };
