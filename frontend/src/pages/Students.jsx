@@ -22,6 +22,7 @@ function Students() {
         if (!response.ok) {
             console.error(response.data.error);
             setLoadStudentsError(response.data.error);
+            return;
         }
         setStudents(response.data);
     };

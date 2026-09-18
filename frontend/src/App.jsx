@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from './pages/Login';
 import Dashboard from "./pages/Dashboard";
 import Students from "./pages/Students";
+import StudentDetails from './pages/StudentDetails';
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginProtectedRoute from "./components/LoginProtectedRoute";
 
@@ -16,6 +17,7 @@ function App() {
       <Route path="/login" element={<LoginProtectedRoute><Login /></LoginProtectedRoute>} />
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/students" element={<ProtectedRoute><Students /></ProtectedRoute>} />
+      <Route path="/students/:id" element={<ProtectedRoute><StudentDetails /></ProtectedRoute>} />
     </Routes>
   );
 }

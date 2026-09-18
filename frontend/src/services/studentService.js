@@ -16,6 +16,22 @@ const getStudents = async () => {
     return { status: response.status, ok: response.ok, data };
 };
 
+const getStudentById = async (studentId) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_GATEWAY_URL}/students/${studentId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
+
 const createStudent = async (studentData) => {
     const token = localStorage.getItem("token");
 
@@ -54,4 +70,4 @@ const updateStudent = async (studentId, studentData) => {
     return { status: response.status, ok: response.ok, data };
 };
 
-export { getStudents, createStudent, updateStudent };
+export { getStudents, getStudentById, createStudent, updateStudent };
