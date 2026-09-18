@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from '../services/authService';
 import LoginCard from "../components/LoginCard";
-import '../styles/pages/login.css';
+import '../styles/pages/Login.css';
 
 function Login() {
     const [username, setUsername] = useState("");

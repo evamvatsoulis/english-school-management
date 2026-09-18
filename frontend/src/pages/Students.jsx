@@ -3,7 +3,7 @@ import { getStudents, createStudent, updateStudent } from "../services/studentSe
 import Sidebar from "../components/Sidebar";
 import StudentsList from '../components/students/StudentsList';
 import StudentForm from '../components/students/StudentForm';
-import '../styles/pages/students.css'
+import '../styles/pages/Students.css'
 
 function Students() {
     const [students, setStudents] = useState([]);
