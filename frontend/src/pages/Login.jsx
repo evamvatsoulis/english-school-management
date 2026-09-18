@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from '../services/authService';
-import '../styles/login.css';
+import '../styles/pages/login.css';
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -18,7 +18,7 @@ function Login() {
 
             if (!response.ok) {
                 console.error(response.data.error);
-                alert(response.data.error);
+                setError(response.data.error);
             } else {
                 localStorage.setItem("token", response.data.token);
                 console.log(response.data);
@@ -51,6 +51,7 @@ function Login() {
                             value={password}
                             onChange={(event) => setPassword(event.target.value)}
                         />
+                        {error && <p className="login-error">{error}</p>}
                     </div>
 
                     <button className="login-button" type="submit">
