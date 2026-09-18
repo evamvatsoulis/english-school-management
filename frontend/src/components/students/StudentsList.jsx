@@ -1,4 +1,6 @@
-function StudentsList({ students }) {
+import '../../styles/components/students/StudentsList.css';
+
+function StudentsList({ students, openEditForm }) {
     return (
         <div className="students-list">
             <div className="students-header">
@@ -13,6 +15,7 @@ function StudentsList({ students }) {
                     <span>{student.last_name}</span>
                     <span>{student.phone}</span>
                     <span>{student.email}</span>
+                    <button className="edit-button" onClick={() => openEditForm(student)}>Edit</button>
                 </div>
             ))}
         </div>

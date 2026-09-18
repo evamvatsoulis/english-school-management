@@ -66,7 +66,7 @@ const updateStudent = async (req, res) => {
         const { error, value } = updateStudentSchema.validate(req.body);
 
         if (error) {
-            return res.status(400).json({ err: error.details[0].message });
+            return res.status(400).json({ error: error.details[0].message });
         }
 
         const currentStudent = await getStudentByIdRepository(id);

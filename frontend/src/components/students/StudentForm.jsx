@@ -1,14 +1,19 @@
 import { useState } from 'react';
+import '../../styles/components/students/StudentForm.css';
 
-function StudentForm({ addStudent, closeCreateForm }) {
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [phone, setPhone] = useState("");
-    const [email, setEmail] = useState("");
+function StudentForm({ addStudent, closeForm, selectedStudent, editStudent }) {
+    const [firstName, setFirstName] = useState(selectedStudent ? selectedStudent.first_name : "");
+    const [lastName, setLastName] = useState(selectedStudent ? selectedStudent.last_name : "");
+    const [phone, setPhone] = useState(selectedStudent ? selectedStudent.phone : "");
+    const [email, setEmail] = useState(selectedStudent ? selectedStudent.email : "");
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        addStudent({ firstName, lastName, phone, email });
+        if (selectedStudent) {
+            editStudent({ firstName, lastName, phone, email });
+        } else {
+            addStudent({ firstName, lastName, phone, email });
+        }
     };
 
     return (
@@ -23,7 +28,7 @@ function StudentForm({ addStudent, closeCreateForm }) {
 
             <button className="student-form-save" type="submit">Save</button>
 
-            <button type="button" className="student-form-cancel" onClick={closeCreateForm}>Cancel</button>
+            <button type="button" className="student-form-cancel" onClick={closeForm}>Cancel</button>
         </form>
     );
 }

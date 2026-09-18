@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getStudents, createStudent } from "../services/studentService";
+import { getStudents, createStudent, updateStudent } from "../services/studentService";
 import Sidebar from "../components/Sidebar";
 import StudentsList from '../components/students/StudentsList';
 import StudentForm from '../components/students/StudentForm';
@@ -7,9 +7,11 @@ import '../styles/pages/students.css'
 
 function Students() {
     const [students, setStudents] = useState([]);
+    const [selectedStudent, setSelectedStudent] = useState(null);
     const [showForm, setShowForm] = useState(false);
     const [loadStudentsError, setLoadStudentsError] = useState("");
     const [addStudentError, setAddStudentError] = useState("");
+    const [editStudentError, setEditStudentError] = useState("");
 
     const loadStudents = async () => {
         const response = await getStudents();
@@ -37,12 +39,36 @@ function Students() {
         }
         setStudents([...students, response.data]);
         console.log(response.data);
-        setShowForm(false);
+        closeForm();
     };
 
-    const openCreateForm = () => setShowForm(true);
+    const editStudent = async (studentData) => {
+        const response = await updateStudent(selectedStudent.id, studentData);
+        if (response.status === 401) {
+            localStorage.removeItem("token");
+        }
 
-    const closeCreateForm = () => setShowForm(false);
+        if (!response.ok) {
+            console.error(response.data.error);
+            setEditStudentError(response.data.error);
+            return;
+        }
+        setStudents(students.map((student) => student.id === response.data.id ? response.data : student));
+        console.log(response.data);
+        closeForm();
+    };
+
+    const openCreateForm = () => {
+        setSelectedStudent(null);
+        setShowForm(true);
+    };
+
+    const openEditForm = (student) => {
+        setSelectedStudent(student);
+        setShowForm(true);
+    };
+
+    const closeForm = () => setShowForm(false);
 
     useEffect(() => {
         loadStudents();
@@ -62,13 +88,18 @@ function Students() {
                         <div className="modal-content">
                             <StudentForm
                                 addStudent={addStudent}
-                                closeCreateForm={closeCreateForm}
+                                closeForm={closeForm}
+                                selectedStudent={selectedStudent}
+                                editStudent={editStudent}
                             />
                         </div>
                     </div>
                 )}
 
-                {!loadStudentsError && <StudentsList students={students} />}
+                {!loadStudentsError && <StudentsList
+                    students={students}
+                    openEditForm={openEditForm}
+                />}
             </div>
         </div>
     );
