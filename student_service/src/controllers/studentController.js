@@ -33,7 +33,7 @@ const getStudentById = async (req, res) => {
         const { id } = req.params;
         const result = await getStudentByIdRepository(id);
 
-        if(studentDoesNotExist(result)) {
+        if (studentDoesNotExist(result)) {
             return res.status(404).json({ error: "Student not found" });
         }
 
@@ -48,7 +48,7 @@ const createStudent = async (req, res) => {
         const { error, value } = studentSchema.validate(req.body);
 
         if (error) {
-            return res.status(400).json({ err: error.details[0].message });
+            return res.status(400).json({ error: error.details[0].message });
         }
 
         const { firstName, lastName, phone, email } = value;

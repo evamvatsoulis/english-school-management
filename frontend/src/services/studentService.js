@@ -1,6 +1,6 @@
 const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL;
 
-export const getStudents = async () => {
+const getStudents = async () => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(`${API_GATEWAY_URL}/students`,
@@ -15,3 +15,24 @@ export const getStudents = async () => {
 
     return { status: response.status, ok: response.ok, data };
 };
+
+const createStudent = async (studentData) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+        `${API_GATEWAY_URL}/students`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(studentData)
+        }
+    );
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
+
+export { getStudents, createStudent };

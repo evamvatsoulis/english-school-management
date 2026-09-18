@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
-import { getStudents } from "../services/studentService";
+import { getStudents, createStudent } from "../services/studentService";
 import Sidebar from "../components/Sidebar";
-import StudentsList from '../components/StudentsList';
+import StudentsList from '../components/students/StudentsList';
+import StudentForm from '../components/students/StudentForm';
 import '../styles/pages/students.css'
 
 function Students() {
     const [students, setStudents] = useState([]);
-    const [error, setError] = useState("");
+    const [showForm, setShowForm] = useState(false);
+    const [loadStudentsError, setLoadStudentsError] = useState("");
+    const [addStudentError, setAddStudentError] = useState("");
 
     const loadStudents = async () => {
         const response = await getStudents();
@@ -16,9 +19,25 @@ function Students() {
 
         if (!response.ok) {
             console.error(response.data.error);
-            setError(response.data.error);
+            setLoadStudentsError(response.data.error);
         }
         setStudents(response.data);
+    };
+
+    const addStudent = async (studentData) => {
+        const response = await createStudent(studentData);
+        if (response.status === 401) {
+            localStorage.removeItem("token");
+        }
+
+        if (!response.ok) {
+            console.error(response.data.error);
+            setAddStudentError(response.data.error);
+            return;
+        }
+        setStudents([...students, response.data]);
+        console.log(response.data);
+        setShowForm(false);
     };
 
     useEffect(() => {
@@ -32,7 +51,20 @@ function Students() {
             <div className="page-content">
                 <h1>Students</h1>
 
-                {!error && <StudentsList students={students} />}
+                <button onClick={() => setShowForm(true)}>Add new student</button>
+
+                {showForm && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <StudentForm
+                                addStudent={addStudent}
+                                setShowForm={setShowForm}
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {!loadStudentsError && <StudentsList students={students} />}
             </div>
         </div>
     );
