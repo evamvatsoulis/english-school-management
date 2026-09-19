@@ -1,14 +1,18 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getStudentById } from '../services/studentService';
+import { getPaymentsByStudentId } from "../services/paymentService";
 import Sidebar from '../components/Sidebar';
+import StudentsList from '../components/PaymentsList';
 import '../styles/pages/StudentDetails.css';
 
 function StudentDetails() {
   const { id } = useParams();
 
   const [student, setStudent] = useState(null);
+  const [payments, setPayments] = useState(null);
   const [error, setError] = useState("");
+  const [loadPaymentsError, setLoadPaymentsError] = useState("");
 
   const loadStudent = async () => {
     const response = await getStudentById(id);
@@ -22,8 +26,21 @@ function StudentDetails() {
     console.log(response.data);
   };
 
+  const loadPaymentsByStudentId = async () => {
+    const response = await getPaymentsByStudentId(id);
+
+    if (!response.ok) {
+      setLoadPaymentsError(response.data.error);
+      console.error(response.data.error);
+      return;
+    }
+    setPayments(response.data);
+    console.log(response.data);
+  };
+
   useEffect(() => {
     loadStudent();
+    loadPaymentsByStudentId();
   }, [id]);
 
   return (
@@ -37,6 +54,8 @@ function StudentDetails() {
             <p>{id}</p>
           </div>
         )}
+
+        {payments && <StudentsList payments={payments} />}
 
         <div className="student-details-actions">
           <button className="edit-button">Edit student</button>
