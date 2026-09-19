@@ -1,0 +1,14 @@
+.student-details-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.edit-button,
+.add-payment-button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  background-color: var(--blue);
+}
