@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { getStudentById } from '../services/studentService';
 import { getPaymentsByStudentId } from "../services/paymentService";
 import Sidebar from '../components/Sidebar';
-import StudentsList from '../components/PaymentsList';
+import PaymentsList from '../components/PaymentsList';
+import StudentsList from '../components/students/StudentsList';
 import '../styles/pages/StudentDetails.css';
+import '../styles/components/students/StudentsList.css'
 
 function StudentDetails() {
   const { id } = useParams();
@@ -50,15 +52,13 @@ function StudentDetails() {
       <div className="page-content">
         {student && (
           <div>
-            <h1>{student.first_name}</h1>
-            <p>{id}</p>
+            <h1>{student.first_name} {student.last_name}</h1>
           </div>
         )}
 
-        {payments && <StudentsList payments={payments} />}
+        {payments && <PaymentsList payments={payments} />}
 
         <div className="student-details-actions">
-          <button className="edit-button">Edit student</button>
           <button className="add-payment-button">Add new payment</button>
         </div>
       </div>
