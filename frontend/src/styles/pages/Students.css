@@ -1,0 +1,31 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--secondary-color);
+    padding: 24px;
+    border-radius: 10px;
+}
+
+.add-student-button {
+    width: fit-content;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: #2563eb;
+    color: white;
+    font-weight: 600;
+}
+
+.add-student-button:hover {
+    background-color: var(--secondary-blue);
+}
