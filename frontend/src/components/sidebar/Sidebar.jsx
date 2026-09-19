@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import '../styles/components/Sidebar.css';
+import '../../styles/components/Sidebar.css';
 
 function Sidebar() {
     const navigate = useNavigate();

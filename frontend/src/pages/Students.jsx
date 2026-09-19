@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getStudents, createStudent, updateStudent } from "../services/studentService";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/sidebar/Sidebar";
 import StudentsList from '../components/students/StudentsList';
 import StudentForm from '../components/students/StudentForm';
 import '../styles/pages/Students.css'

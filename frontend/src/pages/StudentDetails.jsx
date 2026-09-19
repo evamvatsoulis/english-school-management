@@ -2,9 +2,8 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getStudentById } from '../services/studentService';
 import { getPaymentsByStudentId } from "../services/paymentService";
-import Sidebar from '../components/Sidebar';
-import PaymentsList from '../components/PaymentsList';
-import StudentsList from '../components/students/StudentsList';
+import Sidebar from '../components/sidebar/Sidebar';
+import PaymentsList from '../components/payments/PaymentsList';
 import '../styles/pages/StudentDetails.css';
 import '../styles/components/students/StudentsList.css'
 

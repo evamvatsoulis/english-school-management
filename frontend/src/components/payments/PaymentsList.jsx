@@ -1,4 +1,4 @@
-import '../styles/components/PaymentsList.css'
+import '../../styles/components/PaymentsList.css'
 
 const formatDate = (date) => new Date(date).toLocaleDateString('el-GR');
 

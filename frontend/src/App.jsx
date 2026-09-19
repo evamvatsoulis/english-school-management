@@ -3,8 +3,8 @@ import Login from './pages/Login';
 import Dashboard from "./pages/Dashboard";
 import Students from "./pages/Students";
 import StudentDetails from './pages/StudentDetails';
-import ProtectedRoute from "./components/ProtectedRoute";
-import LoginProtectedRoute from "./components/LoginProtectedRoute";
+import ProtectedRoute from "./components/protect/ProtectedRoute";
+import LoginProtectedRoute from "./components/protect/LoginProtectedRoute";
 
 function App() {
   const token = localStorage.getItem("token");
