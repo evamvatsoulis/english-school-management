@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../../styles/components/students/StudentForm.css';
 
-function StudentForm({ addStudent, closeForm, selectedStudent, editStudent }) {
+function StudentForm({ addStudent, editStudent, selectedStudent, closeForm }) {
     const [firstName, setFirstName] = useState(selectedStudent ? selectedStudent.first_name : "");
     const [lastName, setLastName] = useState(selectedStudent ? selectedStudent.last_name : "");
     const [phone, setPhone] = useState(selectedStudent ? selectedStudent.phone : "");

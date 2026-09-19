@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getStudents, createStudent, updateStudent } from "../services/studentService";
-import Sidebar from "../components/sidebar/Sidebar";
+import Sidebar from "../components/Sidebar";
 import StudentsList from '../components/students/StudentsList';
 import StudentForm from '../components/students/StudentForm';
 import '../styles/pages/Students.css'
@@ -39,7 +39,6 @@ function Students() {
             return;
         }
         setStudents([...students, response.data]);
-        console.log(response.data);
         closeForm();
     };
 
@@ -55,7 +54,6 @@ function Students() {
             return;
         }
         setStudents(students.map((student) => student.id === response.data.id ? response.data : student));
-        console.log(response.data);
         closeForm();
     };
 
@@ -89,9 +87,9 @@ function Students() {
                         <div className="modal-content">
                             <StudentForm
                                 addStudent={addStudent}
-                                closeForm={closeForm}
-                                selectedStudent={selectedStudent}
                                 editStudent={editStudent}
+                                selectedStudent={selectedStudent}
+                                closeForm={closeForm}
                             />
                         </div>
                     </div>

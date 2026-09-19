@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getStudentById } from '../services/studentService';
 import { getPaymentsByStudentId } from "../services/paymentService";
-import Sidebar from '../components/sidebar/Sidebar';
+import Sidebar from '../components/Sidebar';
 import PaymentsList from '../components/payments/PaymentsList';
 import '../styles/pages/StudentDetails.css';
 import '../styles/components/students/StudentsList.css'
@@ -12,19 +12,18 @@ function StudentDetails() {
 
   const [student, setStudent] = useState(null);
   const [payments, setPayments] = useState(null);
-  const [error, setError] = useState("");
+  const [loadStudentError, setLoadStudentError] = useState("");
   const [loadPaymentsError, setLoadPaymentsError] = useState("");
 
   const loadStudent = async () => {
     const response = await getStudentById(id);
 
     if (!response.ok) {
-      setError(response.data.error);
+      setLoadStudentError(response.data.error);
       console.error(response.data.error);
       return;
     }
     setStudent(response.data);
-    console.log(response.data);
   };
 
   const loadPaymentsByStudentId = async () => {
@@ -36,7 +35,6 @@ function StudentDetails() {
       return;
     }
     setPayments(response.data);
-    console.log(response.data);
   };
 
   useEffect(() => {

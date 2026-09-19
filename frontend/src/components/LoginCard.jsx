@@ -3,8 +3,8 @@ function LoginCard({ username, password, setUsername, setPassword, error, handle
         <div className="login-card">
             <h1>Login</h1>
 
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
+            <form className="login-form" onSubmit={handleSubmit}>
+                <div className="login-form-group">
                     <label>Username</label>
                     <input
                         type="text"
@@ -13,7 +13,7 @@ function LoginCard({ username, password, setUsername, setPassword, error, handle
                     />
                 </div>
 
-                <div className="form-group">
+                <div className="login-form-group">
                     <label>Password</label>
                     <input
                         type="password"
