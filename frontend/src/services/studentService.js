@@ -70,4 +70,22 @@ const updateStudent = async (studentId, studentData) => {
     return { status: response.status, ok: response.ok, data };
 };
 
-export { getStudents, getStudentById, createStudent, updateStudent };
+const deactivateStudent = async (studentId) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+        `${API_GATEWAY_URL}/students/${studentId}/deactivate`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
+
+export { getStudents, getStudentById, createStudent, updateStudent, deactivateStudent };

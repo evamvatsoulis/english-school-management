@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getStudents, createStudent, updateStudent } from "../services/studentService";
+import { getStudents, createStudent, updateStudent, deactivateStudent } from "../services/studentService";
 import Sidebar from "../components/Sidebar";
 import StudentsList from '../components/students/StudentsList';
 import StudentForm from '../components/students/StudentForm';
@@ -12,6 +12,7 @@ function Students() {
     const [loadStudentsError, setLoadStudentsError] = useState("");
     const [addStudentError, setAddStudentError] = useState("");
     const [editStudentError, setEditStudentError] = useState("");
+    const [deactivateStudentError, setDeactivateStudentError] = useState("");
 
     const navigate = useNavigate();
 
@@ -61,6 +62,20 @@ function Students() {
         closeForm();
     };
 
+      const deleteStudent = async (studentId) => {
+        const response = await deactivateStudent(studentId);
+        if (response.status === 401) {
+            localStorage.removeItem("token");
+        }
+
+        if (!response.ok) {
+            console.error(response.data.error);
+            setDeactivateStudentError(response.data.error);
+            return;
+        }
+        loadStudents();
+    };
+
     const openCreateForm = () => {
         setSelectedStudent(null);
         setShowForm(true);
@@ -102,6 +117,7 @@ function Students() {
                 {!loadStudentsError && <StudentsList
                     students={students}
                     openEditForm={openEditForm}
+                    deleteStudent={deleteStudent}
                 />}
             </div>
         </div>

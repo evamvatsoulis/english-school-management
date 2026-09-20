@@ -85,3 +85,13 @@ a {
     color: white;
     font-weight: 600;
 }
+
+.delete-button {
+    justify-self: start;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--blue);
+    color: white;
+    font-weight: 600;
+}

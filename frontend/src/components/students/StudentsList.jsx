@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../styles/components/students/StudentsList.css';
 import '../../styles/components/list.css';
 
-function StudentsList({ students, openEditForm }) {
+function StudentsList({ students, openEditForm, deleteStudent }) {
     const navigate = useNavigate();
     return (
         <div className="list">
@@ -22,6 +22,7 @@ function StudentsList({ students, openEditForm }) {
                     <div className="actions">
                         <button className="edit-button" onClick={() => openEditForm(student)}>Edit</button>
                         <button className="view-button" onClick={() => navigate(`/students/${student.id}`)}>View payments</button>
+                        <button className="delete-button" onClick={() => deleteStudent(student.id)}>Delete</button>
                     </div>
                 </div>
             ))}
