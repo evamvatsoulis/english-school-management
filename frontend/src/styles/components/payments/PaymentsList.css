@@ -5,8 +5,8 @@
     overflow: hidden;
 }
 
-.payments-header,
-.payment-row {
+.payments-history-header,
+.payment-history-row {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     align-items: center;
@@ -15,17 +15,17 @@
     border-bottom: 1px solid var(--blue);
 }
 
-.payments-header {
+.payments-history-header {
     background-color: var(--secondary-color);
     font-weight: 700;
 }
 
-.payment-row:hover {
+.payment-history-row:hover {
     background-color: var(--secondary-color);
 }
 
-.payments-header span,
-.payment-row span {
+.payments-history-header span,
+.payment-history-row span {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;

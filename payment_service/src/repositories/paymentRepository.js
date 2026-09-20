@@ -21,7 +21,7 @@ const getPaymentById = async (id) => {
 };
 
 const getPaymentsByStudentId = async (studentId) => {
-    const result = await pool.query(`SELECT * FROM payments WHERE student_id = $1 ORDER BY id`, [studentId]);
+    const result = await pool.query(`SELECT * FROM payments WHERE student_id = $1 ORDER BY id DESC`, [studentId]);
     return result;
 };
 

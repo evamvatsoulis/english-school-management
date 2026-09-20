@@ -1,0 +1,41 @@
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.payment-form input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    outline: none;
+    border: none;
+}
+
+.payment-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    margin-top: 8px;
+}
+
+.payment-form-save {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--blue);
+    color: white;
+}
+
+.payment-form-save:hover {
+    background-color: var(--secondary-blue);
+}
+
+.payment-form-cancel {
+    padding: 10px;
+    border-radius: 8px;
+    background-color: var(--background-color);
+    color: white;
+    border: none;
+}

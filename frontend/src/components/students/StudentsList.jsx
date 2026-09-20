@@ -19,7 +19,7 @@ function StudentsList({ students, openEditForm }) {
                     <span>{student.email}</span>
                     <div className="student-actions">
                         <button className="edit-button" onClick={() => openEditForm(student)}>Edit</button>
-                        <button className="view-button" onClick={() => navigate(`/students/${student.id}`)}>View</button>
+                        <button className="view-button" onClick={() => navigate(`/students/${student.id}`)}>View payments</button>
                     </div>
                 </div>
             ))}

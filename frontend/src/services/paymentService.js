@@ -16,4 +16,23 @@ const getPaymentsByStudentId = async (studentId) => {
     return { status: response.status, ok: response.ok, data };
 };
 
-export { getPaymentsByStudentId };
+const createPayment = async (paymentData) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+        `${API_GATEWAY_URL}/payments`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(paymentData)
+        }
+    );
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
+
+export { getPaymentsByStudentId, createPayment };
