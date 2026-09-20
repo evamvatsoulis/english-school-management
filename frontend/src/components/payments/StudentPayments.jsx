@@ -24,7 +24,7 @@ function StudentPayments({ payments, openCreateForm, openEditForm }) {
                     <span>Month</span>
                     <span>Status</span>
                     <span>Amount</span>
-                    <span>Action</span>
+                    <span>Actions</span>
                 </div>
 
                 {schoolYearMonths.map((item) => {
@@ -44,7 +44,7 @@ function StudentPayments({ payments, openCreateForm, openEditForm }) {
 
                             <div className="actions">
                                 {!payment ? <button className="add-button" onClick={() => openCreateForm(item)}>Add Payment</button>
-                                    : <button className="edit-button" onClick={() => openEditForm(payment)}>Edit</button>
+                                    : <span className="material-symbols-outlined" onClick={() => openEditForm(payment)}>edit</span>
                                 }
                             </div>
                         </div>

@@ -95,3 +95,7 @@ a {
     color: white;
     font-weight: 600;
 }
+
+.material-symbols-outlined {
+  cursor: pointer;
+}

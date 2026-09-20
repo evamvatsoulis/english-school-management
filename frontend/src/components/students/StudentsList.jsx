@@ -20,9 +20,9 @@ function StudentsList({ students, openEditForm, openDeleteMessage }) {
                     <span>{student.phone}</span>
                     <span>{student.email}</span>
                     <div className="actions">
-                        <button className="edit-button" onClick={() => openEditForm(student)}>Edit</button>
                         <button className="view-button" onClick={() => navigate(`/students/${student.id}`)}>View payments</button>
-                        <button className="delete-button" onClick={() => openDeleteMessage(student)}>Delete</button>
+                        <span className="material-symbols-outlined" onClick={() => openEditForm(student)}>edit</span>
+                        <span className="material-symbols-outlined" onClick={() => openDeleteMessage(student)}>delete</span>
                     </div>
                 </div>
             ))}
