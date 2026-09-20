@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getStudentById } from '../services/studentService';
-import { getPaymentsByStudentId, createPayment } from "../services/paymentService";
+import { getPaymentsByStudentId, createPayment, updatePayment } from "../services/paymentService";
 import Sidebar from '../components/Sidebar';
 import PaymentsList from '../components/payments/PaymentsList';
 import StudentPayments from "../components/payments/StudentPayments";
@@ -15,10 +15,12 @@ function StudentDetails() {
   const [student, setStudent] = useState(null);
   const [payments, setPayments] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedPayment, setSelectedPayment] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [loadStudentError, setLoadStudentError] = useState("");
   const [loadPaymentsError, setLoadPaymentsError] = useState("");
   const [addPaymentError, setAddPaymentError] = useState("");
+  const [editPaymentError, setEditPaymentError] = useState("");
 
   const loadStudent = async () => {
     const response = await getStudentById(id);
@@ -54,17 +56,35 @@ function StudentDetails() {
     closeForm();
   };
 
+  const editPayment = async (paymentData) => {
+    const response = await updatePayment(selectedPayment.id, paymentData);
+
+    if (!response.ok) {
+      setEditPaymentError(response.data.error);
+      console.error(response.data.error);
+      return;
+    }
+    setPayments((currentPayments) => currentPayments.map((payment) => payment.id === response.data.id ? response.data : payment));
+    closeForm();
+  };
+
   const openCreateForm = (month) => {
     setSelectedMonth(month);
+    setSelectedPayment(null);
     setShowForm(true);
   };
+
+  const openEditForm = (payment) => {
+    setSelectedPayment(payment)
+    setShowForm(true);
+  }
 
   const closeForm = () => setShowForm(false);
 
   useEffect(() => {
     loadStudent();
     loadPaymentsByStudentId();
-  }, [id]);
+  }, [id, payments]);
 
   return (
     <div className="page-layout">
@@ -80,6 +100,7 @@ function StudentDetails() {
         <StudentPayments
           payments={payments}
           openCreateForm={openCreateForm}
+          openEditForm={openEditForm}
         />
 
         {showForm &&
@@ -88,7 +109,9 @@ function StudentDetails() {
               <PaymentForm
                 studentId={id}
                 selectedMonth={selectedMonth}
+                selectedPayment={selectedPayment}
                 addPayment={addPayment}
+                editPayment={editPayment}
                 closeForm={closeForm}
               />
             </div>

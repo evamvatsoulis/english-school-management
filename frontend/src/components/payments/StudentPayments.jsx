@@ -1,6 +1,6 @@
 import '../../styles/components/payments/StudentPayments.css';
 
-function StudentPayments({ payments, openCreateForm }) {
+function StudentPayments({ payments, openCreateForm, openEditForm }) {
     const schoolYearMonths = [
         { month: 9, year: 2026, name: "September" },
         { month: 10, year: 2026, name: "October" },
@@ -41,11 +41,11 @@ function StudentPayments({ payments, openCreateForm }) {
 
                             <span>{payment ? `€${payment.amount}` : "-"}</span>
 
-                            <span>
-                                {!payment && (
-                                    <button className="add-button" onClick={() => openCreateForm(item)}>Add Payment</button>
-                                )}
-                            </span>
+                            <div className="payment-actions">
+                                {!payment ? <button className="add-button" onClick={() => openCreateForm(item)}>Add Payment</button>
+                                    : <button className="edit-button" onClick={() => openEditForm(payment)}>Edit</button>
+                                }
+                            </div>
                         </div>
                     );
                 })}

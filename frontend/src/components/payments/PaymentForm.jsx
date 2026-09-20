@@ -1,18 +1,22 @@
 import { useState } from 'react';
 import '../../styles/components/payments/PaymentForm.css';
 
-function PaymentForm({ studentId, selectedMonth, addPayment, closeForm }) {
-    const [paymentMonth, setPaymentMonth] = useState(selectedMonth.month);
-    const [paymentYear, setPaymentYear] = useState(selectedMonth.year);
-    const [amount, setAmount] = useState("");
-    const [paymentDate, setPaymentDate] = useState(new Date().toISOString().split("T")[0]);
-    const [paymentMethod, setPaymentMethod] = useState("");
-    const [notes, setNotes] = useState("");
+function PaymentForm({ studentId, selectedMonth, selectedPayment, addPayment, editPayment, closeForm }) {
+    const formatDate = (date) => new Date(date).toLocaleDateString('en-CA');
+
+    const [paymentMonth, setPaymentMonth] = useState(selectedPayment ? selectedPayment.payment_month : selectedMonth.month);
+    const [paymentYear, setPaymentYear] = useState(selectedPayment ? selectedPayment.payment_year : selectedMonth.year);
+    const [amount, setAmount] = useState(selectedPayment ? selectedPayment.amount : "");
+    const [paymentDate, setPaymentDate] = useState(selectedPayment ? formatDate(selectedPayment.payment_date) : formatDate(new Date()));
+    const [paymentMethod, setPaymentMethod] = useState(selectedPayment ? selectedPayment.payment_method : "");
+    const [notes, setNotes] = useState(selectedPayment ? selectedPayment.notes : "");
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        selectedPayment ? editPayment({ studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes }) :
         addPayment({ studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes });
     };
+
 
     return (
         <form className="payment-form" onSubmit={handleSubmit}>

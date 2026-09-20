@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getStudents, createStudent, updateStudent } from "../services/studentService";
 import Sidebar from "../components/Sidebar";
 import StudentsList from '../components/students/StudentsList';
@@ -13,10 +14,14 @@ function Students() {
     const [addStudentError, setAddStudentError] = useState("");
     const [editStudentError, setEditStudentError] = useState("");
 
+    const navigate = useNavigate();
+
     const loadStudents = async () => {
         const response = await getStudents();
         if (response.status === 401) {
             localStorage.removeItem("token");
+            navigate('/login');
+            return;
         }
 
         if (!response.ok) {
