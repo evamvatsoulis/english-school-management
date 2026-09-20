@@ -4,11 +4,13 @@ import { getStudents, createStudent, updateStudent, deactivateStudent } from "..
 import Sidebar from "../components/Sidebar";
 import StudentsList from '../components/students/StudentsList';
 import StudentForm from '../components/students/StudentForm';
+import DeleteMessage from '../components/DeleteMessage';
 
 function Students() {
     const [students, setStudents] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [showForm, setShowForm] = useState(false);
+    const [showDeleteMessage, setShowDeleteMessage] = useState(false);
     const [loadStudentsError, setLoadStudentsError] = useState("");
     const [addStudentError, setAddStudentError] = useState("");
     const [editStudentError, setEditStudentError] = useState("");
@@ -62,8 +64,8 @@ function Students() {
         closeForm();
     };
 
-      const deleteStudent = async (studentId) => {
-        const response = await deactivateStudent(studentId);
+    const deleteStudent = async () => {
+        const response = await deactivateStudent(selectedStudent.id);
         if (response.status === 401) {
             localStorage.removeItem("token");
         }
@@ -73,6 +75,7 @@ function Students() {
             setDeactivateStudentError(response.data.error);
             return;
         }
+        closeDeleteMessage();
         loadStudents();
     };
 
@@ -85,6 +88,13 @@ function Students() {
         setSelectedStudent(student);
         setShowForm(true);
     };
+
+    const openDeleteMessage = (student) => {
+        setSelectedStudent(student);
+        setShowDeleteMessage(true);
+    };
+
+    const closeDeleteMessage = () => setShowDeleteMessage(false);
 
     const closeForm = () => setShowForm(false);
 
@@ -117,8 +127,19 @@ function Students() {
                 {!loadStudentsError && <StudentsList
                     students={students}
                     openEditForm={openEditForm}
-                    deleteStudent={deleteStudent}
+                    openDeleteMessage={openDeleteMessage}
                 />}
+
+                {showDeleteMessage && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <DeleteMessage
+                                deleteStudent={deleteStudent}
+                                closeDeleteMessage={closeDeleteMessage}
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
