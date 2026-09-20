@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getStudents, createStudent, updateStudent, deactivateStudent } from "../services/studentService";
+import { studentColumns } from '../config/config';
 import Sidebar from "../components/Sidebar";
-import StudentsList from '../components/students/StudentsList';
 import StudentForm from '../components/students/StudentForm';
 import DeleteMessage from '../components/DeleteMessage';
+import DataTable from '../components/DataTable';
 
 function Students() {
     const [students, setStudents] = useState([]);
@@ -98,6 +99,8 @@ function Students() {
 
     const closeForm = () => setShowForm(false);
 
+    const navigateToStudentDetails = (student) => navigate(`/students/${student.id}`);
+
     useEffect(() => {
         loadStudents();
     }, [])
@@ -124,11 +127,18 @@ function Students() {
                     </div>
                 )}
 
-                {!loadStudentsError && <StudentsList
-                    students={students}
-                    openEditForm={openEditForm}
-                    openDeleteMessage={openDeleteMessage}
-                />}
+                {!loadStudentsError &&
+                    <DataTable
+                        columns={studentColumns}
+                        data={students}
+
+                        actions={[
+                            { label: "edit", function: openEditForm },
+                            { label: "eye_tracking", function: navigateToStudentDetails },
+                            { label: "delete", function: openDeleteMessage }
+                        ]}
+                    />
+                }
 
                 {showDeleteMessage && (
                     <div className="modal-overlay">

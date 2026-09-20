@@ -1,0 +1,25 @@
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border: 1px solid var(--blue);
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--blue);
+}
+
+.data-table th {
+    background-color: var(--secondary-color);
+}
+
+.data-table tbody tr:hover {
+    background-color: var(--secondary-color);
+}
+
+.actions {
+    gap: 10px;
+}

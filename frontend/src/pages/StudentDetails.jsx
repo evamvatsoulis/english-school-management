@@ -2,10 +2,11 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getStudentById } from '../services/studentService';
 import { getPaymentsByStudentId, createPayment, updatePayment } from "../services/paymentService";
+import { paymentColumns } from "../config/config";
 import Sidebar from '../components/Sidebar';
-import PaymentsList from '../components/payments/PaymentsList';
 import StudentPayments from "../components/payments/StudentPayments";
 import PaymentForm from "../components/payments/PaymentForm";
+import DataTable from "../components/DataTable";
 
 function StudentDetails() {
   const { id } = useParams();
@@ -116,7 +117,12 @@ function StudentDetails() {
           </div>
         }
 
-        {payments && <PaymentsList payments={payments} />}
+        {payments &&
+          <DataTable
+            columns={paymentColumns}
+            data={payments}
+          />
+        }
 
       </div>
     </div>
