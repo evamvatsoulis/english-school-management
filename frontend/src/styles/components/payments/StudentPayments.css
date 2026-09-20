@@ -1,35 +1,11 @@
-.payments-list {
-    width: 100%;
-    border-radius: 8px;
-    border: 1px solid var(--blue);
-    overflow: hidden;
-}
-
-.payments-header,
-.payment-row {
-    display: grid;
+.student-payments-header,
+.student-payment-row {
     grid-template-columns: 1fr 1fr 1fr 1fr;
+    display: grid;
     align-items: center;
-    gap: 0px;
+    gap: 10px;
     padding: 15px;
     border-bottom: 1px solid var(--blue);
-}
-
-.payments-header {
-    background-color: var(--secondary-color);
-    font-weight: 700;
-}
-
-.payment-row:hover {
-    background-color: var(--secondary-color);
-}
-
-.payments-header span,
-.payment-row span {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .paid {

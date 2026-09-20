@@ -6,8 +6,6 @@ import Sidebar from '../components/Sidebar';
 import PaymentsList from '../components/payments/PaymentsList';
 import StudentPayments from "../components/payments/StudentPayments";
 import PaymentForm from "../components/payments/PaymentForm";
-import '../styles/pages/StudentDetails.css';
-import '../styles/components/students/StudentsList.css'
 
 function StudentDetails() {
   const { id } = useParams();

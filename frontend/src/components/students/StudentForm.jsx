@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../../styles/components/students/StudentForm.css';
+import '../../styles/components/form.css';
 
 function StudentForm({ addStudent, editStudent, selectedStudent, closeForm }) {
     const [firstName, setFirstName] = useState(selectedStudent ? selectedStudent.first_name : "");
@@ -17,7 +17,7 @@ function StudentForm({ addStudent, editStudent, selectedStudent, closeForm }) {
     };
 
     return (
-        <form className="student-form" onSubmit={handleSubmit}>
+        <form className="form" onSubmit={handleSubmit}>
             <input type="text" placeholder="First name" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
 
             <input type="text" placeholder="Last name" value={lastName} onChange={(event) => setLastName(event.target.value)} />
@@ -26,9 +26,9 @@ function StudentForm({ addStudent, editStudent, selectedStudent, closeForm }) {
 
             <input type="email" placeholder="Email" value={email} onChange={(event) => setEmail(event.target.value)} />
 
-            <button className="student-form-save" type="submit">Save</button>
+            <button className="form-save" type="submit">Save</button>
 
-            <button type="button" className="student-form-cancel" onClick={closeForm}>Cancel</button>
+            <button type="button" className="form-cancel" onClick={closeForm}>Cancel</button>
         </form>
     );
 }

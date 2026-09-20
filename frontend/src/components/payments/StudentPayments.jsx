@@ -1,4 +1,5 @@
 import '../../styles/components/payments/StudentPayments.css';
+import '../../styles/components/list.css';
 
 function StudentPayments({ payments, openCreateForm, openEditForm }) {
     const schoolYearMonths = [
@@ -17,9 +18,9 @@ function StudentPayments({ payments, openCreateForm, openEditForm }) {
     return (
         <div>
             <h2>Payments 2026/2027</h2>
-            <div className="payments-list">
+            <div className="list">
 
-                <div className="payments-header">
+                <div className="student-payments-header">
                     <span>Month</span>
                     <span>Status</span>
                     <span>Amount</span>
@@ -34,14 +35,14 @@ function StudentPayments({ payments, openCreateForm, openEditForm }) {
                     );
 
                     return (
-                        <div className="payment-row" key={`${item.month}-${item.year}`}>
+                        <div className="student-payment-row" key={`${item.month}-${item.year}`}>
                             <span>{item.name}</span>
 
                             <span className={payment ? "paid" : "unpaid"}>{payment ? "Paid" : "Unpaid"}</span>
 
                             <span>{payment ? `€${payment.amount}` : "-"}</span>
 
-                            <div className="payment-actions">
+                            <div className="actions">
                                 {!payment ? <button className="add-button" onClick={() => openCreateForm(item)}>Add Payment</button>
                                     : <button className="edit-button" onClick={() => openEditForm(payment)}>Edit</button>
                                 }

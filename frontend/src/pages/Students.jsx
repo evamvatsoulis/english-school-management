@@ -4,7 +4,6 @@ import { getStudents, createStudent, updateStudent } from "../services/studentSe
 import Sidebar from "../components/Sidebar";
 import StudentsList from '../components/students/StudentsList';
 import StudentForm from '../components/students/StudentForm';
-import '../styles/pages/Students.css'
 
 function Students() {
     const [students, setStudents] = useState([]);
@@ -85,7 +84,7 @@ function Students() {
             <div className="page-content">
                 <h1>Students</h1>
 
-                <button className="add-student-button" onClick={openCreateForm}>Add new student</button>
+                <button className="add-button" onClick={openCreateForm}>Add new student</button>
 
                 {showForm && (
                     <div className="modal-overlay">

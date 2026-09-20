@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../../styles/components/payments/PaymentForm.css';
+import '../../styles/components/form.css';
 
 function PaymentForm({ studentId, selectedMonth, selectedPayment, addPayment, editPayment, closeForm }) {
     const formatDate = (date) => new Date(date).toLocaleDateString('en-CA');
@@ -19,7 +19,7 @@ function PaymentForm({ studentId, selectedMonth, selectedPayment, addPayment, ed
 
 
     return (
-        <form className="payment-form" onSubmit={handleSubmit}>
+        <form className="form" onSubmit={handleSubmit}>
             <input type="text" placeholder="Payment month" value={paymentMonth} onChange={(event) => setPaymentMonth(event.target.value)} />
 
             <input type="text" placeholder="Payment year" value={paymentYear} onChange={(event) => setPaymentYear(event.target.value)} />
@@ -32,9 +32,9 @@ function PaymentForm({ studentId, selectedMonth, selectedPayment, addPayment, ed
 
             <input type="text" placeholder="Notes" value={notes} onChange={(event) => setNotes(event.target.value)} />
 
-            <button className="payment-form-save" type="submit">Save</button>
+            <button className="form-save" type="submit">Save</button>
 
-            <button type="button" className="payment-form-cancel" onClick={closeForm}>Cancel</button>
+            <button type="button" className="form-cancel" onClick={closeForm}>Cancel</button>
         </form>
     );
 }

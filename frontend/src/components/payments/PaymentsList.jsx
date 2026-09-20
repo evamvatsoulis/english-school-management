@@ -1,4 +1,5 @@
 import '../../styles/components/payments/PaymentsList.css'
+import '../../styles/components/list.css';
 
 const formatDate = (date) => new Date(date).toLocaleDateString('el-GR');
 
@@ -7,7 +8,7 @@ function PaymentsList({ payments }) {
         <div>
             <h2>Payments History</h2>
 
-            <div className="payments-list">
+            <div className="list">
                 <div className="payments-history-header">
                     <span>Month</span>
                     <span>Year</span>
@@ -17,7 +18,7 @@ function PaymentsList({ payments }) {
                     <span>Notes</span>
                 </div>
                 {payments.map((payment) => (
-                    <div className="payment-history-row" key={payment.id}>
+                    <div className="payments-history-row" key={payment.id}>
                         <span>{payment.payment_month}</span>
                         <span>{payment.payment_year}</span>
                         <span>{payment.amount}</span>
