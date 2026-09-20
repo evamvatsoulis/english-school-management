@@ -37,7 +37,7 @@ function StudentPayments({ payments, openCreateForm, openEditForm }) {
                         <div className="payment-row" key={`${item.month}-${item.year}`}>
                             <span>{item.name}</span>
 
-                            <span>{payment ? "Paid" : "Unpaid"}</span>
+                            <span className={payment ? "paid" : "unpaid"}>{payment ? "Paid" : "Unpaid"}</span>
 
                             <span>{payment ? `€${payment.amount}` : "-"}</span>
 

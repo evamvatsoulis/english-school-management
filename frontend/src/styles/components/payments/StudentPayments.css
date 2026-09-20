@@ -31,3 +31,11 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.paid {
+    color: var(--green);
+}
+
+.unpaid {
+    color: var(--red);
+}
