@@ -42,4 +42,9 @@ const updatePayment = async (studentId, amount, paymentMonth, paymentYear, payme
     return result.rows[0];
 };
 
-module.exports = { getPayments, createPayment, getPaymentById, getPaymentsByStudentId, updatePayment };
+const deletePayment = async (paymentId) => {
+    await pool.query("DELETE FROM payments where id = $1", [paymentId]);
+    return { message: "Payment deleted" };
+};
+
+module.exports = { getPayments, createPayment, getPaymentById, getPaymentsByStudentId, updatePayment, deletePayment };

@@ -71,4 +71,23 @@ const updatePayment = async (req, res) => {
     }
 };
 
-module.exports = { getPayments, createPayment, getPaymentById, getPaymentByStudentId, updatePayment };
+const deletePayment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const response = await fetch(
+            `http://${config.host}:${config.services.payment.port}/payments/${id}`,
+            {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+        const result = await response.json();
+        return res.status(response.status).json(result);
+    } catch (error) {
+        return res.status(503).json({ error: "Payment service is currently unavailable" });
+    }
+};
+
+module.exports = { getPayments, createPayment, getPaymentById, getPaymentByStudentId, updatePayment, deletePayment };

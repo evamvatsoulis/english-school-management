@@ -5,7 +5,8 @@ const {
     createPayment: createPaymentRepository,
     getPaymentById: getPaymentByIdRepository,
     getPaymentsByStudentId: getPaymentsByStudentIdRepository,
-    updatePayment: updatePaymentRepository
+    updatePayment: updatePaymentRepository,
+    deletePayment: deletePaymentRepository
 } = require('../repositories/paymentRepository');
 
 const paymentDoesNotExist = (payment) => payment.rows.length === 0;
@@ -128,4 +129,22 @@ const updatePayment = async (req, res) => {
     }
 };
 
-module.exports = { getPayments, createPayment, getPaymentById, getPaymentsByStudentId, updatePayment };
+const deletePayment = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const currentPayment = await getPaymentByIdRepository(id);
+
+        if (paymentDoesNotExist(currentPayment)) {
+            return res.status(404).json({ error: "Payment not found" });
+        }
+
+        const result = await deletePaymentRepository(id);
+
+        return res.status(200).json(result);
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to delete payment" });
+    }
+};
+
+module.exports = { getPayments, createPayment, getPaymentById, getPaymentsByStudentId, updatePayment, deletePayment };
