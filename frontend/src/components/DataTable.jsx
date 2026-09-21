@@ -26,7 +26,7 @@ function DataTable({ columns, data, actions }) {
                         {actions &&
                             <td className="actions">
                                 {actions.map((action) => (
-                                    <span className="material-symbols-outlined" onClick={() => action.function(item)}>{action.label}</span>
+                                    <span key={action.label} className="material-symbols-outlined" onClick={() => action.function(item)}>{action.label}</span>
                                 ))}
                             </td>
                         }

@@ -21,5 +21,6 @@
 }
 
 .actions {
-    gap: 10px;
+    display: flex;
+    gap: 5px;
 }

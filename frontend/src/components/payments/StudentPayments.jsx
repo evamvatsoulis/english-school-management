@@ -1,7 +1,8 @@
 import '../../styles/components/payments/StudentPayments.css';
 import '../../styles/components/list.css';
+import '../../styles/components/DataTable.css';
 
-function StudentPayments({ payments, openCreateForm, openEditForm }) {
+function StudentPayments({ payments, openCreateForm, openEditForm, openDeleteMessage }) {
     const schoolYearMonths = [
         { month: 9, year: 2026, name: "September" },
         { month: 10, year: 2026, name: "October" },
@@ -18,39 +19,48 @@ function StudentPayments({ payments, openCreateForm, openEditForm }) {
     return (
         <div>
             <h2>Payments 2026/2027</h2>
-            <div className="list">
+            <table className="data-table">
 
-                <div className="student-payments-header">
-                    <span>Month</span>
-                    <span>Status</span>
-                    <span>Amount</span>
-                    <span>Actions</span>
-                </div>
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
 
-                {schoolYearMonths.map((item) => {
-                    const payment = payments.find(
-                        (payment) =>
-                            payment.payment_month === item.month &&
-                            payment.payment_year === item.year
-                    );
+                <tbody>
 
-                    return (
-                        <div className="student-payment-row" key={`${item.month}-${item.year}`}>
-                            <span>{item.name}</span>
+                    {schoolYearMonths.map((item) => {
+                        const payment = payments.find(
+                            (payment) =>
+                                payment.payment_month === item.month &&
+                                payment.payment_year === item.year
+                        );
 
-                            <span className={payment ? "paid" : "unpaid"}>{payment ? "Paid" : "Unpaid"}</span>
+                        return (
+                            <tr key={`${item.month}-${item.year}`}>
+                                <td>{item.name}</td>
 
-                            <span>{payment ? `€${payment.amount}` : "-"}</span>
+                                <td className={payment ? "paid" : "unpaid"}>{payment ? "Paid" : "Unpaid"}</td>
 
-                            <div className="actions">
-                                {!payment ? <button className="add-button" onClick={() => openCreateForm(item)}>Add Payment</button>
-                                    : <span className="material-symbols-outlined" onClick={() => openEditForm(payment)}>edit</span>
-                                }
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
+                                <td>{payment ? `€${payment.amount}` : "-"}</td>
+
+                                <td>
+                                    {!payment ?
+                                        <button className="add-button" onClick={() => openCreateForm(item)}>Add Payment</button>
+                                        : <div className="actions">
+                                            <span className="material-symbols-outlined" onClick={() => openEditForm(payment)}>edit</span>
+                                            <span className="material-symbols-outlined" onClick={() => openDeleteMessage(payment)}>delete</span>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
         </div>
     );
 }
