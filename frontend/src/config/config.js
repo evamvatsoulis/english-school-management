@@ -14,3 +14,15 @@ export const paymentColumns = [
     { key: "notes", label: "Notes" }
 ];
 
+export const schoolYearMonths = [
+    { month: 9, year: 2026, name: "September" },
+    { month: 10, year: 2026, name: "October" },
+    { month: 11, year: 2026, name: "November" },
+    { month: 12, year: 2026, name: "December" },
+    { month: 1, year: 2027, name: "January" },
+    { month: 2, year: 2027, name: "February" },
+    { month: 3, year: 2027, name: "March" },
+    { month: 4, year: 2027, name: "April" },
+    { month: 5, year: 2027, name: "May" },
+    { month: 6, year: 2027, name: "June" }
+];

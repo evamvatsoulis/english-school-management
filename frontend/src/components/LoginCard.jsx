@@ -7,20 +7,20 @@ function LoginCard({ username, password, setUsername, setPassword, error, handle
                 <form className="form" onSubmit={handleSubmit}>
                     <div className="form-data">
                         <div className="form-group">
-                            <label>Username</label>
+                            <label htmlFor="username">Username</label>
                             <input
                                 type="text"
-                                name="username"
+                                id="username"
                                 value={username}
                                 onChange={(event) => setUsername(event.target.value)}
                             />
                         </div>
 
                         <div className="form-group">
-                            <label>Password</label>
+                            <label htmlFor="password">Password</label>
                             <input
                                 type="password"
-                                name="password"
+                                id="password"
                                 value={password}
                                 onChange={(event) => setPassword(event.target.value)}
                             />

@@ -5,7 +5,7 @@ import { getClasses } from '../services/classService';
 import { getEnrollmentsByClass } from '../services/enrollmentService';
 import { studentColumns } from '../config/config';
 import Sidebar from "../components/Sidebar";
-import StudentForm from '../components/students/StudentForm';
+import StudentForm from '../components/StudentForm';
 import DeleteMessage from '../components/DeleteMessage';
 import DataTable from '../components/DataTable';
 import Filter from '../components/Filter';

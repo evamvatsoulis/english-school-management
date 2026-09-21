@@ -39,7 +39,7 @@ const updatePayment = async (paymentId, paymentData) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${API_GATEWAY_URL}/students/${paymentId}`,
+        `${API_GATEWAY_URL}/payments/${paymentId}`,
         {
             method: "PATCH",
             headers: {

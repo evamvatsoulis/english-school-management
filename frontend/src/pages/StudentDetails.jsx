@@ -53,7 +53,7 @@ function StudentDetails() {
     const response = await createPayment(paymentData);
 
     if (!response.ok) {
-      setLoadPaymentsError(response.data.error);
+      setAddPaymentError(response.data.error);
       console.error(response.data.error);
       return;
     }
@@ -179,6 +179,7 @@ function StudentDetails() {
           <DataTable
             columns={paymentColumns}
             data={payments}
+            title={"Payments History"}
           />
         }
 

@@ -14,27 +14,48 @@ function PaymentForm({ studentId, selectedMonth, selectedPayment, addPayment, ed
     const handleSubmit = (event) => {
         event.preventDefault();
         selectedPayment ? editPayment({ studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes }) :
-        addPayment({ studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes });
+            addPayment({ studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes });
     };
 
 
     return (
         <form className="form" onSubmit={handleSubmit}>
-            <input type="text" placeholder="Payment month" value={paymentMonth} onChange={(event) => setPaymentMonth(event.target.value)} />
+            <div className="payment-form-data">
+                <div className="form-group">
+                    <label htmlFor="month">Payment month:</label>
+                    <input type="text" id="month" placeholder="Payment month" value={paymentMonth} onChange={(event) => setPaymentMonth(event.target.value)} />
+                </div>
 
-            <input type="text" placeholder="Payment year" value={paymentYear} onChange={(event) => setPaymentYear(event.target.value)} />
+                <div className="form-group">
+                    <label htmlFor="year">Payment year:</label>
+                    <input type="text" id="year" placeholder="Payment year" value={paymentYear} onChange={(event) => setPaymentYear(event.target.value)} />
+                </div>
 
-            <input type="text" placeholder="Amount" value={amount} onChange={(event) => setAmount(event.target.value)} />
+                <div className="form-group">
+                    <label htmlFor="amount">Amount:</label>
+                    <input type="text" id="amount" placeholder="Amount" value={amount} onChange={(event) => setAmount(event.target.value)} />
+                </div>
 
-            <input type="date" placeholder="Date" value={paymentDate} onChange={(event) => setPaymentDate(event.target.value)} />
+                <div className="form-group">
+                    <label htmlFor="date">Payment date:</label>
+                    <input type="date" id="date" placeholder="Payment date" value={paymentDate} onChange={(event) => setPaymentDate(event.target.value)} />
+                </div>
 
-            <input type="text" placeholder="Method" value={paymentMethod} onChange={(event) => setPaymentMethod(event.target.value)} />
+                <div className="form-group">
+                    <label htmlFor="method">Payment method:</label>
+                    <input type="text" id="method" placeholder="Payment method" value={paymentMethod} onChange={(event) => setPaymentMethod(event.target.value)} />
+                </div>
 
-            <input type="text" placeholder="Notes" value={notes} onChange={(event) => setNotes(event.target.value)} />
+                <div className="form-group">
+                    <label htmlFor="notes">Notes:</label>
+                    <input type="text" id="notes" placeholder="Notes" value={notes} onChange={(event) => setNotes(event.target.value)} />
+                </div>
+            </div>
 
-            <button className="form-save" type="submit">Save</button>
-
-            <button type="button" className="form-cancel" onClick={closeForm}>Cancel</button>
+            <div className="form-actions">
+                <button className="form-save" type="submit">Save</button>
+                <button type="button" className="form-cancel" onClick={closeForm}>Cancel</button>
+            </div>
         </form>
     );
 }
