@@ -17,26 +17,6 @@
     text-align: center;
 }
 
-.login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.login-form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.login-form-group input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: var(--grey);
-    border: none;
-}
-
 .login-button {
     width: 100%;
     padding: 10px;
@@ -44,6 +24,7 @@
     background-color: var(--blue);
     color: white;
     border: none;
+    margin-top: 15px;
 }
 
 .login-button:hover {

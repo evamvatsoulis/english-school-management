@@ -9,12 +9,12 @@ import StudentForm from '../components/students/StudentForm';
 import DeleteMessage from '../components/DeleteMessage';
 import DataTable from '../components/DataTable';
 import Filter from '../components/Filter';
+import '../styles/pages/Students.css';
 
 function Students() {
     const [students, setStudents] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [classes, setClasses] = useState([]);
-    const [selectedClass, setSelectedClass] = useState(null);
     const [showForm, setShowForm] = useState(false);
     const [showDeleteMessage, setShowDeleteMessage] = useState(false);
     const [loadStudentsError, setLoadStudentsError] = useState("");
@@ -53,7 +53,7 @@ function Students() {
             setAddStudentError(response.data.error);
             return;
         }
-        setStudents([...students, response.data]);
+        setStudents((currentStudents) => [...currentStudents, response.data]);
         closeForm();
     };
 
@@ -68,7 +68,7 @@ function Students() {
             setEditStudentError(response.data.error);
             return;
         }
-        setStudents(students.map((student) => student.id === response.data.id ? response.data : student));
+        setStudents((currentStudents) => currentStudents.map((student) => student.id === response.data.id ? response.data : student));
         closeForm();
     };
 
@@ -120,8 +120,6 @@ function Students() {
             return;
         }
         setStudents(response.data);
-        console.log(response.data);
-
     };
 
     const openCreateForm = () => {
@@ -157,15 +155,17 @@ function Students() {
             <div className="page-content">
                 <h1>Students</h1>
 
-                <button className="add-button" onClick={openCreateForm}>Add new student</button>
+                <div className="students-actions">
+                    {classes &&
+                        <Filter
+                            data={classes}
+                            item={"class"}
+                            load={loadEnrollmentsByClass}
+                        />
+                    }
 
-                {classes &&
-                    <Filter
-                        data={classes}
-                        item={"class"}
-                        load={loadEnrollmentsByClass}
-                    />
-                }
+                    <button className="add-button" onClick={openCreateForm}>Add new student</button>
+                </div>
 
                 {showForm && (
                     <div className="modal-overlay">
@@ -184,7 +184,7 @@ function Students() {
                     <DataTable
                         columns={studentColumns}
                         data={students}
-
+                        title={"Students"}
                         actions={[
                             { label: "edit", function: openEditForm },
                             { label: "eye_tracking", function: navigateToStudentDetails },

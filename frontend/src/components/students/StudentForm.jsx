@@ -18,17 +18,32 @@ function StudentForm({ addStudent, editStudent, selectedStudent, closeForm }) {
 
     return (
         <form className="form" onSubmit={handleSubmit}>
-            <input type="text" placeholder="First name" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
+            <div className="form-data">
+                <div className="form-group">
+                    <label htmlFor="firstname">Firstname:</label>
+                    <input type="text" name="firstname" placeholder="First name" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
+                </div>
 
-            <input type="text" placeholder="Last name" value={lastName} onChange={(event) => setLastName(event.target.value)} />
+                <div className="form-group">
+                    <label htmlFor="lastname">Lastname:</label>
+                    <input type="text" name="lastname" placeholder="Last name" value={lastName} onChange={(event) => setLastName(event.target.value)} />
+                </div>
 
-            <input type="text" placeholder="Phone" value={phone} onChange={(event) => setPhone(event.target.value)} />
+                <div className="form-group">
+                    <label htmlFor="phone">Phone:</label>
+                    <input type="text" name="phone" placeholder="Phone" value={phone} onChange={(event) => setPhone(event.target.value)} />
+                </div>
 
-            <input type="email" placeholder="Email" value={email} onChange={(event) => setEmail(event.target.value)} />
+                <div className="form-group">
+                    <label htmlFor="email">Email:</label>
+                    <input type="email" name="email" placeholder="Email" value={email} onChange={(event) => setEmail(event.target.value)} />
+                </div>
+            </div>
 
-            <button className="form-save" type="submit">Save</button>
-
-            <button type="button" className="form-cancel" onClick={closeForm}>Cancel</button>
+            <div className="form-actions">
+                <button className="form-save" type="submit">Save</button>
+                <button type="button" className="form-cancel" onClick={closeForm}>Cancel</button>
+            </div>
         </form>
     );
 }

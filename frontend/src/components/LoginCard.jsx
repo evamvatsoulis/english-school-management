@@ -1,32 +1,36 @@
 function LoginCard({ username, password, setUsername, setPassword, error, handleSubmit }) {
     return (
-        <div className="login-card">
-            <h1>Login</h1>
+        <div className="login-page">
+            <div className="login-card">
+                <h1>Login</h1>
 
-            <form className="login-form" onSubmit={handleSubmit}>
-                <div className="login-form-group">
-                    <label>Username</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(event) => setUsername(event.target.value)}
-                    />
-                </div>
+                <form className="form" onSubmit={handleSubmit}>
+                    <div className="form-data">
+                        <div className="form-group">
+                            <label>Username</label>
+                            <input
+                                type="text"
+                                name="username"
+                                value={username}
+                                onChange={(event) => setUsername(event.target.value)}
+                            />
+                        </div>
 
-                <div className="login-form-group">
-                    <label>Password</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                    />
+                        <div className="form-group">
+                            <label>Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                value={password}
+                                onChange={(event) => setPassword(event.target.value)}
+                            />
+                        </div>
+                    </div>
                     {error && <p className="login-error">{error}</p>}
-                </div>
 
-                <button className="login-button" type="submit">
-                    Login
-                </button>
-            </form>
+                    <button className="login-button" type="submit">Login</button>
+                </form>
+            </div>
         </div>
     );
 }

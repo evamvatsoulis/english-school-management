@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { login } from '../services/authService';
 import LoginCard from "../components/LoginCard";
 import '../styles/pages/Login.css';
+import '../styles/components/form.css';
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -23,7 +24,7 @@ function Login() {
             } else {
                 localStorage.setItem("token", response.data.token);
                 console.log(response.data.message);
-                navigate("/dashboard");
+                navigate("/students");
             }
         } catch (error) {
             console.error(error);
@@ -31,16 +32,14 @@ function Login() {
     };
 
     return (
-        <div className="login-page">
-            <LoginCard
-                username={username}
-                password={password}
-                setUsername={setUsername}
-                setPassword={setPassword}
-                error={error}
-                handleSubmit={handleSubmit}
-            />
-        </div>
+        <LoginCard
+            username={username}
+            password={password}
+            setUsername={setUsername}
+            setPassword={setPassword}
+            error={error}
+            handleSubmit={handleSubmit}
+        />
     );
 }
 

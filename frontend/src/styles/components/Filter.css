@@ -1,4 +1,14 @@
-.filter-select {
+.filter-section {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+.filter-section label {
+    margin: auto;
+}
+
+.filter-section select {
     width: fit-content;
     padding: 10px;
     border: none;
@@ -8,11 +18,11 @@
     font-weight: 600;
 }
 
-.filter-select:hover {
+.filter-section select:hover {
     background-color: var(--secondary-blue);
     cursor: pointer;
 }
 
-.filter-option {
+.filter-section option {
     background-color: var(--secondary-color);
 }

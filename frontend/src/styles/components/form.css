@@ -1,23 +1,33 @@
 .form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
 }
 
-.form input {
+.form-data {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group input {
     width: 100%;
     padding: 10px;
     border-radius: 8px;
-    outline: none;
+    background-color: var(--grey);
     border: none;
 }
 
 .form-actions {
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
     gap: 10px;
-
-    margin-top: 8px;
+    margin-top: 20px;
 }
 
 .form-save {

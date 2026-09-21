@@ -36,10 +36,10 @@
     padding: 10px;
     border: none;
     border-radius: 8px;
-    background-color: #dc2626;
-    color: white;
+    color: var(--red);
+    background: none;
 }
 
-.sidebar-logout:hover {
-    background-color: #b91c1c;
+.sidebar-logout span {
+    font-size: 30px;
 }

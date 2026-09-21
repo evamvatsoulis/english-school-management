@@ -15,21 +15,11 @@ function Sidebar() {
             <h2>English School</h2>
 
             <nav className="sidebar-nav">
-                <NavLink to="/dashboard">
-                    Dashboard
-                </NavLink>
-
-                <NavLink to="/students">
-                    Students
-                </NavLink>
+                <NavLink to="/dashboard">Dashboard</NavLink>
+                <NavLink to="/students">Students</NavLink>
             </nav>
 
-            <button
-                className="sidebar-logout"
-                onClick={handleLogout}
-            >
-                Logout
-            </button>
+            <button className="sidebar-logout"><span className="material-symbols-outlined" onClick={handleLogout}>logout</span></button>
         </aside>
     );
 }
