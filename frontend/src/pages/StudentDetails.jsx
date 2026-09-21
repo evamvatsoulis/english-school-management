@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getStudentById } from '../services/studentService';
 import { getPaymentsByStudentId, createPayment, updatePayment, deletePayment } from "../services/paymentService";
+import { getEnrollmentsByStudent } from "../services/enrollmentService";
 import { paymentColumns } from "../config/config";
 import Sidebar from '../components/Sidebar';
 import StudentPayments from "../components/payments/StudentPayments";
@@ -16,6 +17,7 @@ function StudentDetails() {
   const [payments, setPayments] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
+  const [enrollments, setEnrollments] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [showDeleteMessage, setShowDeleteMessage] = useState(false);
   const [loadStudentError, setLoadStudentError] = useState("");
@@ -23,6 +25,7 @@ function StudentDetails() {
   const [addPaymentError, setAddPaymentError] = useState("");
   const [editPaymentError, setEditPaymentError] = useState("");
   const [deletePaymentError, setDeletePaymentError] = useState("");
+  const [loadEnrollmentsByStudentError, setLoadEnrollmentsByStudentError] = useState("");
 
   const loadStudent = async () => {
     const response = await getStudentById(id);
@@ -84,6 +87,20 @@ function StudentDetails() {
     closeDeleteMessage();
   };
 
+  const loadEnrollmentsByStudent = async () => {
+    const response = await getEnrollmentsByStudent(id);
+    if (response.status === 401) {
+      localStorage.removeItem("token");
+    }
+
+    if (!response.ok) {
+      console.error(response.data.error);
+      setLoadEnrollmentsByStudentError(response.data.error);
+      return;
+    }
+    setEnrollments(response.data);
+  }
+
   const openCreateForm = (month) => {
     setSelectedMonth(month);
     setSelectedPayment(null);
@@ -107,7 +124,8 @@ function StudentDetails() {
   useEffect(() => {
     loadStudent();
     loadPaymentsByStudentId();
-  }, [id, payments]);
+    loadEnrollmentsByStudent();
+  }, [id]);
 
   return (
     <div className="page-layout">
@@ -117,6 +135,9 @@ function StudentDetails() {
         {student && (
           <div>
             <h1>{student.first_name} {student.last_name}</h1>
+            {enrollments.map((enrollment) => (
+              enrollment.school_year === "2026-2027" && <h2 key={enrollment.id}>Class: {enrollment.name}</h2>
+            ))}
           </div>
         )}
 
