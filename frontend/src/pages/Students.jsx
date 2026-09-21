@@ -146,6 +146,7 @@ function Students() {
                             <DeleteMessage
                                 deleteStudent={deleteStudent}
                                 closeDeleteMessage={closeDeleteMessage}
+                                item={"student"}
                             />
                         </div>
                     </div>

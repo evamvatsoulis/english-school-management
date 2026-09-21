@@ -148,6 +148,7 @@ function StudentDetails() {
               <DeleteMessage
                 removePayment={removePayment}
                 closeDeleteMessage={closeDeleteMessage}
+                item={"payment"}
               />
             </div>
           </div>

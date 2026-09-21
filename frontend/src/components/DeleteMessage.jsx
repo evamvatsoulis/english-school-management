@@ -1,9 +1,9 @@
 import '../styles/components/DeleteMessage.css';
-function DeleteMessage({ deleteStudent, removePayment, closeDeleteMessage }) {
+function DeleteMessage({ deleteStudent, removePayment, closeDeleteMessage, item }) {
     return (
         <>
             <div className="delete-message">
-                <p>Are you sure you want to delete this student ?</p>
+                <p>Are you sure you want to delete this {item} ?</p>
             </div>
             <div className="delete-actions">
                 {deleteStudent ?

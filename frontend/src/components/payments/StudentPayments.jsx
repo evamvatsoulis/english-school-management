@@ -1,5 +1,4 @@
 import '../../styles/components/payments/StudentPayments.css';
-import '../../styles/components/list.css';
 import '../../styles/components/DataTable.css';
 
 function StudentPayments({ payments, openCreateForm, openEditForm, openDeleteMessage }) {
