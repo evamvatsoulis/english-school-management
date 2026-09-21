@@ -1,0 +1,19 @@
+const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL;
+
+const getClasses = async () => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_GATEWAY_URL}/classes`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
+
+export { getClasses };

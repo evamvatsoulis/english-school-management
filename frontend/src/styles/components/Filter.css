@@ -1,0 +1,18 @@
+.filter-select {
+    width: fit-content;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--blue);
+    color: white;
+    font-weight: 600;
+}
+
+.filter-select:hover {
+    background-color: var(--secondary-blue);
+    cursor: pointer;
+}
+
+.filter-option {
+    background-color: var(--secondary-color);
+}

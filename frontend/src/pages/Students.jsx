@@ -1,21 +1,28 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getStudents, createStudent, updateStudent, deactivateStudent } from "../services/studentService";
+import { getClasses } from '../services/classService';
+import { getEnrollmentsByClass } from '../services/enrollmentService';
 import { studentColumns } from '../config/config';
 import Sidebar from "../components/Sidebar";
 import StudentForm from '../components/students/StudentForm';
 import DeleteMessage from '../components/DeleteMessage';
 import DataTable from '../components/DataTable';
+import Filter from '../components/Filter';
 
 function Students() {
     const [students, setStudents] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
+    const [classes, setClasses] = useState([]);
+    const [selectedClass, setSelectedClass] = useState(null);
     const [showForm, setShowForm] = useState(false);
     const [showDeleteMessage, setShowDeleteMessage] = useState(false);
     const [loadStudentsError, setLoadStudentsError] = useState("");
     const [addStudentError, setAddStudentError] = useState("");
     const [editStudentError, setEditStudentError] = useState("");
     const [deactivateStudentError, setDeactivateStudentError] = useState("");
+    const [loadClassesError, setLoadClassesError] = useState("");
+    const [loadEnrollmentsByClassError, setLoadEnrollmentsByClassError] = useState("");
 
     const navigate = useNavigate();
 
@@ -80,6 +87,43 @@ function Students() {
         loadStudents();
     };
 
+    const loadClasses = async () => {
+        const response = await getClasses();
+        if (response.status === 401) {
+            localStorage.removeItem("token");
+        }
+
+        if (!response.ok) {
+            console.error(response.data.error);
+            setLoadClassesError(response.data.error);
+            return;
+        }
+        setClasses(response.data);
+    };
+
+    const loadEnrollmentsByClass = async (classId) => {
+        let response;
+        setStudents([]);
+        classId === "--" ?
+            response = await getStudents() :
+            response = await getEnrollmentsByClass(classId);
+
+        if (response.status === 401) {
+            localStorage.removeItem("token");
+        }
+
+        if (!response.ok) {
+            console.error(response.data.error);
+            classId === "--" ?
+                setLoadStudentsError(response.data.error) :
+                setLoadEnrollmentsByClassError(response.data.error);
+            return;
+        }
+        setStudents(response.data);
+        console.log(response.data);
+
+    };
+
     const openCreateForm = () => {
         setSelectedStudent(null);
         setShowForm(true);
@@ -103,6 +147,7 @@ function Students() {
 
     useEffect(() => {
         loadStudents();
+        loadClasses();
     }, [])
 
     return (
@@ -113,6 +158,14 @@ function Students() {
                 <h1>Students</h1>
 
                 <button className="add-button" onClick={openCreateForm}>Add new student</button>
+
+                {classes &&
+                    <Filter
+                        data={classes}
+                        item={"class"}
+                        load={loadEnrollmentsByClass}
+                    />
+                }
 
                 {showForm && (
                     <div className="modal-overlay">
