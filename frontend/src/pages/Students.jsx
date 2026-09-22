@@ -15,6 +15,7 @@ function Students() {
     const [students, setStudents] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [classes, setClasses] = useState([]);
+    const [selectedClassId, setSelectedClassId] = useState(null);
     const [showForm, setShowForm] = useState(false);
     const [showDeleteMessage, setShowDeleteMessage] = useState(false);
     const [loadStudentsError, setLoadStudentsError] = useState("");
@@ -53,7 +54,9 @@ function Students() {
             setAddStudentError(response.data.error);
             return;
         }
-        setStudents((currentStudents) => [...currentStudents, response.data]);
+        
+        selectedClassId ? loadEnrollmentsByClass(selectedClassId) :
+        loadStudents();
         closeForm();
     };
 
@@ -102,11 +105,8 @@ function Students() {
     };
 
     const loadEnrollmentsByClass = async (classId) => {
-        let response;
         setStudents([]);
-        classId === "--" ?
-            response = await getStudents() :
-            response = await getEnrollmentsByClass(classId);
+        const response = await getEnrollmentsByClass(classId);
 
         if (response.status === 401) {
             localStorage.removeItem("token");
@@ -114,12 +114,20 @@ function Students() {
 
         if (!response.ok) {
             console.error(response.data.error);
-            classId === "--" ?
-                setLoadStudentsError(response.data.error) :
-                setLoadEnrollmentsByClassError(response.data.error);
+            setLoadEnrollmentsByClassError(response.data.error);
             return;
         }
         setStudents(response.data);
+    };
+
+    const handleFilter = (classId) => {
+        if (classId === "--") {
+            setSelectedClassId(null);
+            loadStudents();
+        } else {
+            setSelectedClassId(classId);
+            loadEnrollmentsByClass(classId);
+        }
     };
 
     const openCreateForm = () => {
@@ -160,7 +168,7 @@ function Students() {
                         <Filter
                             data={classes}
                             item={"class"}
-                            load={loadEnrollmentsByClass}
+                            handleFilter={handleFilter}
                         />
                     }
 
