@@ -85,6 +85,7 @@ function StudentDetails() {
       return;
     }
     closeDeleteMessage();
+    loadPaymentsByStudentId();
   };
 
   const loadEnrollmentsByStudent = async () => {
