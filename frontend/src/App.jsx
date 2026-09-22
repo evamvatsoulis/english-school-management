@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import Dashboard from "./pages/Dashboard";
 import Students from "./pages/Students";
 import StudentDetails from './pages/StudentDetails';
+import Classes from './pages/Classes';
 import ProtectedRoute from "./components/protect/ProtectedRoute";
 import LoginProtectedRoute from "./components/protect/LoginProtectedRoute";
 
@@ -18,6 +19,7 @@ function App() {
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/students" element={<ProtectedRoute><Students /></ProtectedRoute>} />
       <Route path="/students/:id" element={<ProtectedRoute><StudentDetails /></ProtectedRoute>} />
+      <Route path="/classes" element={<ProtectedRoute><Classes /></ProtectedRoute>} />
     </Routes>
   );
 }

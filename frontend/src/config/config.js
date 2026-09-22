@@ -14,6 +14,11 @@ export const paymentColumns = [
     { key: "notes", label: "Notes" }
 ];
 
+export const classColumns = [
+    { key: "name", label: "Level" },
+    { key: "school_year", label: "School Year" }
+];
+
 export const schoolYearMonths = [
     { month: 9, year: 2026, name: "September" },
     { month: 10, year: 2026, name: "October" },

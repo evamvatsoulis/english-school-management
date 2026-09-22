@@ -17,6 +17,7 @@ function Sidebar() {
             <nav className="sidebar-nav">
                 <NavLink to="/dashboard">Dashboard</NavLink>
                 <NavLink to="/students">Students</NavLink>
+                <NavLink to="/classes">Classes</NavLink>
             </nav>
 
             <button className="sidebar-logout"><span className="material-symbols-outlined" onClick={handleLogout}>logout</span></button>
