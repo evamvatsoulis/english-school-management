@@ -16,6 +16,22 @@ const getClasses = async () => {
     return { status: response.status, ok: response.ok, data };
 };
 
+const getClassById = async (classId) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_GATEWAY_URL}/classes/${classId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
+
 const createClass = async (classData) => {
     const token = localStorage.getItem("token");
 
@@ -72,4 +88,4 @@ const deactivateClass = async (classId) => {
     return { status: response.status, ok: response.ok, data };
 };
 
-export { getClasses, createClass, updateClass, deactivateClass };
+export { getClasses, getClassById, createClass, updateClass, deactivateClass };

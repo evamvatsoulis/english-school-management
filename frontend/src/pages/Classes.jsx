@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getClasses, createClass, updateClass, deactivateClass } from '../services/classService';
 import { classColumns } from '../config/config';
 import DataTable from '../components/DataTable';
@@ -15,6 +16,8 @@ function Classes() {
     const [addClassError, setAddClassError] = useState("");
     const [editClassError, setEditClassError] = useState("");
     const [deleteClassError, setDeleteClassError] = useState("");
+
+    const navigate = useNavigate();
 
     const loadClasses = async () => {
         const response = await getClasses();
@@ -88,11 +91,13 @@ function Classes() {
     const openDeleteMessage = (subject) => {
         setSelectedClass(subject);
         setShowDeleteMessage(true);
-    }
+    };
 
     const closeForm = () => setShowForm(false);
 
     const closeDeleteMessage = () => setShowDeleteMessage(false);
+
+    const navigateToClassDetails = (subject) => navigate(`/classes/${subject.id}`);
 
     useEffect(() => {
         loadClasses();
@@ -115,6 +120,7 @@ function Classes() {
                         data={classes}
                         actions={[
                             { label: "edit", function: openEditForm },
+                            { label: "eye_tracking", function: navigateToClassDetails},
                             { label: "delete", function: openDeleteMessage }
                         ]}
                     />
