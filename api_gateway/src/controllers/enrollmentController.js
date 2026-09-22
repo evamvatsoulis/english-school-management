@@ -41,4 +41,23 @@ const getEnrollmentsByClass = async (req, res) => {
     }
 };
 
-module.exports = { createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass };
+const deleteEnrollment = async (req, res) => {
+    try {
+        const { classId, studentId } = req.params;
+        const response = await fetch(
+            `http://${config.host}:${config.services.class.port}/enrollments/class/${classId}/student/${studentId}`,
+            {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+        const result = await response.json();
+        return res.status(response.status).json(result);
+    } catch (err) {
+        return res.status(503).json({ error: "Class service is currently unavailable" });
+    }
+};
+
+module.exports = { createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, deleteEnrollment };

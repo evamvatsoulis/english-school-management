@@ -5,7 +5,9 @@ const { getClassById } = require('../repositories/classRepository');
 const {
     createEnrollment: createEnrollmentRepository,
     getEnrollmentsByStudent: getEnrollmentsByStudentRepository,
-    getStudentsIdsByClass: getStudentsIdsByClassRepository
+    getStudentsIdsByClass: getStudentsIdsByClassRepository,
+    getEnrollment,
+    deleteEnrollment: deleteEnrollmentRepository
 } = require('../repositories/enrollmentRepository');
 
 const zeroRows = (result) => result.length === 0;
@@ -15,7 +17,7 @@ const fetchStudent = async (studentId) => {
         const response = await fetch(`http://${config.host}:${config.services.student.port}/students/${studentId}`);
         const result = await response.json();
         if (!response.ok) {
-            return { status: response.status, error: result };
+            return { status: response.status, error: result.error };
         }
         return { status: 200, data: result };
     } catch (error) {
@@ -39,7 +41,7 @@ const createEnrollment = async (req, res) => {
 
         const classResponse = await getClassById(value.classId);
 
-        if (!classResponse) {
+        if (zeroRows(classResponse)) {
             return res.status(404).json({ error: "Class not found" });
         }
 
@@ -80,7 +82,7 @@ const getEnrollmentsByClass = async (req, res) => {
 
         const classResponse = await getClassById(classId);
 
-        if (!classResponse) {
+        if (zeroRows(classResponse)) {
             return res.status(404).json({ error: "Class not found" });
         }
 
@@ -107,4 +109,30 @@ const getEnrollmentsByClass = async (req, res) => {
     }
 };
 
-module.exports = { createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass };
+const deleteEnrollment = async (req, res) => {
+    const { classId, studentId } = req.params;
+
+    const classResponse = await getClassById(classId);
+
+    if (zeroRows(classResponse)) {
+        return res.status(404).json({ error: "Class not found" });
+    }
+
+    const studentError = await fetchStudent(studentId);
+
+    if (studentError.status !== 200) {
+        return res.status(studentError.status).json({ error: studentError.error });
+    }
+
+    const enrollment = await getEnrollment(classId, studentId);
+
+    if (zeroRows(enrollment)) {
+        return res.status(404).json({ error: "Enrollment not found" });
+    }
+
+    const result = await deleteEnrollmentRepository(classId, studentId);
+
+    return res.status(200).json({ message: "Enrollment deleted" });
+};
+
+module.exports = { createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, deleteEnrollment };

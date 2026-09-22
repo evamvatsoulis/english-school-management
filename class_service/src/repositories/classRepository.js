@@ -17,7 +17,7 @@ const getClasses = async () => {
 
 const getClassById = async (id) => {
     const result = await pool.query(`SELECT * FROM classes WHERE id = $1`, [id]);
-    return result.rows[0];
+    return result.rows;
 };
 
 const updateClass = async (name, schoolYear, id) => {
