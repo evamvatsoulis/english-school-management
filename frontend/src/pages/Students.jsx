@@ -155,7 +155,7 @@ function Students() {
             <div className="page-content">
                 <h1>Students</h1>
 
-                <div className="students-actions">
+                <div className="page-actions">
                     {classes &&
                         <Filter
                             data={classes}

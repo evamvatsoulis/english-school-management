@@ -16,6 +16,25 @@ const getClasses = async () => {
     return { status: response.status, ok: response.ok, data };
 };
 
+const createClass = async (classData) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+        `${API_GATEWAY_URL}/classes`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(classData)
+        }
+    );
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
+
 const updateClass = async (classId, classData) => {
     const token = localStorage.getItem("token");
 
@@ -35,4 +54,4 @@ const updateClass = async (classId, classData) => {
     return { status: response.status, ok: response.ok, data };
 };
 
-export { getClasses, updateClass };
+export { getClasses, createClass, updateClass };

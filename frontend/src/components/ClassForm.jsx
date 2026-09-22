@@ -16,12 +16,12 @@ function ClassForm({ addClass, editClass, selectedClass, closeForm }) {
         <form className="form" onSubmit={handleSubmit}>
             <div className="form-data">
                 <div className="form-group">
-                    <label htmlFor="name">Name:</label>
-                    <input type="text" id="name" placeholder="Name" value={name} onChange={(event) => setName(event.target.value)} />
+                    <label htmlFor="level">Level:</label>
+                    <input type="text" id="level" placeholder="Level" value={name} onChange={(event) => setName(event.target.value)} />
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="school-year">Lastname:</label>
+                    <label htmlFor="school-year">School Year:</label>
                     <input type="text" id="school-year" placeholder="School Year" value={schoolYear} onChange={(event) => setSchoolYear(event.target.value)} />
                 </div>
             </div>

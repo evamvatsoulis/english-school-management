@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getClasses, updateClass } from '../services/classService';
+import { getClasses, createClass, updateClass } from '../services/classService';
 import { classColumns } from '../config/config';
 import DataTable from '../components/DataTable';
 import Sidebar from '../components/Sidebar';
@@ -10,6 +10,7 @@ function Classes() {
     const [selectedClass, setSelectedClass] = useState(null);
     const [showForm, setShowForm] = useState(false);
     const [loadClassesError, setLoadClassesError] = useState("");
+    const [addClassError, setAddClassError] = useState("");
     const [editClassError, setEditClassError] = useState("");
 
     const loadClasses = async () => {
@@ -26,6 +27,21 @@ function Classes() {
         setClasses(response.data);
     };
 
+    const addClass = async (classData) => {
+        const response = await createClass(classData);
+        if (response.status === 401) {
+            localStorage.removeItem("token");
+        }
+
+        if (!response.ok) {
+            console.error(response.data.error);
+            setAddClassError(response.data.error);
+            return;
+        }
+        setClasses((currentClasses) => [...currentClasses, response.data]);
+        closeForm();
+    };
+
     const editClass = async (classData) => {
         const response = await updateClass(selectedClass.id, classData);
         if (response.status === 401) {
@@ -39,6 +55,11 @@ function Classes() {
         }
         setClasses((currentClasses) => currentClasses.map((subject) => subject.id === response.data.id ? response.data : subject));
         closeForm();
+    };
+
+    const openCreateForm = () => {
+        setSelectedClass(null);
+        setShowForm(true);
     };
 
     const openEditForm = (subject) => {
@@ -57,11 +78,16 @@ function Classes() {
             <Sidebar />
 
             <div className="page-content">
+                <h1>Classes</h1>
+
+                <div className="page-actions">
+                    <button className="add-button" onClick={openCreateForm}>Add new class</button>
+                </div>
+
                 {classes &&
                     <DataTable
                         columns={classColumns}
                         data={classes}
-                        title={"Classes"}
                         actions={[
                             { label: "edit", function: openEditForm }
                         ]}
@@ -72,6 +98,7 @@ function Classes() {
                     <div className="modal-overlay">
                         <div className="modal-content">
                             <ClassForm
+                                addClass={addClass}
                                 editClass={editClass}
                                 selectedClass={selectedClass}
                                 closeForm={closeForm}
