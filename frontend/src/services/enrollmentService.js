@@ -32,4 +32,23 @@ const getEnrollmentsByClass = async (classId) => {
     return { status: response.status, ok: response.ok, data };
 };
 
-export { getEnrollmentsByStudent, getEnrollmentsByClass };
+const createEnrollment = async (enrollmentData) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+        `${API_GATEWAY_URL}/enrollments`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(enrollmentData)
+        }
+    );
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
+
+export { getEnrollmentsByStudent, getEnrollmentsByClass, createEnrollment };

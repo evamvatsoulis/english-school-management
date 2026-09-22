@@ -1,18 +1,25 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from 'react';
 import { getClassById } from '../services/classService';
-import { getEnrollmentsByClass } from '../services/enrollmentService';
+import { getEnrollmentsByClass, createEnrollment } from '../services/enrollmentService';
+import { getStudents } from '../services/studentService';
 import { studentColumns } from '../config/config';
 import Sidebar from '../components/Sidebar';
 import DataTable from "../components/DataTable";
+import '../styles/components/select.css';
 
 function ClassDetails() {
     const { id } = useParams();
+    const classId = Number(id);
 
     const [subject, setSubject] = useState(null);
     const [enrollments, setEnrollments] = useState([]);
+    const [students, setStudents] = useState([]);
+    const [selectedStudentId, setSelectedStudentId] = useState(null);
     const [loadClassError, setLoadClassError] = useState("");
     const [loadEnrollmentsByClassError, setLoadEnrollmentsByClassError] = useState("");
+    const [loadStudentsError, setLoadStudentsError] = useState("");
+    const [addEnrollmentError, setAddEnrollmentError] = useState("");
 
     const loadClass = async () => {
         const response = await getClassById(id);
@@ -44,9 +51,40 @@ function ClassDetails() {
         setEnrollments(response.data);
     };
 
+    const loadStudents = async () => {
+        const response = await getStudents();
+
+        if (response.status === 401) {
+            localStorage.removeItem("token");
+        }
+
+        if (!response.ok) {
+            setLoadStudentsError(response.data.error);
+            console.error(response.data.error);
+            return;
+        }
+        setStudents(response.data);
+    };
+
+    const addEnrollment = async (studentId) => {
+        const response = await createEnrollment({ studentId, classId });
+
+        if (response.status === 401) {
+            localStorage.removeItem("token");
+        }
+
+        if (!response.ok) {
+            setAddEnrollmentError(response.data.error);
+            console.error(response.data.error);
+            return;
+        }
+        loadEnrollmentsByClass();
+    };
+
     useEffect(() => {
         loadClass();
         loadEnrollmentsByClass();
+        loadStudents();
     }, [id]);
 
     return (
@@ -63,6 +101,18 @@ function ClassDetails() {
                         title={"Students"}
                     />
                 }
+
+                <div className="select-section">
+                    <label htmlFor="student">Select student:</label>
+                    <select id="student" onChange={(event) => setSelectedStudentId(event.target.value)}>
+                        <option value="--" key="--">--</option>
+                        {students.map((student) => (
+                            <option value={student.id} key={student.id}>{student.first_name} {student.last_name}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <button className="add-button" onClick={() => addEnrollment(selectedStudentId)}>Add student to class</button>
             </div>
         </div>
     );

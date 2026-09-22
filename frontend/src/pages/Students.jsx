@@ -184,7 +184,6 @@ function Students() {
                     <DataTable
                         columns={studentColumns}
                         data={students}
-                        title={"Students"}
                         actions={[
                             { label: "edit", function: openEditForm },
                             { label: "eye_tracking", function: navigateToStudentDetails },

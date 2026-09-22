@@ -1,9 +1,9 @@
-import '../styles/components/Filter.css'
+import '../styles/components/select.css'
 
 function Filter({ data, item, load }) {
     return (
-        <div className="filter-section">
-            <label htmlFor="item">Choose a {item}:</label>
+        <div className="select-section">
+            <label htmlFor="item">Sort by {item}:</label>
 
             <select id="item" onChange={(event) => load(event.target.value)}>
                 <option value="--" key={"--"}>--</option>

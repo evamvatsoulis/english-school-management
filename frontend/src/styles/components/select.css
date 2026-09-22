@@ -1,28 +1,27 @@
-.filter-section {
+.select-section {
     display: flex;
     flex-direction: row;
     gap: 8px;
 }
 
-.filter-section label {
-    margin: auto;
+.select-section label {
+    margin: auto 0;
 }
 
-.filter-section select {
+.select-section select {
     width: fit-content;
     padding: 10px;
     border: none;
     border-radius: 8px;
-    background-color: var(--blue);
+    background-color: var(--select-color);
     color: white;
     font-weight: 600;
 }
 
-.filter-section select:hover {
-    background-color: var(--secondary-blue);
+.select-section select:hover {
     cursor: pointer;
 }
 
-.filter-section option {
+.select-section option {
     background-color: var(--secondary-color);
 }
