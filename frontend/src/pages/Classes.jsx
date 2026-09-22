@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
-import { getClasses, createClass, updateClass } from '../services/classService';
+import { getClasses, createClass, updateClass, deactivateClass } from '../services/classService';
 import { classColumns } from '../config/config';
 import DataTable from '../components/DataTable';
 import Sidebar from '../components/Sidebar';
 import ClassForm from '../components/ClassForm';
+import DeleteMessage from '../components/DeleteMessage';
 
 function Classes() {
     const [classes, setClasses] = useState([]);
     const [selectedClass, setSelectedClass] = useState(null);
     const [showForm, setShowForm] = useState(false);
+    const [showDeleteMessage, setShowDeleteMessage] = useState(false);
     const [loadClassesError, setLoadClassesError] = useState("");
     const [addClassError, setAddClassError] = useState("");
     const [editClassError, setEditClassError] = useState("");
+    const [deleteClassError, setDeleteClassError] = useState("");
 
     const loadClasses = async () => {
         const response = await getClasses();
@@ -57,6 +60,21 @@ function Classes() {
         closeForm();
     };
 
+    const deleteClass = async () => {
+        const response = await deactivateClass(selectedClass.id);
+        if (response.status === 401) {
+            localStorage.removeItem("token");
+        }
+
+        if (!response.ok) {
+            console.error(response.data.error);
+            setDeleteClassError(response.data.error);
+            return;
+        }
+        loadClasses();
+        setShowDeleteMessage(false);
+    };
+
     const openCreateForm = () => {
         setSelectedClass(null);
         setShowForm(true);
@@ -67,7 +85,14 @@ function Classes() {
         setShowForm(true);
     };
 
+    const openDeleteMessage = (subject) => {
+        setSelectedClass(subject);
+        setShowDeleteMessage(true);
+    }
+
     const closeForm = () => setShowForm(false);
+
+    const closeDeleteMessage = () => setShowDeleteMessage(false);
 
     useEffect(() => {
         loadClasses();
@@ -89,7 +114,8 @@ function Classes() {
                         columns={classColumns}
                         data={classes}
                         actions={[
-                            { label: "edit", function: openEditForm }
+                            { label: "edit", function: openEditForm },
+                            { label: "delete", function: openDeleteMessage }
                         ]}
                     />
                 }
@@ -102,6 +128,18 @@ function Classes() {
                                 editClass={editClass}
                                 selectedClass={selectedClass}
                                 closeForm={closeForm}
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {showDeleteMessage && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <DeleteMessage
+                                deleteFunction={deleteClass}
+                                closeDeleteMessage={closeDeleteMessage}
+                                item={"class"}
                             />
                         </div>
                     </div>

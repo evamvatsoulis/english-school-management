@@ -167,7 +167,7 @@ function StudentDetails() {
           <div className="modal-overlay">
             <div className="modal-content">
               <DeleteMessage
-                removePayment={removePayment}
+                deleteFunction={removePayment}
                 closeDeleteMessage={closeDeleteMessage}
                 item={"payment"}
               />

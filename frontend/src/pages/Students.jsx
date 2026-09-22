@@ -197,7 +197,7 @@ function Students() {
                     <div className="modal-overlay">
                         <div className="modal-content">
                             <DeleteMessage
-                                deleteStudent={deleteStudent}
+                                deleteFunction={deleteStudent}
                                 closeDeleteMessage={closeDeleteMessage}
                                 item={"student"}
                             />

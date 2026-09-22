@@ -1,6 +1,6 @@
 import '../styles/components/DeleteMessage.css';
 
-function DeleteMessage({ deleteStudent, removePayment, closeDeleteMessage, item }) {
+function DeleteMessage({ deleteFunction, closeDeleteMessage, item }) {
     return (
         <>
             <div className="delete-message">
@@ -8,10 +8,7 @@ function DeleteMessage({ deleteStudent, removePayment, closeDeleteMessage, item 
             </div>
 
             <div className="delete-actions">
-                {deleteStudent ?
-                    <button className="yes-button" onClick={deleteStudent}>Yes</button> :
-                    <button className="yes-button" onClick={removePayment}>Yes</button>
-                }
+                <button className="yes-button" onClick={deleteFunction}>Yes</button>
                 <button className="no-button" onClick={closeDeleteMessage}>No</button>
             </div>
         </>
