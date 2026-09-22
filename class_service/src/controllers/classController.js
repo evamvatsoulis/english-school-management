@@ -49,7 +49,7 @@ const getClassById = async (req, res) => {
         if (!result) {
             return res.status(404).json({ error: "Class not found" });
         }
-        return res.status(200).json(result);
+        return res.status(200).json(result[0]);
     } catch (err) {
         return res.status(500).json({ error: "Failed to get class" });
     }
