@@ -61,7 +61,7 @@ const updateClass = async (req, res) => {
         const { error, value } = updateClassSchema.validate(req.body);
 
         if (error) {
-            return res.status(400).json({ err: error.details[0].message });
+            return res.status(400).json({ error: error.details[0].message });
         }
 
         const currentClass = await getClassByIdRepository(id);
