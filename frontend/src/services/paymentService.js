@@ -72,4 +72,20 @@ const deletePayment = async (paymentId) => {
     return { status: response.status, ok: response.ok, data };
 };
 
-export { getPaymentsByStudentId, createPayment, updatePayment, deletePayment };
+const getPayments = async () => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_GATEWAY_URL}/payments`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
+
+export { getPaymentsByStudentId, createPayment, updatePayment, deletePayment, getPayments };
