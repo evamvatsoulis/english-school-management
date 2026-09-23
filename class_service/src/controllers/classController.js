@@ -35,7 +35,7 @@ const createClass = async (req, res) => {
 const getClasses = async (req, res) => {
     try {
         const result = await getClassesRepository();
-        return res.status(201).json(result);
+        return res.status(201).json({ message: "Classes were successfully loaded", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch classes" });
     }

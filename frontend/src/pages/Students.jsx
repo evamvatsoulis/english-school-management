@@ -27,11 +27,15 @@ function Students() {
 
     const navigate = useNavigate();
 
+    const handleUnauthorizedError = () => {
+        localStorage.removeItem("token");
+        navigate('/login');
+    };
+
     const loadStudents = async () => {
         const response = await getStudents();
         if (response.status === 401) {
-            localStorage.removeItem("token");
-            navigate('/login');
+            handleUnauthorizedError();
             return;
         }
 
@@ -40,13 +44,15 @@ function Students() {
             setLoadStudentsError(response.data.error);
             return;
         }
-        setStudents(response.data);
+        setStudents(response.data.result);
+        console.log(response.data.message);
     };
 
     const addStudent = async (studentData) => {
         const response = await createStudent(studentData);
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
+            return;
         }
 
         if (!response.ok) {
@@ -54,16 +60,20 @@ function Students() {
             setAddStudentError(response.data.error);
             return;
         }
-        
+
+        console.log(response.data.message);
+        setAddStudentError("");
+
         selectedClassId ? loadEnrollmentsByClass(selectedClassId) :
-        loadStudents();
+            loadStudents();
         closeForm();
     };
 
     const editStudent = async (studentData) => {
         const response = await updateStudent(selectedStudent.id, studentData);
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
+            return;
         }
 
         if (!response.ok) {
@@ -71,14 +81,19 @@ function Students() {
             setEditStudentError(response.data.error);
             return;
         }
-        setStudents((currentStudents) => currentStudents.map((student) => student.id === response.data.id ? response.data : student));
+
+        console.log(response.data.message);
+        setEditStudentError("");
+
+        loadStudents();
         closeForm();
     };
 
     const deleteStudent = async () => {
         const response = await deactivateStudent(selectedStudent.id);
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
+            return;
         }
 
         if (!response.ok) {
@@ -86,6 +101,8 @@ function Students() {
             setDeactivateStudentError(response.data.error);
             return;
         }
+
+        console.log(response.data.message);
         closeDeleteMessage();
         loadStudents();
     };
@@ -93,7 +110,8 @@ function Students() {
     const loadClasses = async () => {
         const response = await getClasses();
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
+            return;
         }
 
         if (!response.ok) {
@@ -101,7 +119,9 @@ function Students() {
             setLoadClassesError(response.data.error);
             return;
         }
-        setClasses(response.data);
+
+        setLoadClassesError("");
+        setClasses(response.data.result);
     };
 
     const loadEnrollmentsByClass = async (classId) => {
@@ -109,7 +129,8 @@ function Students() {
         const response = await getEnrollmentsByClass(classId);
 
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
+            return;
         }
 
         if (!response.ok) {
@@ -118,6 +139,11 @@ function Students() {
             return;
         }
         setStudents(response.data);
+    };
+
+    const handleSubmit = (studentData) => {
+        selectedStudent ? editStudent(studentData) :
+            addStudent(studentData);
     };
 
     const handleFilter = (classId) => {
@@ -147,7 +173,11 @@ function Students() {
 
     const closeDeleteMessage = () => setShowDeleteMessage(false);
 
-    const closeForm = () => setShowForm(false);
+    const closeForm = () => {
+        setShowForm(false);
+        setAddStudentError("");
+        setEditStudentError("");
+    };
 
     const navigateToStudentDetails = (student) => navigate(`/students/${student.id}`);
 
@@ -164,7 +194,7 @@ function Students() {
                 <h1>Students</h1>
 
                 <div className="page-actions">
-                    {classes &&
+                    {!loadClassesError &&
                         <Filter
                             data={classes}
                             item={"class"}
@@ -179,10 +209,10 @@ function Students() {
                     <div className="modal-overlay">
                         <div className="modal-content">
                             <StudentForm
-                                addStudent={addStudent}
-                                editStudent={editStudent}
                                 selectedStudent={selectedStudent}
                                 closeForm={closeForm}
+                                formError={selectedStudent ? editStudentError : addStudentError}
+                                onSubmit={handleSubmit}
                             />
                         </div>
                     </div>

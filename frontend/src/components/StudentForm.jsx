@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../styles/components/form.css';
 
-function StudentForm({ addStudent, editStudent, selectedStudent, closeForm }) {
+function StudentForm({ selectedStudent, closeForm, formError, onSubmit }) {
     const [firstName, setFirstName] = useState(selectedStudent ? selectedStudent.first_name : "");
     const [lastName, setLastName] = useState(selectedStudent ? selectedStudent.last_name : "");
     const [phone, setPhone] = useState(selectedStudent ? selectedStudent.phone : "");
@@ -9,11 +9,8 @@ function StudentForm({ addStudent, editStudent, selectedStudent, closeForm }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (selectedStudent) {
-            editStudent({ firstName, lastName, phone, email });
-        } else {
-            addStudent({ firstName, lastName, phone, email });
-        }
+
+        onSubmit({ firstName, lastName, phone, email });
     };
 
     return (
@@ -39,6 +36,8 @@ function StudentForm({ addStudent, editStudent, selectedStudent, closeForm }) {
                     <input type="email" id="email" placeholder="Email" value={email} onChange={(event) => setEmail(event.target.value)} />
                 </div>
             </div>
+
+            <p className="form-error">{formError}</p>
 
             <div className="form-actions">
                 <button className="form-save" type="submit">Save</button>
