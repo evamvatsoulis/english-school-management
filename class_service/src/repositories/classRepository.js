@@ -11,7 +11,7 @@ const createClass = async (name, schoolYear) => {
 };
 
 const getClasses = async () => {
-    const result = await pool.query("SELECT * FROM classes WHERE active = true ORDER BY id");
+    const result = await pool.query("SELECT * FROM classes WHERE active = true AND school_year = '2026-2027' ORDER BY id");
     return result.rows;
 };
 

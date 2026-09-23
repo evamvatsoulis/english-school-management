@@ -44,7 +44,8 @@ function Classes() {
             setAddClassError(response.data.error);
             return;
         }
-        setClasses((currentClasses) => [...currentClasses, response.data]);
+        //setClasses((currentClasses) => [...currentClasses, response.data]);
+        loadClasses();
         closeForm();
     };
 
@@ -59,7 +60,8 @@ function Classes() {
             setLoadClassesError(response.data.error);
             return;
         }
-        setClasses((currentClasses) => currentClasses.map((subject) => subject.id === response.data.id ? response.data : subject));
+        //setClasses((currentClasses) => currentClasses.map((subject) => subject.id === response.data.id ? response.data : subject));
+        loadClasses();
         closeForm();
     };
 
