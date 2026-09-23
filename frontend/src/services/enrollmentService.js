@@ -51,4 +51,23 @@ const createEnrollment = async (enrollmentData) => {
     return { status: response.status, ok: response.ok, data };
 };
 
-export { getEnrollmentsByStudent, getEnrollmentsByClass, createEnrollment };
+const deleteEnrollment = async (classId, studentId) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+        `${API_GATEWAY_URL}/enrollments/class/${classId}/student/${studentId}`,
+        {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ classId, studentId })
+        }
+    );
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
+
+export { getEnrollmentsByStudent, getEnrollmentsByClass, createEnrollment, deleteEnrollment };

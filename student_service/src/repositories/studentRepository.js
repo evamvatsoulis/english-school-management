@@ -1,6 +1,6 @@
 const { pool } = require('../config/db');
 
-const getStudentById = async (id) => result = await pool.query("SELECT * FROM students WHERE id = $1", [id]);
+const getStudentById = async (id) => await pool.query("SELECT * FROM students WHERE id = $1", [id]);
 
 const getStudents = async () => {
     const result = await pool.query("SELECT * FROM students WHERE active = TRUE ORDER BY id");
