@@ -24,3 +24,11 @@
     display: flex;
     gap: 5px;
 }
+
+.ok {
+    color: var(--green);
+}
+
+.down {
+    color: var(--red);
+}

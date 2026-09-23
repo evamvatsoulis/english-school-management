@@ -19,6 +19,12 @@ export const classColumns = [
     { key: "school_year", label: "School Year" }
 ];
 
+export const healthColumns = [
+    { key: "service", label: "Service" },
+    { key: "status", label: "Status" },
+    { key: "lastTimeChecked", label: "Last time checked"}
+];
+
 export const schoolYearMonths = [
     { month: 9, year: 2026, name: "September" },
     { month: 10, year: 2026, name: "October" },

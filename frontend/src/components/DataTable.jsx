@@ -1,6 +1,12 @@
 import '../styles/components/DataTable.css';
 
-const formatDate = (date) => new Date(date).toLocaleDateString('el-GR');
+const formatDate = (date, key) => {
+    if (key === "payment_date") {
+        return new Date(date).toLocaleDateString('el-GR');
+    } else {
+        return new Date(date).toLocaleString('el-GR');
+    }
+}
 
 function DataTable({ columns, data, title, actions }) {
     return (
@@ -19,11 +25,13 @@ function DataTable({ columns, data, title, actions }) {
 
                 <tbody>
                     {data.map((item) => (
-                        <tr key={item.id}>
+                        <tr key={`${item.id}-${item.service}`}>
                             {columns.map((column) => (
-                                column.key === "payment_date" ?
-                                    <td key={column.key}>{formatDate(item[column.key])}</td> :
-                                    <td key={column.key}>{item[column.key]}</td>
+                                column.key === "payment_date" || column.key === "lastTimeChecked" ?
+                                    <td key={column.key}>{formatDate(item[column.key], column.key)}</td> :
+                                    column.key === "status" ?
+                                        <td key={column.key} className={item[column.key] === "OK" ? "ok" : "down"}>{item[column.key]}</td> :
+                                        <td key={column.key}>{item[column.key]}</td>
                             ))}
 
                             {actions &&
