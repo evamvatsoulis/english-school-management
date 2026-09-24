@@ -9,6 +9,11 @@ import DataTable from "../components/DataTable";
 import DeleteMessage from '../components/DeleteMessage';
 import '../styles/components/select.css';
 
+const handleUnauthorizedError = () => {
+    localStorage.removeItem("token");
+    navigate('/login');
+};
+
 function ClassDetails() {
     const { id } = useParams();
     const classId = Number(id);
@@ -29,7 +34,8 @@ function ClassDetails() {
         const response = await getClassById(id);
 
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
+            return;
         }
 
         if (!response.ok) {
@@ -38,13 +44,15 @@ function ClassDetails() {
             return;
         }
         setSubject(response.data);
+        setLoadClassError("");
     };
 
     const loadEnrollmentsByClass = async () => {
         const response = await getEnrollmentsByClass(id);
 
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
+            return;
         }
 
         if (!response.ok) {
@@ -52,14 +60,17 @@ function ClassDetails() {
             console.error(response.data.error);
             return;
         }
-        setEnrollments(response.data);
+        setEnrollments(response.data.result);
+        console.log(response.data.message);
+        setLoadEnrollmentsByClassError("");
     };
 
     const loadStudents = async () => {
         const response = await getStudents();
 
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
+            return;
         }
 
         if (!response.ok) {
@@ -67,14 +78,16 @@ function ClassDetails() {
             console.error(response.data.error);
             return;
         }
-        setStudents(response.data);
+        setStudents(response.data.result);
+        setLoadStudentsError("");
     };
 
     const addEnrollment = async (studentId) => {
         const response = await createEnrollment({ studentId, classId });
 
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
+            return;
         }
 
         if (!response.ok) {
@@ -83,13 +96,16 @@ function ClassDetails() {
             return;
         }
         loadEnrollmentsByClass();
+        setAddEnrollmentError("");
+        console.log(response.data.message);
     };
 
     const removeEnrollment = async () => {
         const response = await deleteEnrollment(classId, selectedEnrollment.id);
 
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
+            return;
         }
 
         if (!response.ok) {
@@ -97,9 +113,9 @@ function ClassDetails() {
             console.error(response.data.error);
             return;
         }
-        setEnrollments((currentEnrollments) => currentEnrollments.filter(
-            (currentStudent) => currentStudent.id !== selectedEnrollment.id
-        ));
+
+        loadEnrollmentsByClass();
+        console.log(response.data.message);
         closeDeleteMessage();
     };
 
@@ -123,7 +139,7 @@ function ClassDetails() {
             <div className="page-content">
                 {subject && <h1>{subject.name} | {subject.school_year}</h1>}
 
-                {enrollments &&
+                {!loadEnrollmentsByClassError &&
                     <DataTable
                         columns={studentColumns}
                         data={enrollments}

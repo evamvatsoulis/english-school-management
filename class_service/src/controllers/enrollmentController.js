@@ -48,7 +48,7 @@ const createEnrollment = async (req, res) => {
         const { studentId, classId } = value;
         const result = await createEnrollmentRepository(studentId, classId);
 
-        return res.status(201).json(result);
+        return res.status(201).json({ message: "Student added to class", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to create enrollment" });
     }
@@ -89,7 +89,7 @@ const getEnrollmentsByClass = async (req, res) => {
         const enrollments = await getStudentsIdsByClassRepository(classId);
 
         if (zeroRows(enrollments)) {
-            return res.status(404).json({ error: "Class does not have students" });
+            return res.status(200).json({ message: "Class does not have students", result: [] });
         }
 
         const result = [];
@@ -103,7 +103,7 @@ const getEnrollmentsByClass = async (req, res) => {
             }
         }
 
-        return res.status(200).json(result);
+        return res.status(200).json({ message: "Enrollments were loaded successfully", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch enrollments" });
     }

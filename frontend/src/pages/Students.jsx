@@ -138,7 +138,8 @@ function Students() {
             setLoadEnrollmentsByClassError(response.data.error);
             return;
         }
-        setStudents(response.data);
+        setStudents(response.data.result);
+        console.log(response.data.message);
     };
 
     const handleSubmit = (studentData) => {
