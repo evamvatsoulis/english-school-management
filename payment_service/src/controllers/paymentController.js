@@ -97,10 +97,10 @@ const getPaymentsByStudentId = async (req, res) => {
         const payment = await getPaymentsByStudentIdRepository(studentId);
 
         if (paymentDoesNotExist(payment)) {
-            return res.status(404).json({ error: "Payments not found" });
+            return res.status(200).json({ message: "There are no payments", result: [] });
         }
 
-        return res.status(200).json(payment.rows);
+        return res.status(200).json({ message: "Payments were successfully loaded", result: payment.rows });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch payments" });
     }

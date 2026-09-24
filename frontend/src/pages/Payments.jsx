@@ -5,6 +5,11 @@ import '../components/Sidebar';
 import Sidebar from '../components/Sidebar';
 import PaymentsTable from '../components/payments/PaymentsTable';
 
+const handleUnauthorizedError = () => {
+    localStorage.removeItem("token");
+    navigate('/login');
+};
+
 function Payments({ }) {
     const [students, setStudents] = useState([]);
     const [payments, setPayments] = useState([]);
@@ -14,8 +19,7 @@ function Payments({ }) {
     const loadStudents = async () => {
         const response = await getStudents();
         if (response.status === 401) {
-            localStorage.removeItem("token");
-            navigate('/login');
+            handleUnauthorizedError();
             return;
         }
 
@@ -24,17 +28,26 @@ function Payments({ }) {
             setLoadStudentsError(response.data.error);
             return;
         }
-        setStudents(response.data);
+
+        setStudents(response.data.result);
+        setLoadStudentsError("");
     };
 
     const loadPayments = async () => {
         const response = await getPayments();
+
+        if (response.status === 401) {
+            handleUnauthorizedError();
+            return;
+        }
 
         if (!response.ok) {
             setLoadPaymentsError(response.data.error);
             console.error(response.data.error);
             return;
         }
+
+        setLoadPaymentsError("");
         setPayments(response.data);
     };
 
@@ -50,7 +63,7 @@ function Payments({ }) {
             <div className="page-content">
                 <h1>Payments 2026-27</h1>
 
-                {students &&
+                {!loadStudentsError && !loadPaymentsError &&
                     <PaymentsTable
                         students={students}
                         payments={payments}

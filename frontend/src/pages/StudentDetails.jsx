@@ -66,8 +66,9 @@ function StudentDetails() {
       return;
     }
 
-    setPayments(response.data);
+    setPayments(response.data.result);
     setLoadPaymentsError("");
+    console.log(response.data.message);
   };
 
   const addPayment = async (paymentData) => {
