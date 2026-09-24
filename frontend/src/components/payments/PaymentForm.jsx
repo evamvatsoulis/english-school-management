@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../../styles/components/form.css';
 
-function PaymentForm({ studentId, selectedMonth, selectedPayment, addPayment, editPayment, closeForm }) {
+function PaymentForm({ studentId, selectedMonth, selectedPayment, closeForm, formError, onSubmit }) {
     const formatDate = (date) => new Date(date).toLocaleDateString('en-CA');
 
     const [paymentMonth, setPaymentMonth] = useState(selectedPayment ? selectedPayment.payment_month : selectedMonth.month);
@@ -13,8 +13,7 @@ function PaymentForm({ studentId, selectedMonth, selectedPayment, addPayment, ed
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        selectedPayment ? editPayment({ studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes }) :
-            addPayment({ studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes });
+        onSubmit({ studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes });
     };
 
 
@@ -51,6 +50,8 @@ function PaymentForm({ studentId, selectedMonth, selectedPayment, addPayment, ed
                     <input type="text" id="notes" placeholder="Notes" value={notes} onChange={(event) => setNotes(event.target.value)} />
                 </div>
             </div>
+
+            <p className="form-error">{formError}</p>
 
             <div className="form-actions">
                 <button className="form-save" type="submit">Save</button>

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getStudentById } from '../services/studentService';
 import { getPaymentsByStudentId, createPayment, updatePayment, deletePayment } from "../services/paymentService";
@@ -27,56 +27,93 @@ function StudentDetails() {
   const [deletePaymentError, setDeletePaymentError] = useState("");
   const [loadEnrollmentsByStudentError, setLoadEnrollmentsByStudentError] = useState("");
 
+  const navigate = useNavigate();
+
+  const handleUnauthorizedError = () => {
+    localStorage.removeItem("token");
+    navigate('/login');
+  }
+
   const loadStudent = async () => {
     const response = await getStudentById(id);
+
+    if (response.status === 401) {
+      handleUnauthorizedError();
+      return;
+    }
 
     if (!response.ok) {
       setLoadStudentError(response.data.error);
       console.error(response.data.error);
       return;
     }
+
     setStudent(response.data);
+    setLoadStudentError("");
   };
 
   const loadPaymentsByStudentId = async () => {
     const response = await getPaymentsByStudentId(id);
+
+    if (response.status === 401) {
+      handleUnauthorizedError();
+      return;
+    }
 
     if (!response.ok) {
       setLoadPaymentsError(response.data.error);
       console.error(response.data.error);
       return;
     }
+
     setPayments(response.data);
+    setLoadPaymentsError("");
   };
 
   const addPayment = async (paymentData) => {
     const response = await createPayment(paymentData);
+
+    if (response.status === 401) {
+      handleUnauthorizedError();
+      return;
+    }
 
     if (!response.ok) {
       setAddPaymentError(response.data.error);
       console.error(response.data.error);
       return;
     }
-    setPayments((currentPayments) => [...currentPayments, response.data]);
+
+    console.log(response.data.message);
+    loadPaymentsByStudentId(id);
     closeForm();
   };
 
   const editPayment = async (paymentData) => {
     const response = await updatePayment(selectedPayment.id, paymentData);
 
+    if (response.status === 401) {
+      handleUnauthorizedError();
+      return;
+    }
+
     if (!response.ok) {
       setEditPaymentError(response.data.error);
       console.error(response.data.error);
       return;
     }
-    setPayments((currentPayments) => currentPayments.map((payment) => payment.id === response.data.id ? response.data : payment));
+
+    console.log(response.data.message);
+    loadPaymentsByStudentId(id);
     closeForm();
   };
 
   const removePayment = async () => {
     const response = await deletePayment(selectedPayment.id);
+
     if (response.status === 401) {
-      localStorage.removeItem("token");
+      handleUnauthorizedError();
+      return;
     }
 
     if (!response.ok) {
@@ -84,6 +121,8 @@ function StudentDetails() {
       setDeletePaymentError(response.data.error);
       return;
     }
+
+    console.log(response.data.message);
     closeDeleteMessage();
     loadPaymentsByStudentId();
   };
@@ -91,7 +130,8 @@ function StudentDetails() {
   const loadEnrollmentsByStudent = async () => {
     const response = await getEnrollmentsByStudent(id);
     if (response.status === 401) {
-      localStorage.removeItem("token");
+      handleUnauthorizedError();
+      return;
     }
 
     if (!response.ok) {
@@ -99,6 +139,7 @@ function StudentDetails() {
       setLoadEnrollmentsByStudentError(response.data.error);
       return;
     }
+
     setEnrollments(response.data);
   }
 
@@ -118,9 +159,18 @@ function StudentDetails() {
     setShowDeleteMessage(true);
   };
 
-  const closeForm = () => setShowForm(false);
+  const closeForm = () => {
+    setShowForm(false);
+    setAddPaymentError("");
+    setEditPaymentError("");
+  };
 
   const closeDeleteMessage = () => setShowDeleteMessage(false);
+
+  const handleSubmit = (paymentData) => {
+    selectedPayment ? editPayment(paymentData) :
+      addPayment(paymentData);
+  };
 
   useEffect(() => {
     loadStudent();
@@ -133,7 +183,7 @@ function StudentDetails() {
       <Sidebar />
 
       <div className="page-content">
-        {student && (
+        {student && !loadStudentError && (
           <div>
             <h1>{student.first_name} {student.last_name}</h1>
             {enrollments.map((enrollment) => (
@@ -142,12 +192,14 @@ function StudentDetails() {
           </div>
         )}
 
-        <StudentPayments
-          payments={payments}
-          openCreateForm={openCreateForm}
-          openEditForm={openEditForm}
-          openDeleteMessage={openDeleteMessage}
-        />
+        {!loadPaymentsError &&
+          <StudentPayments
+            payments={payments}
+            openCreateForm={openCreateForm}
+            openEditForm={openEditForm}
+            openDeleteMessage={openDeleteMessage}
+          />
+        }
 
         {showForm &&
           <div className="modal-overlay">
@@ -156,9 +208,9 @@ function StudentDetails() {
                 studentId={id}
                 selectedMonth={selectedMonth}
                 selectedPayment={selectedPayment}
-                addPayment={addPayment}
-                editPayment={editPayment}
                 closeForm={closeForm}
+                onSubmit={handleSubmit}
+                formError={selectedPayment ? editPaymentError : addPaymentError}
               />
             </div>
           </div>
@@ -176,7 +228,7 @@ function StudentDetails() {
           </div>
         }
 
-        {payments &&
+        {!loadPaymentsError &&
           <DataTable
             columns={paymentColumns}
             data={payments}

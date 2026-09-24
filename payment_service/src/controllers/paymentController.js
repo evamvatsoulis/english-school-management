@@ -62,7 +62,7 @@ const createPayment = async (req, res) => {
         const { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes } = value;
         const result = await createPaymentRepository(studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes);
 
-        return res.status(201).json(result);
+        return res.status(201).json({ message: "Payment added", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to create payment" });
     }
@@ -112,7 +112,7 @@ const updatePayment = async (req, res) => {
         const { error, value } = updatePaymentSchema.validate(req.body);
 
         if (error) {
-            return res.status(400).json({ err: error.details[0].message });
+            return res.status(400).json({ error: error.details[0].message });
         }
         const currentPayment = await getPaymentByIdRepository(id);
 
@@ -123,7 +123,7 @@ const updatePayment = async (req, res) => {
         const { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes } = updatePaymentData(value, currentPayment.rows[0]);
         const result = await updatePaymentRepository(studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes, id);
 
-        return res.status(200).json(result);
+        return res.status(200).json({ message: "Payment edited", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to update payment" });
     }
@@ -141,7 +141,7 @@ const deletePayment = async (req, res) => {
 
         const result = await deletePaymentRepository(id);
 
-        return res.status(200).json(result);
+        return res.status(200).json({ message: "Payment deleted", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to delete payment" });
     }
