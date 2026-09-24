@@ -8,6 +8,7 @@ import Payments from './pages/Payments';
 import Healths from './pages/Healths';
 import ProtectedRoute from "./components/protect/ProtectedRoute";
 import LoginProtectedRoute from "./components/protect/LoginProtectedRoute";
+import AdminProtectedRoute from "./components/protect/AdminProtectedRoute";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -16,14 +17,14 @@ function App() {
     <Routes>
       <Route path="/" element={
         token ? <Navigate to="/students" replace />
-              : <Navigate to="/login" replace />} />
+          : <Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginProtectedRoute><Login /></LoginProtectedRoute>} />
       <Route path="/students" element={<ProtectedRoute><Students /></ProtectedRoute>} />
       <Route path="/students/:id" element={<ProtectedRoute><StudentDetails /></ProtectedRoute>} />
       <Route path="/classes" element={<ProtectedRoute><Classes /></ProtectedRoute>} />
       <Route path="/classes/:id" element={<ProtectedRoute><ClassDetails /></ProtectedRoute>} />
       <Route path="/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
-      <Route path="/healths" element={<ProtectedRoute><Healths /></ProtectedRoute>} />
+      <Route path="/healths" element={<ProtectedRoute><AdminProtectedRoute><Healths /></AdminProtectedRoute></ProtectedRoute>} />
     </Routes>
   );
 }
