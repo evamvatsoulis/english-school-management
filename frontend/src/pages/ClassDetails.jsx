@@ -94,6 +94,7 @@ function ClassDetails() {
 
         if (!response.ok) {
             setAddEnrollmentError(response.data.error);
+            alert(response.data.error);
             console.error(response.data.error);
             return;
         }
