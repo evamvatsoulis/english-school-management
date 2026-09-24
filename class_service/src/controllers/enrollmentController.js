@@ -98,9 +98,7 @@ const getEnrollmentsByClass = async (req, res) => {
             const student = await fetchStudent(enrollment.student_id);
             if (student.status === 200) {
                 result.push(student.data);
-            } else {
-                res.status(student.status).json({ error: student.error });
-            }
+            } 
         }
 
         return res.status(200).json({ message: "Enrollments were loaded successfully", result });

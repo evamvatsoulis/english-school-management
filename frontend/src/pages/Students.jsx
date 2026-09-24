@@ -104,6 +104,7 @@ function Students() {
 
         console.log(response.data.message);
         closeDeleteMessage();
+        selectedClassId ? loadEnrollmentsByClass(selectedClassId) :
         loadStudents();
     };
 
