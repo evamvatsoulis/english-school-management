@@ -8,6 +8,8 @@ const {
     activateClass: activateClassRepository
 } = require('../repositories/classRepository');
 
+const classesNotFound = (result) => result.length === 0;
+
 const updateClassData = (value, className) => {
     const name = value.name ?? className.name;
     const schoolYear = value.schoolYear ?? className.school_year;
@@ -26,7 +28,7 @@ const createClass = async (req, res) => {
         const { name, schoolYear } = value;
         const result = await createClassRepository(name, schoolYear);
 
-        return res.status(201).json(result);
+        return res.status(201).json({ message: "Class added", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to create class" });
     }
@@ -35,7 +37,11 @@ const createClass = async (req, res) => {
 const getClasses = async (req, res) => {
     try {
         const result = await getClassesRepository();
-        return res.status(201).json({ message: "Classes were successfully loaded", result });
+        if(classesNotFound(result)) {
+            return res.status(200).json({ message: "There are no classes", result: [] });
+        }
+
+        return res.status(200).json({ message: "Classes were successfully loaded", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch classes" });
     }
@@ -73,7 +79,7 @@ const updateClass = async (req, res) => {
         const { name, schoolYear } = updateClassData(value, currentClass);
         const result = await updateClassRepository(name, schoolYear, id);
 
-        return res.status(200).json(result);
+        return res.status(200).json({ message: "Class edited", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to update class" });
     }

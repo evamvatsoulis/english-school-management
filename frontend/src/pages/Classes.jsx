@@ -19,10 +19,16 @@ function Classes() {
 
     const navigate = useNavigate();
 
+    const handleUnauthorizedError = () => {
+        localStorage.removeItem("token");
+        navigate('/login');
+    };
+
     const loadClasses = async () => {
         const response = await getClasses();
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
+            return;
         }
 
         if (!response.ok) {
@@ -30,13 +36,17 @@ function Classes() {
             setLoadClassesError(response.data.error);
             return;
         }
-        setClasses(response.data);
+
+        setClasses(response.data.result);
+        console.log(response.data.message);
+        setLoadClassesError("");
     };
 
     const addClass = async (classData) => {
         const response = await createClass(classData);
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
+            return;
         }
 
         if (!response.ok) {
@@ -44,25 +54,27 @@ function Classes() {
             setAddClassError(response.data.error);
             return;
         }
-        //setClasses((currentClasses) => [...currentClasses, response.data]);
+
         loadClasses();
         closeForm();
+        console.log(response.data.message);
     };
 
     const editClass = async (classData) => {
         const response = await updateClass(selectedClass.id, classData);
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
+            return;
         }
 
         if (!response.ok) {
             console.error(response.data.error);
-            setLoadClassesError(response.data.error);
+            setEditClassError(response.data.error);
             return;
         }
-        //setClasses((currentClasses) => currentClasses.map((subject) => subject.id === response.data.id ? response.data : subject));
         loadClasses();
         closeForm();
+        console.log(response.data.message);
     };
 
     const deleteClass = async () => {
@@ -95,11 +107,20 @@ function Classes() {
         setShowDeleteMessage(true);
     };
 
-    const closeForm = () => setShowForm(false);
+    const closeForm = () => {
+        setShowForm(false);
+        setEditClassError("");
+        setAddClassError("");
+    };
 
     const closeDeleteMessage = () => setShowDeleteMessage(false);
 
     const navigateToClassDetails = (subject) => navigate(`/classes/${subject.id}`);
+
+    const handleSubmit = (classData) => {
+        selectedClass ? editClass(classData) :
+        addClass(classData);
+    };
 
     useEffect(() => {
         loadClasses();
@@ -116,7 +137,7 @@ function Classes() {
                     <button className="add-button" onClick={openCreateForm}>Add new class</button>
                 </div>
 
-                {classes &&
+                {!loadClassesError &&
                     <DataTable
                         columns={classColumns}
                         data={classes}
@@ -132,10 +153,10 @@ function Classes() {
                     <div className="modal-overlay">
                         <div className="modal-content">
                             <ClassForm
-                                addClass={addClass}
-                                editClass={editClass}
                                 selectedClass={selectedClass}
                                 closeForm={closeForm}
+                                onSubmit={handleSubmit}
+                                formError={selectedClass ? editClassError : addClassError}
                             />
                         </div>
                     </div>

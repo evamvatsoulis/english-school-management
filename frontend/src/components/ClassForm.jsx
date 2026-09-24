@@ -1,15 +1,13 @@
 import { useState } from 'react';
 import '../styles/components/form.css';
 
-function ClassForm({ addClass, editClass, selectedClass, closeForm }) {
+function ClassForm({ selectedClass, closeForm, onSubmit, formError }) {
     const [name, setName] = useState(selectedClass ? selectedClass.name : "");
     const [schoolYear, setSchoolYear] = useState(selectedClass ? selectedClass.school_year : "");
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        selectedClass ?
-            editClass({ name, schoolYear }) :
-            addClass({ name, schoolYear });
+        onSubmit({ name, schoolYear });
     };
 
     return (
@@ -25,6 +23,8 @@ function ClassForm({ addClass, editClass, selectedClass, closeForm }) {
                     <input type="text" id="school-year" placeholder="School Year" value={schoolYear} onChange={(event) => setSchoolYear(event.target.value)} />
                 </div>
             </div>
+
+            <p className="form-error">{formError}</p>
 
             <div className="form-actions">
                 <button className="form-save" type="submit">Save</button>
