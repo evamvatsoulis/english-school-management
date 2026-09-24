@@ -1,17 +1,27 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getHealths } from "../services/healthService";
 import { healthColumns } from '../config/config';
 import DataTable from '../components/DataTable';
 import Sidebar from '../components/Sidebar';
 
+
+
 function Healths() {
     const [healths, setHealths] = useState([]);
     const [loadHealthsError, setLoadHealthsError] = useState("");
 
+    const navigate = useNavigate();
+
+    const handleUnauthorizedError = () => {
+        localStorage.removeItem("token");
+        navigate('/login');
+    }
+
     const loadHealths = async () => {
         const response = await getHealths();
         if (response.status === 401) {
-            localStorage.removeItem("token");
+            handleUnauthorizedError();
             return;
         }
 
@@ -20,7 +30,9 @@ function Healths() {
             setLoadHealthsError(response.data.error);
             return;
         }
+
         setHealths(response.data);
+        setLoadHealthsError("");
     };
 
     useEffect(() => {
@@ -34,7 +46,7 @@ function Healths() {
             <div className="page-content">
                 <Sidebar />
 
-                {healths &&
+                {!loadHealthsError &&
                     <DataTable
                         columns={healthColumns}
                         data={healths}

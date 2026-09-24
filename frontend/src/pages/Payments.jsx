@@ -1,20 +1,23 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getStudents } from '../services/studentService';
 import { getPayments } from '../services/paymentService';
 import '../components/Sidebar';
 import Sidebar from '../components/Sidebar';
 import PaymentsTable from '../components/payments/PaymentsTable';
 
-const handleUnauthorizedError = () => {
-    localStorage.removeItem("token");
-    navigate('/login');
-};
-
 function Payments({ }) {
     const [students, setStudents] = useState([]);
     const [payments, setPayments] = useState([]);
     const [loadStudentsError, setLoadStudentsError] = useState("");
     const [loadPaymentsError, setLoadPaymentsError] = useState("");
+
+    const navigate = useNavigate();
+
+    const handleUnauthorizedError = () => {
+        localStorage.removeItem("token");
+        navigate('/login');
+    };
 
     const loadStudents = async () => {
         const response = await getStudents();

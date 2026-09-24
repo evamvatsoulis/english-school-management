@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { useEffect, useState } from 'react';
 import { getClassById } from '../services/classService';
 import { getEnrollmentsByClass, createEnrollment, deleteEnrollment } from '../services/enrollmentService';
@@ -8,11 +8,6 @@ import Sidebar from '../components/Sidebar';
 import DataTable from "../components/DataTable";
 import DeleteMessage from '../components/DeleteMessage';
 import '../styles/components/select.css';
-
-const handleUnauthorizedError = () => {
-    localStorage.removeItem("token");
-    navigate('/login');
-};
 
 function ClassDetails() {
     const { id } = useParams();
@@ -29,6 +24,13 @@ function ClassDetails() {
     const [loadStudentsError, setLoadStudentsError] = useState("");
     const [addEnrollmentError, setAddEnrollmentError] = useState("");
     const [removeEnrollmentError, setRemoveEnrollmentError] = useState("");
+
+    const navigate = useNavigate();
+
+    const handleUnauthorizedError = () => {
+        localStorage.removeItem("token");
+        navigate('/login');
+    };
 
     const loadClass = async () => {
         const response = await getClassById(id);
