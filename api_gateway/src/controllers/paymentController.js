@@ -1,8 +1,10 @@
 const config = require('../config/config');
 
+const paymentServiceUrl = `http://${config.services.payment.host}:${config.services.payment.port}`;
+
 const getPayments = async (req, res) => {
     try {
-        const response = await fetch(`http://${config.host}:${config.services.payment.port}/payments`);
+        const response = await fetch(`${paymentServiceUrl}/payments`);
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
@@ -13,7 +15,7 @@ const getPayments = async (req, res) => {
 const createPayment = async (req, res) => {
     try {
         const response = await fetch(
-            `http://${config.host}:${config.services.payment.port}/payments`,
+            `${paymentServiceUrl}/payments`,
             {
                 method: "POST",
                 headers: {
@@ -32,7 +34,7 @@ const createPayment = async (req, res) => {
 const getPaymentById = async (req, res) => {
     try {
         const { id } = req.params;
-        const response = await fetch(`http://${config.host}:${config.services.payment.port}/payments/${id}`);
+        const response = await fetch(`${paymentServiceUrl}/payments/${id}`);
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
@@ -43,7 +45,7 @@ const getPaymentById = async (req, res) => {
 const getPaymentByStudentId = async (req, res) => {
     try {
         const { studentId } = req.params;
-        const response = await fetch(`http://${config.host}:${config.services.payment.port}/payments/students/${studentId}`);
+        const response = await fetch(`${paymentServiceUrl}/payments/students/${studentId}`);
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
@@ -55,7 +57,7 @@ const updatePayment = async (req, res) => {
     try {
         const { id } = req.params;
         const response = await fetch(
-            `http://${config.host}:${config.services.payment.port}/payments/${id}`,
+            `${paymentServiceUrl}/payments/${id}`,
             {
                 method: "PATCH",
                 headers: {
@@ -75,7 +77,7 @@ const deletePayment = async (req, res) => {
     try {
         const { id } = req.params;
         const response = await fetch(
-            `http://${config.host}:${config.services.payment.port}/payments/${id}`,
+            `${paymentServiceUrl}/payments/${id}`,
             {
                 method: "DELETE",
                 headers: {

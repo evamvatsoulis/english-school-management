@@ -12,7 +12,7 @@ app.use('/health', healthRoutes);
 app.use('/classes', classRoutes);
 app.use('/enrollments', enrollmentRoutes);
 
-app.listen(config.classServicePort, config.host, () => {
+app.listen(config.classServicePort, "0.0.0.0", () => {
   console.log(`Class Service is running at http://${config.host}:${config.classServicePort}`);
 });
 

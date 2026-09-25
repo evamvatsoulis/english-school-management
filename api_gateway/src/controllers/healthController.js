@@ -1,16 +1,16 @@
 const config = require('../config/config');
 const { services } = require('../config/config');
 
-const getPortByServiceName = (serviceName) => {
+const getUrlByServiceName = (serviceName) => {
     const service = Object.values(services).find(service => service.name === serviceName);
     if (service) {
-        return service.port;
+        return `http://${service.host}:${service.port}`;
     }
 };
 
-const checkServiceHealth = async (serviceName, port) => {
+const checkServiceHealth = async (serviceName, serviceUrl) => {
     try {
-        const response = await fetch(`http://${config.host}:${port}/health`);
+        const response = await fetch(`${serviceUrl}/health`);
         return await response.json();
     } catch (error) {
         return {
@@ -24,19 +24,19 @@ const checkServiceHealth = async (serviceName, port) => {
 const getAllHealths = async (req, res) => {
     const healths = [];
     for (const service of Object.values(services)) {
-        healths.push(await checkServiceHealth(service.name, service.port));
+        healths.push(await checkServiceHealth(service.name, `http://${service.host}:${service.port}`));
     }
     res.status(200).json(healths);
 };
 
 const getServiceHealth = async (req, res) => {
     const { serviceName } = req.params;
-    const servicePort = getPortByServiceName(serviceName);
+    const serviceUrl = getUrlByServiceName(serviceName);
 
-    if (!servicePort) {
+    if (!serviceUrl) {
         return res.status(404).json({ error: "Service not found" });
     }
-    res.status(200).json(await checkServiceHealth(serviceName, servicePort));
+    res.status(200).json(await checkServiceHealth(serviceName, serviceUrl));
 };
 
 module.exports = { getAllHealths, getServiceHealth };

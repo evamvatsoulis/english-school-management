@@ -10,7 +10,7 @@ app.use(express.json());
 app.use('/payments', paymentRoutes);
 app.use('/health', healthRoutes);
 
-app.listen(config.paymentServicePort, config.host, () => {
+app.listen(config.paymentServicePort, "0.0.0.0", () => {
   console.log(`Payment Service is running at http://${config.host}:${config.paymentServicePort}`);
 });
 

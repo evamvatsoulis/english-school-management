@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const services = {
   student: {
+    host: process.env.STUDENT_SERVICE_HOST,
     port: process.env.STUDENT_SERVICE_PORT
   }
 }

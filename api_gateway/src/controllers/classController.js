@@ -1,9 +1,11 @@
 const config = require('../config/config');
 
+const classServiceUrl = `http://${config.services.class.host}:${config.services.class.port}`;
+
 const createClass = async (req, res) => {
     try {
         const response = await fetch(
-            `http://${config.host}:${config.services.class.port}/classes`,
+            `${classServiceUrl}/classes`,
             {
                 method: "POST",
                 headers: {
@@ -21,7 +23,7 @@ const createClass = async (req, res) => {
 
 const getClasses = async (req, res) => {
     try {
-        const response = await fetch(`http://${config.host}:${config.services.class.port}/classes`);
+        const response = await fetch(`${classServiceUrl}/classes`);
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (err) {
@@ -32,7 +34,7 @@ const getClasses = async (req, res) => {
 const getClassById = async (req, res) => {
     try {
         const { id } = req.params;
-        const response = await fetch(`http://${config.host}:${config.services.class.port}/classes/${id}`);
+        const response = await fetch(`${classServiceUrl}/classes/${id}`);
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (err) {
@@ -44,7 +46,7 @@ const updateClass = async (req, res) => {
     try {
         const { id } = req.params;
         const response = await fetch(
-            `http://${config.host}:${config.services.class.port}/classes/${id}`,
+            `${classServiceUrl}/classes/${id}`,
             {
                 method: "PATCH",
                 headers: {
@@ -64,7 +66,7 @@ const deactivateClass = async (req, res) => {
     try {
         const { id } = req.params;
         const response = await fetch(
-            `http://${config.host}:${config.services.class.port}/classes/${id}/deactivate`,
+            `${classServiceUrl}/classes/${id}/deactivate`,
             {
                 method: "PATCH",
                 headers: {
@@ -84,7 +86,7 @@ const activateClass = async (req, res) => {
     try {
         const { id } = req.params;
         const response = await fetch(
-            `http://${config.host}:${config.services.class.port}/classes/${id}/activate`,
+            `${classServiceUrl}/classes/${id}/activate`,
             {
                 method: "PATCH",
                 headers: {

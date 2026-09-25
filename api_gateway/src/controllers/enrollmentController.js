@@ -1,9 +1,11 @@
 const config = require('../config/config');
 
+const classServiceUrl = `http://${config.services.class.host}:${config.services.class.port}`;
+
 const createEnrollment = async (req, res) => {
     try {
         const response = await fetch(
-            `http://${config.host}:${config.services.class.port}/enrollments`,
+            `${classServiceUrl}/enrollments`,
             {
                 method: "POST",
                 headers: {
@@ -22,7 +24,7 @@ const createEnrollment = async (req, res) => {
 const getEnrollmentsByStudent = async (req, res) => {
     try {
         const { studentId } = req.params;
-        const response = await fetch(`http://${config.host}:${config.services.class.port}/enrollments/students/${studentId}`);
+        const response = await fetch(`${classServiceUrl}/enrollments/students/${studentId}`);
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (err) {
@@ -33,7 +35,7 @@ const getEnrollmentsByStudent = async (req, res) => {
 const getEnrollmentsByClass = async (req, res) => {
     try {
         const { classId } = req.params;
-        const response = await fetch(`http://${config.host}:${config.services.class.port}/enrollments/class/${classId}`);
+        const response = await fetch(`${classServiceUrl}/enrollments/class/${classId}`);
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (err) {
@@ -45,7 +47,7 @@ const deleteEnrollment = async (req, res) => {
     try {
         const { classId, studentId } = req.params;
         const response = await fetch(
-            `http://${config.host}:${config.services.class.port}/enrollments/class/${classId}/student/${studentId}`,
+            `${classServiceUrl}/enrollments/class/${classId}/student/${studentId}`,
             {
                 method: "DELETE",
                 headers: {

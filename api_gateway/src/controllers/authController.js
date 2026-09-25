@@ -1,8 +1,10 @@
 const config = require('../config/config');
 
+const authServiceUrl = `http://${config.services.auth.host}:${config.services.auth.port}`;
+
 const getUsers = async (req, res) => {
     try {
-        const response = await fetch(`http://${config.host}:${config.services.auth.port}/auth/users`);
+        const response = await fetch(`${authServiceUrl}/auth/users`);
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
@@ -13,7 +15,7 @@ const getUsers = async (req, res) => {
 const createUser = async (req, res) => {
     try {
         const response = await fetch(
-            `http://${config.host}:${config.services.auth.port}/auth/register`,
+            `${authServiceUrl}/auth/register`,
             {
                 method: "POST",
                 headers: {
@@ -32,7 +34,7 @@ const createUser = async (req, res) => {
 const login = async (req, res) => {
     try {
         const response = await fetch(
-            `http://${config.host}:${config.services.auth.port}/auth/login`,
+            `${authServiceUrl}/auth/login`,
             {
                 method: "POST",
                 headers: {

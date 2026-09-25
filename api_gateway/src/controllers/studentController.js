@@ -1,8 +1,10 @@
 const config = require('../config/config');
 
+const studentServiceUrl = `http://${config.services.student.host}:${config.services.student.port}`;
+
 const getStudents = async (req, res) => {
     try {
-        const response = await fetch(`http://${config.host}:${config.services.student.port}/students`);
+        const response = await fetch(`${studentServiceUrl}/students`);
         const result = await response.json();
 
         return res.status(response.status).json(result);
@@ -14,7 +16,7 @@ const getStudents = async (req, res) => {
 const getStudentById = async (req, res) => {
     try {
         const { id } = req.params;
-        const response = await fetch(`http://${config.host}:${config.services.student.port}/students/${id}`);
+        const response = await fetch(`${studentServiceUrl}/students/${id}`);
         const result = await response.json();
 
         return res.status(response.status).json(result);
@@ -26,7 +28,7 @@ const getStudentById = async (req, res) => {
 const createStudent = async (req, res) => {
     try {
         const response = await fetch(
-            `http://${config.host}:${config.services.student.port}/students`,
+            `${studentServiceUrl}/students`,
             {
                 method: "POST",
                 headers: {
@@ -46,7 +48,7 @@ const updateStudent = async (req, res) => {
     try {
         const { id } = req.params;
         const response = await fetch(
-            `http://${config.host}:${config.services.student.port}/students/${id}`,
+            `${studentServiceUrl}/students/${id}`,
             {
                 method: "PATCH",
                 headers: {
@@ -66,7 +68,7 @@ const deactivateStudent = async (req, res) => {
     try {
         const { id } = req.params;
         const response = await fetch(
-            `http://${config.host}:${config.services.student.port}/students/${id}/deactivate`,
+            `${studentServiceUrl}/students/${id}/deactivate`,
             {
                 method: "PATCH",
                 headers: {
@@ -87,7 +89,7 @@ const activateStudent = async (req, res) => {
     try {
         const { id } = req.params;
         const response = await fetch(
-            `http://${config.host}:${config.services.student.port}/students/${id}/activate`,
+            `${studentServiceUrl}/students/${id}/activate`,
             {
                 method: "PATCH",
                 headers: {

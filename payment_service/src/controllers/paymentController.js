@@ -25,7 +25,7 @@ const updatePaymentData = (value, payment) => {
 
 const fetchStudent = async (studentId) => {
     try {
-        const response = await fetch(`http://${config.host}:${config.services.student.port}/students/${studentId}`);
+        const response = await fetch(`http://${config.services.student.host}:${config.services.student.port}/students/${studentId}`);
         const result = await response.json();
         if (!response.ok) {
             return { status: response.status, error: result };

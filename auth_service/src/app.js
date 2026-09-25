@@ -10,7 +10,7 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/health', healthRoutes);
 
-app.listen(config.authServicePort, config.host, () => {
+app.listen(config.authServicePort, "0.0.0.0", () => {
   console.log(`Auth Service is running at http://${config.host}:${config.authServicePort}`);
 });
 

@@ -20,6 +20,6 @@ app.use('/classes', classRoutes);
 app.use('/enrollments', enrollmentRoutes);
 app.use('/auth', authRoutes);
 
-app.listen(config.apiGatewayPort, config.host, () => {
+app.listen(config.apiGatewayPort, "0.0.0.0", () => {
   console.log(`Api Gateway Service is running at http://${config.host}:${config.apiGatewayPort}`);
 });
