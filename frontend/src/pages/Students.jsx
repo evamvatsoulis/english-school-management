@@ -24,6 +24,7 @@ function Students() {
     const [deactivateStudentError, setDeactivateStudentError] = useState("");
     const [loadClassesError, setLoadClassesError] = useState("");
     const [loadEnrollmentsByClassError, setLoadEnrollmentsByClassError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -33,6 +34,10 @@ function Students() {
     };
 
     const loadStudents = async () => {
+        setLoading(true);
+        setLoadStudentsError("");
+        setStudents([]);
+
         const response = await getStudents();
         if (response.status === 401) {
             handleUnauthorizedError();
@@ -42,13 +47,17 @@ function Students() {
         if (!response.ok) {
             console.error(response.data.error);
             setLoadStudentsError(response.data.error);
+            setLoading(false);
             return;
         }
         setStudents(response.data.result);
         console.log(response.data.message);
+        setLoading(false);
     };
 
     const addStudent = async (studentData) => {
+        setAddStudentError("");
+
         const response = await createStudent(studentData);
         if (response.status === 401) {
             handleUnauthorizedError();
@@ -62,7 +71,6 @@ function Students() {
         }
 
         console.log(response.data.message);
-        setAddStudentError("");
 
         selectedClassId ? loadEnrollmentsByClass(selectedClassId) :
             loadStudents();
@@ -70,6 +78,8 @@ function Students() {
     };
 
     const editStudent = async (studentData) => {
+        setEditStudentError("");
+
         const response = await updateStudent(selectedStudent.id, studentData);
         if (response.status === 401) {
             handleUnauthorizedError();
@@ -83,7 +93,6 @@ function Students() {
         }
 
         console.log(response.data.message);
-        setEditStudentError("");
 
         loadStudents();
         closeForm();
@@ -105,10 +114,12 @@ function Students() {
         console.log(response.data.message);
         closeDeleteMessage();
         selectedClassId ? loadEnrollmentsByClass(selectedClassId) :
-        loadStudents();
+            loadStudents();
     };
 
     const loadClasses = async () => {
+        setLoadClassesError("");
+
         const response = await getClasses();
         if (response.status === 401) {
             handleUnauthorizedError();
@@ -121,7 +132,6 @@ function Students() {
             return;
         }
 
-        setLoadClassesError("");
         setClasses(response.data.result);
     };
 
@@ -196,13 +206,11 @@ function Students() {
                 <h1>Students</h1>
 
                 <div className="page-actions">
-                    {!loadClassesError &&
                         <Filter
-                            data={classes}
+                            data={loadClassesError ? [] : classes}
                             item={"class"}
                             handleFilter={handleFilter}
                         />
-                    }
 
                     <button className="add-button" onClick={openCreateForm}>Add new student</button>
                 </div>
@@ -220,7 +228,8 @@ function Students() {
                     </div>
                 )}
 
-                {!loadStudentsError &&
+                {loading ? <p>Loading...</p> :
+                    !loadStudentsError &&
                     <DataTable
                         columns={studentColumns}
                         data={students}

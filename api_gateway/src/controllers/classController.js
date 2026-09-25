@@ -23,7 +23,7 @@ const createClass = async (req, res) => {
 
 const getClasses = async (req, res) => {
     try {
-        const response = await fetch(`${classServiceUrl}/classes`);
+        const response = await fetch(`${classServiceUrl}/classes`, { signal: AbortSignal.timeout(1000) });
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (err) {
