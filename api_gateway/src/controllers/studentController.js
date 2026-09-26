@@ -16,7 +16,7 @@ const getStudents = async (req, res) => {
 const getStudentById = async (req, res) => {
     try {
         const { id } = req.params;
-        const response = await fetch(`${studentServiceUrl}/students/${id}`);
+        const response = await fetch(`${studentServiceUrl}/students/${id}`, { signal: AbortSignal.timeout(1000) });
         const result = await response.json();
 
         return res.status(response.status).json(result);

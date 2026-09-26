@@ -24,7 +24,7 @@ const createEnrollment = async (req, res) => {
 const getEnrollmentsByStudent = async (req, res) => {
     try {
         const { studentId } = req.params;
-        const response = await fetch(`${classServiceUrl}/enrollments/students/${studentId}`);
+        const response = await fetch(`${classServiceUrl}/enrollments/students/${studentId}`, { signal: AbortSignal.timeout(1000) });
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (err) {

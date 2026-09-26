@@ -17,6 +17,7 @@ const createPayment = async (req, res) => {
         const response = await fetch(
             `${paymentServiceUrl}/payments`,
             {
+                signal: AbortSignal.timeout(1000),
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -45,7 +46,7 @@ const getPaymentById = async (req, res) => {
 const getPaymentByStudentId = async (req, res) => {
     try {
         const { studentId } = req.params;
-        const response = await fetch(`${paymentServiceUrl}/payments/students/${studentId}`);
+        const response = await fetch(`${paymentServiceUrl}/payments/students/${studentId}`, { signal: AbortSignal.timeout(1000) });
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
@@ -59,6 +60,7 @@ const updatePayment = async (req, res) => {
         const response = await fetch(
             `${paymentServiceUrl}/payments/${id}`,
             {
+                signal: AbortSignal.timeout(1000),
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -79,6 +81,7 @@ const deletePayment = async (req, res) => {
         const response = await fetch(
             `${paymentServiceUrl}/payments/${id}`,
             {
+                signal: AbortSignal.timeout(1000),
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
