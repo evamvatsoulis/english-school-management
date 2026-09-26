@@ -58,19 +58,19 @@ const getEnrollmentsByStudent = async (req, res) => {
     try {
         const { studentId } = req.params;
 
-        const studentError = await fetchStudent(studentId);
+        // const studentError = await fetchStudent(studentId);
 
-        if (studentError.status !== 200) {
-            return res.status(studentError.status).json({ error: studentError.error });
-        }
+        // if (studentError.status !== 200) {
+        //     return res.status(studentError.status).json({ error: studentError.error });
+        // }
 
         const result = await getEnrollmentsByStudentRepository(studentId);
 
         if (zeroRows(result)) {
-            return res.status(404).json({ error: "Student has no enrollments" });
+            return res.status(200).json({ message: "Student has no enrollments", result: [] });
         }
 
-        return res.status(200).json(result);
+        return res.status(200).json({ message: "Student enrollments loaded", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch enrollments" });
     }

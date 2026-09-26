@@ -88,11 +88,11 @@ const getPaymentsByStudentId = async (req, res) => {
     try {
         const { studentId } = req.params;
 
-        const studentError = await fetchStudent(studentId);
+        // const studentError = await fetchStudent(studentId);
 
-        if (studentError) {
-            return res.status(studentError.status).json({ error: studentError.error });
-        }
+        // if (studentError) {
+        //     return res.status(studentError.status).json({ error: studentError.error });
+        // }
 
         const payment = await getPaymentsByStudentIdRepository(studentId);
 
