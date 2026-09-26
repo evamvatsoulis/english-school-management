@@ -6,6 +6,9 @@ services:
     ports:
       - "3000:3000"
 
+    depends_on:
+      - postgres
+
     volumes:
       - ./student_service:/app
       - /app/node_modules
@@ -20,6 +23,9 @@ services:
 
     ports:
       - "3001:3001"
+
+    depends_on:
+      - postgres
 
     volumes:
       - ./payment_service:/app
@@ -36,6 +42,9 @@ services:
     ports:
       - "3002:3002"
 
+    depends_on:
+      - postgres
+
     volumes:
       - ./auth_service:/app
       - /app/node_modules
@@ -50,6 +59,9 @@ services:
 
     ports:
       - "3003:3003"
+
+    depends_on:
+      - postgres
 
     volumes:
       - ./class_service:/app
@@ -87,3 +99,23 @@ services:
 
     env_file:
       - ./frontend/.env
+
+  postgres:
+    image: postgres:15-alpine
+
+    container_name: postgres_container
+
+    ports:
+      - "5433:5432"
+
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+volumes:
+  postgres_data:
