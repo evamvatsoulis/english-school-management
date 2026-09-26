@@ -26,6 +26,9 @@ function StudentDetails() {
   const [editPaymentError, setEditPaymentError] = useState("");
   const [deletePaymentError, setDeletePaymentError] = useState("");
   const [loadEnrollmentsByStudentError, setLoadEnrollmentsByStudentError] = useState("");
+  const [studentLoading, setStudentLoading] = useState(false);
+  const [paymentsLoading, setPaymentsLoading] = useState(false);
+  const [enrollmentLoading, setEnrollmentLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -35,6 +38,9 @@ function StudentDetails() {
   }
 
   const loadStudent = async () => {
+    setLoadStudentError("");
+    setStudentLoading(true);
+
     const response = await getStudentById(id);
 
     if (response.status === 401) {
@@ -45,14 +51,19 @@ function StudentDetails() {
     if (!response.ok) {
       setLoadStudentError(response.data.error);
       console.error(response.data.error);
+      setStudentLoading(false);
       return;
     }
 
     setStudent(response.data);
-    setLoadStudentError("");
+    setStudentLoading(false);
   };
 
   const loadPaymentsByStudentId = async () => {
+    setLoadPaymentsError("");
+    setPayments([]);
+    setPaymentsLoading(true);
+
     const response = await getPaymentsByStudentId(id);
 
     if (response.status === 401) {
@@ -63,15 +74,17 @@ function StudentDetails() {
     if (!response.ok) {
       setLoadPaymentsError(response.data.error);
       console.error(response.data.error);
+      setPaymentsLoading(false);
       return;
     }
 
     setPayments(response.data.result);
-    setLoadPaymentsError("");
     console.log(response.data.message);
+    setPaymentsLoading(false);
   };
 
   const addPayment = async (paymentData) => {
+    setAddPaymentError("");
     const response = await createPayment(paymentData);
 
     if (response.status === 401) {
@@ -91,6 +104,7 @@ function StudentDetails() {
   };
 
   const editPayment = async (paymentData) => {
+    setEditPaymentError("");
     const response = await updatePayment(selectedPayment.id, paymentData);
 
     if (response.status === 401) {
@@ -129,6 +143,10 @@ function StudentDetails() {
   };
 
   const loadEnrollmentsByStudent = async () => {
+    setLoadEnrollmentsByStudentError("");
+    setEnrollmentLoading(true);
+    setEnrollments([]);
+
     const response = await getEnrollmentsByStudent(id);
     if (response.status === 401) {
       handleUnauthorizedError();
@@ -138,10 +156,12 @@ function StudentDetails() {
     if (!response.ok) {
       console.error(response.data.error);
       setLoadEnrollmentsByStudentError(response.data.error);
+      setEnrollmentLoading(false);
       return;
     }
 
-    setEnrollments(response.data);
+    setEnrollments(response.data.result);
+    setEnrollmentLoading(false);
   }
 
   const openCreateForm = (month) => {
@@ -184,22 +204,34 @@ function StudentDetails() {
       <Sidebar />
 
       <div className="page-content">
-        {student && !loadStudentError && (
-          <div>
+        <div>
+          {studentLoading ? <p>Loading student...</p> : student && !loadStudentError && (
             <h1>{student.first_name} {student.last_name}</h1>
-            {enrollments.map((enrollment) => (
-              enrollment.school_year === "2026-2027" && <h2 key={enrollment.id}>Class: {enrollment.name}</h2>
-            ))}
-          </div>
-        )}
+          )}
 
-        {!loadPaymentsError &&
-          <StudentPayments
-            payments={payments}
-            openCreateForm={openCreateForm}
-            openEditForm={openEditForm}
-            openDeleteMessage={openDeleteMessage}
-          />
+          {enrollmentLoading ? <p>Loading enrollment...</p> : !loadEnrollmentsByStudentError && (
+            enrollments.map((enrollment) => (
+              enrollment.school_year === "2026-2027" && <h2 key={enrollment.id}>Class: {enrollment.name}</h2>
+            ))
+          )}
+        </div>
+
+        {paymentsLoading ? <p>Loading payments...</p> :
+          !loadPaymentsError &&
+          <>
+            <StudentPayments
+              payments={payments}
+              openCreateForm={openCreateForm}
+              openEditForm={openEditForm}
+              openDeleteMessage={openDeleteMessage}
+            />
+
+            <DataTable
+              columns={paymentColumns}
+              data={payments}
+              title={"Payments History"}
+            />
+          </>
         }
 
         {showForm &&
@@ -228,15 +260,6 @@ function StudentDetails() {
             </div>
           </div>
         }
-
-        {!loadPaymentsError &&
-          <DataTable
-            columns={paymentColumns}
-            data={payments}
-            title={"Payments History"}
-          />
-        }
-
       </div>
     </div>
   );
