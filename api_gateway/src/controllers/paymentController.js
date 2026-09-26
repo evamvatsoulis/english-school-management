@@ -46,7 +46,7 @@ const getPaymentById = async (req, res) => {
 const getPaymentByStudentId = async (req, res) => {
     try {
         const { studentId } = req.params;
-        const response = await fetch(`${paymentServiceUrl}/payments/students/${studentId}`, { signal: AbortSignal.timeout(1000) });
+        const response = await fetch(`${paymentServiceUrl}/payments/students/${studentId}`, { signal: AbortSignal.timeout(5000) });
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
