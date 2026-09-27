@@ -11,6 +11,8 @@ function Payments({ }) {
     const [payments, setPayments] = useState([]);
     const [loadStudentsError, setLoadStudentsError] = useState("");
     const [loadPaymentsError, setLoadPaymentsError] = useState("");
+    const [studentsLoading, setStudentsLoading] = useState(false);
+    const [paymentsLoading, setPaymentsLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -20,6 +22,9 @@ function Payments({ }) {
     };
 
     const loadStudents = async () => {
+        setLoadStudentsError("");
+        setStudentsLoading(true);
+
         const response = await getStudents();
         if (response.status === 401) {
             handleUnauthorizedError();
@@ -29,14 +34,18 @@ function Payments({ }) {
         if (!response.ok) {
             console.error(response.data.error);
             setLoadStudentsError(response.data.error);
+            setStudentsLoading(false);
             return;
         }
 
         setStudents(response.data.result);
-        setLoadStudentsError("");
+        setStudentsLoading(false);
     };
 
     const loadPayments = async () => {
+        setLoadPaymentsError("");
+        setPaymentsLoading(true);
+
         const response = await getPayments();
 
         if (response.status === 401) {
@@ -47,11 +56,12 @@ function Payments({ }) {
         if (!response.ok) {
             setLoadPaymentsError(response.data.error);
             console.error(response.data.error);
+            setPaymentsLoading(false);
             return;
         }
 
-        setLoadPaymentsError("");
         setPayments(response.data);
+        setPaymentsLoading(false);
     };
 
     useEffect(() => {
@@ -66,11 +76,13 @@ function Payments({ }) {
             <div className="page-content">
                 <h1>Payments 2026-27</h1>
 
-                {!loadStudentsError && !loadPaymentsError &&
-                    <PaymentsTable
-                        students={students}
-                        payments={payments}
-                    />
+                {studentsLoading ? <p>Loading students...</p> :
+                    paymentsLoading ? <p>Loading payments...</p> :
+                        !loadPaymentsError && !loadStudentsError &&
+                        <PaymentsTable
+                            students={students}
+                            payments={payments}
+                        />
                 }
             </div>
         </div>
