@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getStudents, createStudent, updateStudent, deactivateStudent, getStudentById } from "../services/studentService";
+import { getStudents, createStudent, updateStudent, deactivateStudent, getStudentsByIds } from "../services/studentService";
 import { getClasses } from '../services/classService';
 import { getEnrollmentsByClass } from '../services/enrollmentService';
 import { studentColumns } from '../config/config';
@@ -155,23 +155,21 @@ function Students() {
     };
 
     const loadStudentsByClass = async (enrollments) => {
-        let studentsByClass = [];
-        for (const enrollment of enrollments) {
-            const response = await getStudentById(enrollment.student_id);
-            if (response.status === 401) {
-                handleUnauthorizedError();
-                return;
-            }
+        const studentsIds = enrollments.map((enrollment) => enrollment.student_id);
+        const response = await getStudentsByIds(studentsIds);
 
-            if (!response.ok) {
-                console.error(response.data.error);
-                setLoadStudentsByClassError(response.data.error);
-                return;
-            }
-
-            studentsByClass.push(response.data);
+        if (response.status === 401) {
+            handleUnauthorizedError();
+            return;
         }
-        setStudents(studentsByClass);
+
+        if (!response.ok) {
+            setLoadStudentsByClassError(response.data.error);
+            console.error(response.data.error);
+            return;
+        }
+
+        setStudents(response.data.result);
     };
 
     const handleSubmit = (studentData) => {
