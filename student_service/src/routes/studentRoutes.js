@@ -3,7 +3,7 @@ const router = express.Router();
 const { getStudents, getStudentById, createStudent, updateStudent, deactivateStudent, activateStudent, getStudentsByIds } = require('../controllers/studentController');
 
 router.get('/', getStudents);
-router.get('/batch', getStudentsByIds);
+router.post('/batch', getStudentsByIds);
 router.get('/:id', getStudentById);
 router.post('/', createStudent);
 router.patch('/:id', updateStudent);

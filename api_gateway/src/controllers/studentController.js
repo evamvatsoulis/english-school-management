@@ -25,6 +25,25 @@ const getStudentById = async (req, res) => {
     }
 };
 
+const getStudentsByIds = async (req, res) => {
+    try {
+        const response = await fetch(`${studentServiceUrl}/students/batch`,
+            {
+                signal: AbortSignal.timeout(5000),
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(req.body)
+            }
+        );
+        const result = await response.json();
+        return res.status(response.status).json(result);
+    } catch (error) {
+        return res.status(503).json({ error: error.message });
+    }
+};
+
 const createStudent = async (req, res) => {
     try {
         const response = await fetch(
@@ -109,4 +128,4 @@ const activateStudent = async (req, res) => {
     }
 };
 
-module.exports = { getStudents, getStudentById, createStudent, updateStudent, deactivateStudent, activateStudent };
+module.exports = { getStudents, getStudentById, getStudentsByIds, createStudent, updateStudent, deactivateStudent, activateStudent };

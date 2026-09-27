@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { getStudents, getStudentById, createStudent, updateStudent, deactivateStudent, activateStudent } = require('../controllers/studentController');
+const { getStudents, getStudentById, getStudentsByIds, createStudent, updateStudent, deactivateStudent, activateStudent } = require('../controllers/studentController');
 const { authenticateToken } = require('../middleware/authMiddleware');
 
 router.use(authenticateToken);
 
 router.get('/', getStudents);
+router.post('/batch', getStudentsByIds);
 router.get('/:id', getStudentById);
 router.post('/', createStudent);
 router.patch('/:id', updateStudent);
