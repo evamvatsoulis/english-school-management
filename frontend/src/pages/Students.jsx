@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getStudents, createStudent, updateStudent, deactivateStudent } from "../services/studentService";
+import { getStudents, createStudent, updateStudent, deactivateStudent, getStudentById } from "../services/studentService";
 import { getClasses } from '../services/classService';
 import { getEnrollmentsByClass } from '../services/enrollmentService';
 import { studentColumns } from '../config/config';
@@ -24,6 +24,7 @@ function Students() {
     const [deactivateStudentError, setDeactivateStudentError] = useState("");
     const [loadClassesError, setLoadClassesError] = useState("");
     const [loadEnrollmentsByClassError, setLoadEnrollmentsByClassError] = useState("");
+    const [loadStudentsByClassError, setLoadStudentsByClassError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -149,9 +150,29 @@ function Students() {
             setLoadEnrollmentsByClassError(response.data.error);
             return;
         }
-        setStudents(response.data.result);
+        loadStudentsByClass(response.data.result);
         console.log(response.data.message);
     };
+
+    const loadStudentsByClass = async (enrollments) => {
+        let studentsByClass = [];
+        for (const enrollment of enrollments) {
+            const response = await getStudentById(enrollment.student_id);
+            if (response.status === 401) {
+                handleUnauthorizedError();
+                return;
+            }
+
+            if (!response.ok) {
+                console.error(response.data.error);
+                setLoadStudentsByClassError(response.data.error);
+                return;
+            }
+
+            studentsByClass.push(response.data);
+        }
+        setStudents(studentsByClass);
+    }
 
     const handleSubmit = (studentData) => {
         selectedStudent ? editStudent(studentData) :
@@ -206,11 +227,11 @@ function Students() {
                 <h1>Students</h1>
 
                 <div className="page-actions">
-                        <Filter
-                            data={loadClassesError ? [] : classes}
-                            item={"class"}
-                            handleFilter={handleFilter}
-                        />
+                    <Filter
+                        data={loadClassesError ? [] : classes}
+                        item={"class"}
+                        handleFilter={handleFilter}
+                    />
 
                     <button className="add-button" onClick={openCreateForm}>Add new student</button>
                 </div>

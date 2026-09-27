@@ -92,16 +92,16 @@ const getEnrollmentsByClass = async (req, res) => {
             return res.status(200).json({ message: "Class does not have students", result: [] });
         }
 
-        const result = [];
+        // const result = [];
 
-        for (const enrollment of enrollments) {
-            const student = await fetchStudent(enrollment.student_id);
-            if (student.status === 200) {
-                result.push(student.data);
-            } 
-        }
+        // for (const enrollment of enrollments) {
+        //     const student = await fetchStudent(enrollment.student_id);
+        //     if (student.status === 200) {
+        //         result.push(student.data);
+        //     } 
+        // }
 
-        return res.status(200).json({ message: "Enrollments were loaded successfully", result });
+        return res.status(200).json({ message: "Enrollments were loaded successfully", result: enrollments });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch enrollments" });
     }
