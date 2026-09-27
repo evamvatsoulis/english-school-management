@@ -23,19 +23,6 @@ const updatePaymentData = (value, payment) => {
     return { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes };
 };
 
-const fetchStudent = async (studentId) => {
-    try {
-        const response = await fetch(`http://${config.services.student.host}:${config.services.student.port}/students/${studentId}`);
-        const result = await response.json();
-        if (!response.ok) {
-            return { status: response.status, error: result };
-        }
-        return null;
-    } catch (error) {
-        return { status: 503, error: 'Student service is currently unavailable' }
-    }
-};
-
 const getPayments = async (req, res) => {
     try {
         const result = await getPaymentsRepository();
@@ -51,12 +38,6 @@ const createPayment = async (req, res) => {
 
         if (error) {
             return res.status(400).json({ error: error.details[0].message });
-        }
-
-        const studentError = await fetchStudent(value.studentId);
-
-        if (studentError) {
-            return res.status(studentError.status).json({ error: studentError.error });
         }
 
         const { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes } = value;
@@ -87,12 +68,6 @@ const getPaymentById = async (req, res) => {
 const getPaymentsByStudentId = async (req, res) => {
     try {
         const { studentId } = req.params;
-
-        // const studentError = await fetchStudent(studentId);
-
-        // if (studentError) {
-        //     return res.status(studentError.status).json({ error: studentError.error });
-        // }
 
         const payment = await getPaymentsByStudentIdRepository(studentId);
 

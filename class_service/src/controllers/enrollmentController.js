@@ -12,31 +12,12 @@ const {
 
 const zeroRows = (result) => result.length === 0;
 
-const fetchStudent = async (studentId) => {
-    try {
-        const response = await fetch(`http://${config.services.student.host}:${config.services.student.port}/students/${studentId}`);
-        const result = await response.json();
-        if (!response.ok) {
-            return { status: response.status, error: result.error };
-        }
-        return { status: 200, data: result };
-    } catch (error) {
-        return { status: 503, error: 'Student service is currently unavailable' }
-    }
-};
-
 const createEnrollment = async (req, res) => {
     try {
         const { error, value } = enrollmentSchema.validate(req.body);
 
         if (error) {
             return res.status(400).json({ error: error.details[0].message });
-        }
-
-        const studentError = await fetchStudent(value.studentId);
-
-        if (studentError.status !== 200) {
-            return res.status(studentError.status).json({ error: studentError.error });
         }
 
         const classResponse = await getClassById(value.classId);
@@ -57,12 +38,6 @@ const createEnrollment = async (req, res) => {
 const getEnrollmentsByStudent = async (req, res) => {
     try {
         const { studentId } = req.params;
-
-        // const studentError = await fetchStudent(studentId);
-
-        // if (studentError.status !== 200) {
-        //     return res.status(studentError.status).json({ error: studentError.error });
-        // }
 
         const result = await getEnrollmentsByStudentRepository(studentId);
 
@@ -92,15 +67,6 @@ const getEnrollmentsByClass = async (req, res) => {
             return res.status(200).json({ message: "Class does not have students", result: [] });
         }
 
-        // const result = [];
-
-        // for (const enrollment of enrollments) {
-        //     const student = await fetchStudent(enrollment.student_id);
-        //     if (student.status === 200) {
-        //         result.push(student.data);
-        //     } 
-        // }
-
         return res.status(200).json({ message: "Enrollments were loaded successfully", result: enrollments });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch enrollments" });
@@ -114,12 +80,6 @@ const deleteEnrollment = async (req, res) => {
 
     if (zeroRows(classResponse)) {
         return res.status(404).json({ error: "Class not found" });
-    }
-
-    const studentError = await fetchStudent(studentId);
-
-    if (studentError.status !== 200) {
-        return res.status(studentError.status).json({ error: studentError.error });
     }
 
     const enrollment = await getEnrollment(classId, studentId);
