@@ -16,6 +16,7 @@ function Classes() {
     const [addClassError, setAddClassError] = useState("");
     const [editClassError, setEditClassError] = useState("");
     const [deleteClassError, setDeleteClassError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -25,6 +26,10 @@ function Classes() {
     };
 
     const loadClasses = async () => {
+        setLoadClassesError("");
+        setLoading(true);
+        setClasses([]);
+
         const response = await getClasses();
         if (response.status === 401) {
             handleUnauthorizedError();
@@ -34,12 +39,13 @@ function Classes() {
         if (!response.ok) {
             console.error(response.data.error);
             setLoadClassesError(response.data.error);
+            setLoading(false);
             return;
         }
 
         setClasses(response.data.result);
         console.log(response.data.message);
-        setLoadClassesError("");
+        setLoading(false);
     };
 
     const addClass = async (classData) => {
@@ -119,7 +125,7 @@ function Classes() {
 
     const handleSubmit = (classData) => {
         selectedClass ? editClass(classData) :
-        addClass(classData);
+            addClass(classData);
     };
 
     useEffect(() => {
@@ -133,17 +139,19 @@ function Classes() {
             <div className="page-content">
                 <h1>Classes</h1>
 
-                <div className="page-actions">
-                    <button className="add-button" onClick={openCreateForm}>Add new class</button>
-                </div>
-
                 {!loadClassesError &&
+                    <div className="page-actions">
+                        <button className="add-button" onClick={openCreateForm}>Add new class</button>
+                    </div>
+                }
+
+                {loading ? <p>Loading...</p> : !loadClassesError &&
                     <DataTable
                         columns={classColumns}
                         data={classes}
                         actions={[
                             { label: "edit", function: openEditForm },
-                            { label: "eye_tracking", function: navigateToClassDetails},
+                            { label: "eye_tracking", function: navigateToClassDetails },
                             { label: "delete", function: openDeleteMessage }
                         ]}
                     />

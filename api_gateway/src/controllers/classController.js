@@ -7,6 +7,7 @@ const createClass = async (req, res) => {
         const response = await fetch(
             `${classServiceUrl}/classes`,
             {
+                signal: AbortSignal.timeout(5000),
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -23,7 +24,7 @@ const createClass = async (req, res) => {
 
 const getClasses = async (req, res) => {
     try {
-        const response = await fetch(`${classServiceUrl}/classes`, { signal: AbortSignal.timeout(1000) });
+        const response = await fetch(`${classServiceUrl}/classes`, { signal: AbortSignal.timeout(5000) });
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (err) {
@@ -48,6 +49,7 @@ const updateClass = async (req, res) => {
         const response = await fetch(
             `${classServiceUrl}/classes/${id}`,
             {
+                signal: AbortSignal.timeout(5000),
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -68,6 +70,7 @@ const deactivateClass = async (req, res) => {
         const response = await fetch(
             `${classServiceUrl}/classes/${id}/deactivate`,
             {
+                signal: AbortSignal.timeout(5000),
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
