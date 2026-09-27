@@ -7,6 +7,7 @@ const createEnrollment = async (req, res) => {
         const response = await fetch(
             `${classServiceUrl}/enrollments`,
             {
+                signal: AbortSignal.timeout(5000),
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -35,7 +36,7 @@ const getEnrollmentsByStudent = async (req, res) => {
 const getEnrollmentsByClass = async (req, res) => {
     try {
         const { classId } = req.params;
-        const response = await fetch(`${classServiceUrl}/enrollments/class/${classId}`);
+        const response = await fetch(`${classServiceUrl}/enrollments/class/${classId}`, { signal: AbortSignal.timeout(5000) });
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (err) {
@@ -49,6 +50,7 @@ const deleteEnrollment = async (req, res) => {
         const response = await fetch(
             `${classServiceUrl}/enrollments/class/${classId}/student/${studentId}`,
             {
+                signal: AbortSignal.timeout(5000),
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"

@@ -35,7 +35,7 @@ const getClasses = async (req, res) => {
 const getClassById = async (req, res) => {
     try {
         const { id } = req.params;
-        const response = await fetch(`${classServiceUrl}/classes/${id}`);
+        const response = await fetch(`${classServiceUrl}/classes/${id}`, { signal: AbortSignal.timeout(5000) });
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (err) {
