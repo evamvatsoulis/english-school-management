@@ -10,6 +10,7 @@ import Sidebar from '../components/Sidebar';
 function Healths() {
     const [healths, setHealths] = useState([]);
     const [loadHealthsError, setLoadHealthsError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -19,6 +20,9 @@ function Healths() {
     }
 
     const loadHealths = async () => {
+        setLoadHealthsError("");
+        setLoading(true);
+
         const response = await getHealths();
         if (response.status === 401) {
             handleUnauthorizedError();
@@ -28,11 +32,12 @@ function Healths() {
         if (!response.ok) {
             console.error(response.data.error);
             setLoadHealthsError(response.data.error);
+            setLoading(false);
             return;
         }
 
         setHealths(response.data);
-        setLoadHealthsError("");
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -46,11 +51,12 @@ function Healths() {
             <div className="page-content">
                 <Sidebar />
 
-                {!loadHealthsError &&
+                <h1>Health</h1>
+
+                {loading ? <p>Loading...</p> : !loadHealthsError &&
                     <DataTable
                         columns={healthColumns}
                         data={healths}
-                        title={"Health"}
                     />
                 }
             </div>

@@ -10,7 +10,7 @@ const getUrlByServiceName = (serviceName) => {
 
 const checkServiceHealth = async (serviceName, serviceUrl) => {
     try {
-        const response = await fetch(`${serviceUrl}/health`);
+        const response = await fetch(`${serviceUrl}/health`, { signal: AbortSignal.timeout(5000) });
         return await response.json();
     } catch (error) {
         return {
