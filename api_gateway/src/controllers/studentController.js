@@ -40,7 +40,7 @@ const getStudentsByIds = async (req, res) => {
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
-        return res.status(503).json({ error: error.message });
+        return res.status(503).json({ error: "Student service is currently unavailable" });
     }
 };
 

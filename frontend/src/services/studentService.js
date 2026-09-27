@@ -32,6 +32,25 @@ const getStudentById = async (studentId) => {
     return { status: response.status, ok: response.ok, data };
 };
 
+const getStudentsByIds = async (studentsIds) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+        `${API_GATEWAY_URL}/students/batch`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ studentsIds })
+        }
+    );
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
+
 const createStudent = async (studentData) => {
     const token = localStorage.getItem("token");
 
@@ -88,4 +107,4 @@ const deactivateStudent = async (studentId) => {
     return { status: response.status, ok: response.ok, data };
 };
 
-export { getStudents, getStudentById, createStudent, updateStudent, deactivateStudent };
+export { getStudents, getStudentById, getStudentsByIds, createStudent, updateStudent, deactivateStudent };

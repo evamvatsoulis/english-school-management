@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import { useEffect, useState } from 'react';
 import { getClassById } from '../services/classService';
 import { getEnrollmentsByClass, createEnrollment, deleteEnrollment } from '../services/enrollmentService';
-import { getStudents } from '../services/studentService';
+import { getStudents, getStudentById, getStudentsByIds } from '../services/studentService';
 import { studentColumns } from '../config/config';
 import Sidebar from '../components/Sidebar';
 import DataTable from "../components/DataTable";
@@ -21,9 +21,12 @@ function ClassDetails() {
     const [showDeleteMessage, setShowDeleteMessage] = useState("");
     const [loadClassError, setLoadClassError] = useState("");
     const [loadEnrollmentsByClassError, setLoadEnrollmentsByClassError] = useState("");
+    const [loadStudentsByClassError, setLoadStudentsByClassError] = useState("");
     const [loadStudentsError, setLoadStudentsError] = useState("");
     const [addEnrollmentError, setAddEnrollmentError] = useState("");
     const [removeEnrollmentError, setRemoveEnrollmentError] = useState("");
+    const [classLoading, setClassLoading] = useState(false);
+    const [studentsLoading, setStudentsLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -33,6 +36,7 @@ function ClassDetails() {
     };
 
     const loadClass = async () => {
+        setClassLoading(true);
         const response = await getClassById(id);
 
         if (response.status === 401) {
@@ -43,13 +47,19 @@ function ClassDetails() {
         if (!response.ok) {
             setLoadClassError(response.data.error);
             console.error(response.data.error);
+            setClassLoading(false);
             return;
         }
         setSubject(response.data);
         setLoadClassError("");
+        setClassLoading(false);
     };
 
     const loadEnrollmentsByClass = async () => {
+        setStudentsLoading(true);
+        setLoadEnrollmentsByClassError("");
+        setEnrollments([]);
+
         const response = await getEnrollmentsByClass(id);
 
         if (response.status === 401) {
@@ -60,14 +70,35 @@ function ClassDetails() {
         if (!response.ok) {
             setLoadEnrollmentsByClassError(response.data.error);
             console.error(response.data.error);
+            setStudentsLoading(false);
             return;
         }
+        loadStudentsByClass(response.data.result);
+        console.log(response.data.message);
+        setStudentsLoading(false);
+    };
+
+    const loadStudentsByClass = async (enrollments) => {
+        const studentsIds = enrollments.map((enrollment) => enrollment.student_id);
+        const response = await getStudentsByIds(studentsIds);
+
+        if (response.status === 401) {
+            handleUnauthorizedError();
+            return;
+        }
+
+         if (!response.ok) {
+            setLoadStudentsByClassError(response.data.error);
+            console.error(response.data.error);
+            return;
+        }
+
         setEnrollments(response.data.result);
         console.log(response.data.message);
-        setLoadEnrollmentsByClassError("");
     };
 
     const loadStudents = async () => {
+        setLoadStudentsError("");
         const response = await getStudents();
 
         if (response.status === 401) {
@@ -81,7 +112,6 @@ function ClassDetails() {
             return;
         }
         setStudents(response.data.result);
-        setLoadStudentsError("");
     };
 
     const addEnrollment = async (studentId) => {
@@ -140,9 +170,9 @@ function ClassDetails() {
             <Sidebar />
 
             <div className="page-content">
-                {subject && <h1>{subject.name} | {subject.school_year}</h1>}
+                {classLoading ? <p>Loading class...</p> : subject && !loadClassError && <h1>{subject.name} | {subject.school_year}</h1>}
 
-                {!loadEnrollmentsByClassError &&
+                {studentsLoading ? <p>Loading...</p> :
                     <DataTable
                         columns={studentColumns}
                         data={enrollments}
@@ -174,7 +204,7 @@ function ClassDetails() {
                         ))}
                     </select>
                 </div>
-
+                
                 <button className="add-button" onClick={() => addEnrollment(selectedStudentId)}>Add student to class</button>
             </div>
         </div>

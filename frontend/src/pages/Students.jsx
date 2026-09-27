@@ -172,7 +172,7 @@ function Students() {
             studentsByClass.push(response.data);
         }
         setStudents(studentsByClass);
-    }
+    };
 
     const handleSubmit = (studentData) => {
         selectedStudent ? editStudent(studentData) :
