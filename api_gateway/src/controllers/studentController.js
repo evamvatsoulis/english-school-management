@@ -4,7 +4,7 @@ const studentServiceUrl = `http://${config.services.student.host}:${config.servi
 
 const getStudents = async (req, res) => {
     try {
-        const response = await fetch(`${studentServiceUrl}/students`, { signal: AbortSignal.timeout(1000) });
+        const response = await fetch(`${studentServiceUrl}/students`, { signal: AbortSignal.timeout(5000) });
         const result = await response.json();
 
         return res.status(response.status).json(result);
@@ -30,7 +30,7 @@ const createStudent = async (req, res) => {
         const response = await fetch(
             `${studentServiceUrl}/students`,
             {
-                signal: AbortSignal.timeout(1000),
+                signal: AbortSignal.timeout(5000),
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -51,7 +51,7 @@ const updateStudent = async (req, res) => {
         const response = await fetch(
             `${studentServiceUrl}/students/${id}`,
             {
-                signal: AbortSignal.timeout(1000),
+                signal: AbortSignal.timeout(5000),
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -72,6 +72,7 @@ const deactivateStudent = async (req, res) => {
         const response = await fetch(
             `${studentServiceUrl}/students/${id}/deactivate`,
             {
+                signal: AbortSignal.timeout(5000),
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
