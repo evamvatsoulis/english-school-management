@@ -28,6 +28,5 @@ const services = {
 
 module.exports = {
   apiGatewayPort: process.env.API_GATEWAY_PORT,
-  host: process.env.HOST,
   services
 };

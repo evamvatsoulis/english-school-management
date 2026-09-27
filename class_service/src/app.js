@@ -13,7 +13,7 @@ app.use('/classes', classRoutes);
 app.use('/enrollments', enrollmentRoutes);
 
 app.listen(config.classServicePort, "0.0.0.0", () => {
-  console.log(`Class Service is running at http://${config.host}:${config.classServicePort}`);
+  console.log(`Class Service is running at port ${config.classServicePort}`);
 });
 
 testDbConnection();

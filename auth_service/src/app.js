@@ -11,7 +11,7 @@ app.use('/auth', authRoutes);
 app.use('/health', healthRoutes);
 
 app.listen(config.authServicePort, "0.0.0.0", () => {
-  console.log(`Auth Service is running at http://${config.host}:${config.authServicePort}`);
+  console.log(`Auth Service is running at port ${config.authServicePort}`);
 });
 
 testDbConnection();

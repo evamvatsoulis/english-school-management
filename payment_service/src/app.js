@@ -11,7 +11,7 @@ app.use('/payments', paymentRoutes);
 app.use('/health', healthRoutes);
 
 app.listen(config.paymentServicePort, "0.0.0.0", () => {
-  console.log(`Payment Service is running at http://${config.host}:${config.paymentServicePort}`);
+  console.log(`Payment Service is running at port ${config.paymentServicePort}`);
 });
 
 testDbConnection();

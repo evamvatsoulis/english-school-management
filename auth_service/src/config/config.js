@@ -1,6 +1,5 @@
 require("dotenv").config();
 
 module.exports = {
-  authServicePort: process.env.AUTH_SERVICE_PORT,
-  host: process.env.HOST
+  authServicePort: process.env.AUTH_SERVICE_PORT
 };
