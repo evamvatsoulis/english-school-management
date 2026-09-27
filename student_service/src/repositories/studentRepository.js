@@ -7,6 +7,11 @@ const getStudents = async () => {
     return result.rows;
 };
 
+const getStudentsByIds = async (studentIds) => {
+    const result = await pool.query(`SELECT * FROM students WHERE active = TRUE AND id = ANY($1) ORDER BY id`, [studentIds]);
+    return result.rows;
+};
+
 const createStudent = async (firstName, lastName, phone, email) => {
     const result = await pool.query(
         `INSERT INTO students (first_name, last_name, phone, email)
@@ -53,4 +58,4 @@ const activateStudent = async (id) => {
     return result.rows[0];
 };
 
-module.exports = { getStudentById, getStudents, createStudent, updateStudent, deactivateStudent, activateStudent };
+module.exports = { getStudentById, getStudentsByIds, getStudents, createStudent, updateStudent, deactivateStudent, activateStudent };

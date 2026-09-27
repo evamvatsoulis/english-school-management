@@ -2,6 +2,7 @@ const { studentSchema, updateStudentSchema } = require('../schemas/studentSchema
 const {
     getStudentById: getStudentByIdRepository,
     getStudents: getStudentsRepository,
+    getStudentsByIds: getStudentsByIdsRepository,
     createStudent: createStudentRepository,
     updateStudent: updateStudentRepository,
     deactivateStudent: deactivateStudentRepository,
@@ -22,7 +23,7 @@ const updatedStudentData = (value, student) => {
 const getStudents = async (req, res) => {
     try {
         const result = await getStudentsRepository();
-        return res.status(200).json({ message: "The students were successfully loaded", result});
+        return res.status(200).json({ message: "The students were successfully loaded", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch students" });
     }
@@ -40,6 +41,22 @@ const getStudentById = async (req, res) => {
         return res.status(200).json(result.rows[0]);
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch student" });
+    }
+};
+
+const getStudentsByIds = async (req, res) => {
+    try {
+        const { studentsIds } = req.body;
+
+        const result = await getStudentsByIdsRepository(studentsIds);
+
+        if (result.length === 0) {
+            return res.status(200).json({ message: "Students not found", result: [] });
+        }
+
+        return res.status(200).json({ message: "Students loaded successfully", result });
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to fetch students" });
     }
 };
 
@@ -120,4 +137,4 @@ const activateStudent = async (req, res) => {
     }
 };
 
-module.exports = { getStudents, getStudentById, createStudent, updateStudent, deactivateStudent, activateStudent };
+module.exports = { getStudents, getStudentById, getStudentsByIds, createStudent, updateStudent, deactivateStudent, activateStudent };
