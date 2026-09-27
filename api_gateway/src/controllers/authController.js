@@ -36,6 +36,7 @@ const login = async (req, res) => {
         const response = await fetch(
             `${authServiceUrl}/auth/login`,
             {
+                signal: AbortSignal.timeout(5000),
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
