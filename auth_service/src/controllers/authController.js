@@ -6,6 +6,8 @@ const encryptPassword = async (password) => bcrypt.hash(password, 10);
 
 const passwordMatches = async (password, passwordHash) => bcrypt.compare(password, passwordHash);
 
+const notFound = (result) => result.length === 0;
+
 const generateToken = (user) => {
     const token = jwt.sign(
         {
@@ -21,7 +23,6 @@ const generateToken = (user) => {
     return token;
 };
 
-
 const register = async (req, res) => {
     try {
         const { username, password, role } = req.body;
@@ -29,7 +30,7 @@ const register = async (req, res) => {
         const passwordHash = await encryptPassword(password);
         const result = await registerRepository(username, passwordHash, role);
 
-        return res.status(201).json(result);
+        return res.status(201).json({ message: "User added", result });
     } catch (error) {
         return res.status(500).json({ error: "Failed to create user" });
     }
@@ -38,7 +39,11 @@ const register = async (req, res) => {
 const getUsers = async (req, res) => {
     try {
         const result = await getUsersRepository();
-        return res.status(200).json(result);
+
+        if (notFound(result)) {
+            return res.status(200).json({ message: "There are no users", result: [] });
+        }
+        return res.status(200).json({ message: "Users loaded successfully", result });
     } catch (error) {
         return res.status(500).json({ error: "Failed to fetch users" })
     }
@@ -48,8 +53,7 @@ const login = async (req, res) => {
     try {
         const { username, password } = req.body;
 
-        const result = await findUserByUsername(username);
-        const user = result.rows[0];
+        const user = await findUserByUsername(username);
 
         if (!user) {
             return res.status(401).json({ error: "Invalid username or password" });
@@ -61,7 +65,7 @@ const login = async (req, res) => {
 
         const token = generateToken(user);
 
-        return res.status(200).json({ message: "Login succesfull", token });
+        return res.status(200).json({ message: "Successfull login", token });
     } catch (err) {
         return res.status(500).json({ error: "Login failed" });
     }
