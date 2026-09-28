@@ -1,16 +1,15 @@
-const config = require('../config/config');
-
 const { enrollmentSchema } = require('../schemas/enrollmentSchema');
 const { getClassById } = require('../repositories/classRepository');
 const {
     createEnrollment: createEnrollmentRepository,
     getEnrollmentsByStudent: getEnrollmentsByStudentRepository,
-    getStudentsIdsByClass: getStudentsIdsByClassRepository,
+    getEnrollmentsByClass: getEnrollmentsByClassRepository,
     getEnrollment,
     deleteEnrollment: deleteEnrollmentRepository
 } = require('../repositories/enrollmentRepository');
 
 const zeroRows = (result) => result.length === 0;
+const notFound = (result) => result.length === 0;
 
 const createEnrollment = async (req, res) => {
     try {
@@ -22,7 +21,7 @@ const createEnrollment = async (req, res) => {
 
         const classResponse = await getClassById(value.classId);
 
-        if (zeroRows(classResponse)) {
+        if (!classResponse) {
             return res.status(404).json({ error: "Class not found" });
         }
 
@@ -41,7 +40,7 @@ const getEnrollmentsByStudent = async (req, res) => {
 
         const result = await getEnrollmentsByStudentRepository(studentId);
 
-        if (zeroRows(result)) {
+        if (notFound(result)) {
             return res.status(200).json({ message: "Student has no enrollments", result: [] });
         }
 
@@ -57,17 +56,17 @@ const getEnrollmentsByClass = async (req, res) => {
 
         const classResponse = await getClassById(classId);
 
-        if (zeroRows(classResponse)) {
+        if (!classResponse) {
             return res.status(404).json({ error: "Class not found" });
         }
 
-        const enrollments = await getStudentsIdsByClassRepository(classId);
+        const enrollments = await getEnrollmentsByClassRepository(classId);
 
-        if (zeroRows(enrollments)) {
+        if (notFound(enrollments)) {
             return res.status(200).json({ message: "Class does not have students", result: [] });
         }
 
-        return res.status(200).json({ message: "Enrollments were loaded successfully", result: enrollments });
+        return res.status(200).json({ message: "Enrollments loaded successfully", result: enrollments });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch enrollments" });
     }
@@ -78,17 +77,17 @@ const deleteEnrollment = async (req, res) => {
 
     const classResponse = await getClassById(classId);
 
-    if (zeroRows(classResponse)) {
+    if (!classResponse) {
         return res.status(404).json({ error: "Class not found" });
     }
 
     const enrollment = await getEnrollment(classId, studentId);
 
-    if (zeroRows(enrollment)) {
+    if (!enrollment) {
         return res.status(404).json({ error: "Enrollment not found" });
     }
 
-    const result = await deleteEnrollmentRepository(classId, studentId);
+    await deleteEnrollmentRepository(classId, studentId);
 
     return res.status(200).json({ message: "Enrollment deleted" });
 };

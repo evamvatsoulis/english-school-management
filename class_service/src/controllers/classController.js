@@ -8,7 +8,7 @@ const {
     activateClass: activateClassRepository
 } = require('../repositories/classRepository');
 
-const classesNotFound = (result) => result.length === 0;
+const notFound = (result) => result.length === 0;
 
 const updateClassData = (value, className) => {
     const name = value.name ?? className.name;
@@ -37,11 +37,12 @@ const createClass = async (req, res) => {
 const getClasses = async (req, res) => {
     try {
         const result = await getClassesRepository();
-        if(classesNotFound(result)) {
+
+        if (notFound(result)) {
             return res.status(200).json({ message: "There are no classes", result: [] });
         }
 
-        return res.status(200).json({ message: "Classes were successfully loaded", result });
+        return res.status(200).json({ message: "Classes loaded successfully", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch classes" });
     }
@@ -55,7 +56,7 @@ const getClassById = async (req, res) => {
         if (!result) {
             return res.status(404).json({ error: "Class not found" });
         }
-        return res.status(200).json(result[0]);
+        return res.status(200).json({ message: "Class loaded successfully", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to get class" });
     }
@@ -94,7 +95,7 @@ const deactivateClass = async (req, res) => {
             return res.status(404).json({ error: "Class not found" });
         }
         const result = await deactivateClassRepository(id);
-        return res.status(200).json(result);
+        return res.status(200).json({ message: "Class deleted", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to deactivate class" });
     }
@@ -109,7 +110,7 @@ const activateClass = async (req, res) => {
             return res.status(404).json({ error: "Class not found" });
         }
         const result = await activateClassRepository(id);
-        return res.status(200).json(result);
+        return res.status(200).json({ message: "Class activated", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to activate class" });
     }

@@ -19,7 +19,7 @@ const getEnrollmentsByStudent = async (studentId) => {
     return result.rows;
 };
 
-const getStudentsIdsByClass = async (classId) => {
+const getEnrollmentsByClass = async (classId) => {
     const result = await pool.query(
         `SELECT * FROM enrollments
         WHERE class_id = $1`, [classId]
@@ -32,15 +32,11 @@ const getEnrollment = async (classId, studentId) => {
         `SELECT * FROM enrollments
         WHERE class_id = $1 AND student_id = $2`, [classId, studentId]
     );
-    return result.rows;
-};
-
-const deleteEnrollment = async (classId, studentId) => {
-    const result = await pool.query(
-        `DELETE FROM enrollments
-        WHERE class_id = $1 AND student_id = $2`, [classId, studentId]
-    );
     return result.rows[0];
 };
 
-module.exports = { createEnrollment, getEnrollmentsByStudent, getStudentsIdsByClass, getEnrollment, deleteEnrollment };
+const deleteEnrollment = async (classId, studentId) => await pool.query(
+    `DELETE FROM enrollmentsWHERE class_id = $1 AND student_id = $2`, [classId, studentId]
+);
+
+module.exports = { createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, getEnrollment, deleteEnrollment };
