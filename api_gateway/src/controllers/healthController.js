@@ -1,4 +1,3 @@
-const config = require('../config/config');
 const { services } = require('../config/config');
 
 const getUrlByServiceName = (serviceName) => {
