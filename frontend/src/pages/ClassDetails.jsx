@@ -7,7 +7,7 @@ import { studentColumns } from '../config/config';
 import Sidebar from '../components/Sidebar';
 import DataTable from "../components/DataTable";
 import DeleteMessage from '../components/DeleteMessage';
-import '../styles/components/select.css';
+import Select from '../components/Select';
 
 function ClassDetails() {
     const { id } = useParams();
@@ -27,6 +27,7 @@ function ClassDetails() {
     const [removeEnrollmentError, setRemoveEnrollmentError] = useState("");
     const [classLoading, setClassLoading] = useState(false);
     const [studentsLoading, setStudentsLoading] = useState(false);
+    const [enrollmentsLoading, setEnrollmentsLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -56,7 +57,7 @@ function ClassDetails() {
     };
 
     const loadEnrollmentsByClass = async () => {
-        setStudentsLoading(true);
+        setEnrollmentsLoading(true);
         setLoadEnrollmentsByClassError("");
         setEnrollments([]);
 
@@ -70,15 +71,17 @@ function ClassDetails() {
         if (!response.ok) {
             setLoadEnrollmentsByClassError(response.data.error);
             console.error(response.data.error);
-            setStudentsLoading(false);
+            setEnrollmentsLoading(false);
             return;
         }
         loadStudentsByClass(response.data.result);
         console.log(response.data.message);
-        setStudentsLoading(false);
+        setEnrollmentsLoading(false);
     };
 
     const loadStudentsByClass = async (enrollments) => {
+        setStudentsLoading(true);
+
         const studentsIds = enrollments.map((enrollment) => enrollment.student_id);
         const response = await getStudentsByIds(studentsIds);
 
@@ -87,14 +90,16 @@ function ClassDetails() {
             return;
         }
 
-         if (!response.ok) {
+        if (!response.ok) {
             setLoadStudentsByClassError(response.data.error);
             console.error(response.data.error);
+            setStudentsLoading(false);
             return;
         }
 
         setEnrollments(response.data.result);
         console.log(response.data.message);
+        setStudentsLoading(false);
     };
 
     const loadStudents = async () => {
@@ -159,6 +164,8 @@ function ClassDetails() {
 
     const closeDeleteMessage = () => setShowDeleteMessage(false);
 
+    const handleSelect = (studentId) => setSelectedStudentId(studentId);
+
     useEffect(() => {
         loadClass();
         loadEnrollmentsByClass();
@@ -172,15 +179,17 @@ function ClassDetails() {
             <div className="page-content">
                 {classLoading ? <p>Loading class...</p> : subject && !loadClassError && <h1>{subject.name} | {subject.school_year}</h1>}
 
-                {studentsLoading ? <p>Loading...</p> :
-                    <DataTable
-                        columns={studentColumns}
-                        data={enrollments}
-                        title={"Students"}
-                        actions={[
-                            { label: "delete", function: openDeleteMessage }
-                        ]}
-                    />
+                {enrollmentsLoading ? <p>Loading enrollments...</p> :
+                    studentsLoading ? <p>Loading students...</p> :
+                        !loadEnrollmentsByClassError && !loadStudentsByClassError &&
+                        <DataTable
+                            columns={studentColumns}
+                            data={enrollments}
+                            title={"Students"}
+                            actions={[
+                                { label: "delete", function: openDeleteMessage }
+                            ]}
+                        />
                 }
 
                 {showDeleteMessage &&
@@ -195,16 +204,12 @@ function ClassDetails() {
                     </div>
                 }
 
-                <div className="select-section">
-                    <label htmlFor="student">Select student:</label>
-                    <select id="student" onChange={(event) => setSelectedStudentId(event.target.value)}>
-                        <option value="--" key="--">--</option>
-                        {students.map((student) => (
-                            <option value={student.id} key={student.id}>{student.first_name} {student.last_name}</option>
-                        ))}
-                    </select>
-                </div>
-                
+                <Select
+                    data={!loadStudentsError ? students : []}
+                    item={"student"}
+                    handleSelect={handleSelect}
+                />
+
                 <button className="add-button" onClick={() => addEnrollment(selectedStudentId)}>Add student to class</button>
             </div>
         </div>
