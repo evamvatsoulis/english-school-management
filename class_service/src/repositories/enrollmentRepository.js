@@ -36,7 +36,7 @@ const getEnrollment = async (classId, studentId) => {
 };
 
 const deleteEnrollment = async (classId, studentId) => await pool.query(
-    `DELETE FROM enrollmentsWHERE class_id = $1 AND student_id = $2`, [classId, studentId]
+    `DELETE FROM enrollments WHERE class_id = $1 AND student_id = $2`, [classId, studentId]
 );
 
 module.exports = { createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, getEnrollment, deleteEnrollment };

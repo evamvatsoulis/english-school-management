@@ -61,8 +61,7 @@ const deleteEnrollment = async (classId, studentId) => {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({ classId, studentId })
+            }
         }
     );
     const data = await response.json();
