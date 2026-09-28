@@ -9,7 +9,7 @@ const {
     activateStudent: activateStudentRepository,
 } = require('../repositories/studentRepository');
 
-const studentDoesNotExist = (student) => student.rows.length === 0;
+const notFound = (result) => result.length === 0;
 
 const updatedStudentData = (value, student) => {
     const firstName = value.firstName ?? student.first_name;
@@ -34,11 +34,11 @@ const getStudentById = async (req, res) => {
         const { id } = req.params;
         const result = await getStudentByIdRepository(id);
 
-        if (studentDoesNotExist(result)) {
+        if (!result) {
             return res.status(404).json({ error: "Student not found" });
         }
 
-        return res.status(200).json(result.rows[0]);
+        return res.status(200).json(result);
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch student" });
     }
@@ -50,11 +50,11 @@ const getStudentsByIds = async (req, res) => {
 
         const result = await getStudentsByIdsRepository(studentsIds);
 
-        if (result.length === 0) {
+        if (notFound(result)) {
             return res.status(200).json({ message: "Students not found", result: [] });
         }
 
-        return res.status(200).json({ message: "Students loaded successfully", result });
+        return res.status(200).json({ message: "The students were successfully loaded", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch students" });
     }
@@ -71,7 +71,7 @@ const createStudent = async (req, res) => {
         const { firstName, lastName, phone, email } = value;
         const result = await createStudentRepository(firstName, lastName, phone, email);
 
-        return res.status(201).json({ message: "Student added", result });
+        return res.status(201).json({ message: "The student was added", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to create student" });
     }
@@ -88,14 +88,14 @@ const updateStudent = async (req, res) => {
 
         const currentStudent = await getStudentByIdRepository(id);
 
-        if (studentDoesNotExist(currentStudent)) {
+        if (!currentStudent) {
             return res.status(404).json({ error: "Student not found" });
         }
 
-        const { firstName, lastName, phone, email } = updatedStudentData(value, currentStudent.rows[0]);
+        const { firstName, lastName, phone, email } = updatedStudentData(value, currentStudent);
         const result = await updateStudentRepository(firstName, lastName, phone, email, id);
 
-        return res.status(200).json({ message: "The student edited", result });
+        return res.status(200).json({ message: "The student was edited", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to update student" });
     }
@@ -107,13 +107,13 @@ const deactivateStudent = async (req, res) => {
 
         const currentStudent = await getStudentByIdRepository(id);
 
-        if (studentDoesNotExist(currentStudent)) {
+        if (!currentStudent) {
             return res.status(404).json({ error: "Student not found" });
         }
 
         const result = await deactivateStudentRepository(id);
 
-        return res.status(200).json({ message: "Student deleted", result });
+        return res.status(200).json({ message: "The student was deleted", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to deactivate student" });
     }
@@ -125,7 +125,7 @@ const activateStudent = async (req, res) => {
 
         const currentStudent = await getStudentByIdRepository(id);
 
-        if (studentDoesNotExist(currentStudent)) {
+        if (!currentStudent) {
             return res.status(404).json({ error: "Student not found" });
         }
 
