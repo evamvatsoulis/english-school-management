@@ -9,7 +9,6 @@ import StudentForm from '../components/StudentForm';
 import DeleteMessage from '../components/DeleteMessage';
 import DataTable from '../components/DataTable';
 import Filter from '../components/Filter';
-import '../styles/pages/Students.css';
 
 function Students() {
     const [students, setStudents] = useState([]);

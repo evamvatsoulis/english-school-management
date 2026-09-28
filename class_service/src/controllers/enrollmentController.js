@@ -8,7 +8,6 @@ const {
     deleteEnrollment: deleteEnrollmentRepository
 } = require('../repositories/enrollmentRepository');
 
-const zeroRows = (result) => result.length === 0;
 const notFound = (result) => result.length === 0;
 
 const createEnrollment = async (req, res) => {

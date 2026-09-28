@@ -94,6 +94,8 @@ function Classes() {
             setDeleteClassError(response.data.error);
             return;
         }
+
+        console.log(response.data.message);
         loadClasses();
         setShowDeleteMessage(false);
     };

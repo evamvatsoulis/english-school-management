@@ -55,7 +55,7 @@ function StudentDetails() {
       return;
     }
 
-    setStudent(response.data);
+    setStudent(response.data.result);
     setStudentLoading(false);
   };
 

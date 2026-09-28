@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from '../services/authService';
 import LoginCard from "../components/LoginCard";
-import '../styles/pages/Login.css';
-import '../styles/components/form.css';
 
 function Login() {
     const [username, setUsername] = useState("");

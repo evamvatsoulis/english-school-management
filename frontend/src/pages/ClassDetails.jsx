@@ -51,7 +51,7 @@ function ClassDetails() {
             setClassLoading(false);
             return;
         }
-        setSubject(response.data);
+        setSubject(response.data.result);
         setLoadClassError("");
         setClassLoading(false);
     };

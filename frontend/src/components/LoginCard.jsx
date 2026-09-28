@@ -1,3 +1,6 @@
+import '../styles/pages/Login.css';
+import '../styles/components/form.css';
+
 function LoginCard({ username, password, setUsername, setPassword, error, handleSubmit }) {
     return (
         <div className="login-page">
