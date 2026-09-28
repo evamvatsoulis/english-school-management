@@ -1,4 +1,3 @@
-const config = require('../config/config');
 const { paymentSchema, updatePaymentSchema } = require('../schemas/paymentSchema');
 const {
     getPayments: getPaymentsRepository,
@@ -9,7 +8,7 @@ const {
     deletePayment: deletePaymentRepository
 } = require('../repositories/paymentRepository');
 
-const paymentDoesNotExist = (payment) => payment.rows.length === 0;
+const notFound = (result) => result.length === 0;
 
 const updatePaymentData = (value, payment) => {
     const studentId = value.studentId ?? payment.student_id;
@@ -26,7 +25,11 @@ const updatePaymentData = (value, payment) => {
 const getPayments = async (req, res) => {
     try {
         const result = await getPaymentsRepository();
-        return res.status(200).json(result);
+
+        if (notFound(result)) {
+            return res.status(200).json({ message: "There are no payments", result: [] })
+        }
+        return res.status(200).json({ message: "Payments loaded successfully", result });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch payments" });
     }
@@ -55,11 +58,11 @@ const getPaymentById = async (req, res) => {
 
         const payment = await getPaymentByIdRepository(id);
 
-        if (paymentDoesNotExist(payment)) {
+        if (!payment) {
             return res.status(404).json({ error: "Payment not found" });
         }
 
-        return res.status(200).json(payment.rows[0]);
+        return res.status(200).json({ message: "Payment loaded successfully", result: payment });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch payment" });
     }
@@ -69,13 +72,13 @@ const getPaymentsByStudentId = async (req, res) => {
     try {
         const { studentId } = req.params;
 
-        const payment = await getPaymentsByStudentIdRepository(studentId);
+        const payments = await getPaymentsByStudentIdRepository(studentId);
 
-        if (paymentDoesNotExist(payment)) {
+        if (notFound(payments)) {
             return res.status(200).json({ message: "There are no payments", result: [] });
         }
 
-        return res.status(200).json({ message: "Payments were successfully loaded", result: payment.rows });
+        return res.status(200).json({ message: "Payments loaded successfully", result: payments });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch payments" });
     }
@@ -91,11 +94,11 @@ const updatePayment = async (req, res) => {
         }
         const currentPayment = await getPaymentByIdRepository(id);
 
-        if (paymentDoesNotExist(currentPayment)) {
+        if (!currentPayment) {
             return res.status(404).json({ error: "Payment not found" });
         }
 
-        const { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes } = updatePaymentData(value, currentPayment.rows[0]);
+        const { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes } = updatePaymentData(value, currentPayment);
         const result = await updatePaymentRepository(studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes, id);
 
         return res.status(200).json({ message: "Payment edited", result });
@@ -110,13 +113,13 @@ const deletePayment = async (req, res) => {
 
         const currentPayment = await getPaymentByIdRepository(id);
 
-        if (paymentDoesNotExist(currentPayment)) {
+        if (!currentPayment) {
             return res.status(404).json({ error: "Payment not found" });
         }
 
-        const result = await deletePaymentRepository(id);
+        await deletePaymentRepository(id);
 
-        return res.status(200).json({ message: "Payment deleted", result });
+        return res.status(200).json({ message: "Payment deleted" });
     } catch (err) {
         return res.status(500).json({ error: "Failed to delete payment" });
     }

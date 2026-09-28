@@ -59,7 +59,7 @@ function Payments({ }) {
             return;
         }
 
-        setPayments(response.data);
+        setPayments(response.data.result);
         setPaymentsLoading(false);
     };
 

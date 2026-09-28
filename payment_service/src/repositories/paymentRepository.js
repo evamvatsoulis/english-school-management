@@ -17,12 +17,12 @@ const createPayment = async (studentId, amount, paymentMonth, paymentYear, payme
 
 const getPaymentById = async (id) => {
     const result = await pool.query(`SELECT * FROM payments WHERE id = $1`, [id]);
-    return result;
+    return result.rows[0];
 };
 
 const getPaymentsByStudentId = async (studentId) => {
     const result = await pool.query(`SELECT * FROM payments WHERE student_id = $1 ORDER BY payment_year ASC, payment_month ASC`, [studentId]);
-    return result;
+    return result.rows;
 };
 
 const updatePayment = async (studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes, id) => {
@@ -42,9 +42,6 @@ const updatePayment = async (studentId, amount, paymentMonth, paymentYear, payme
     return result.rows[0];
 };
 
-const deletePayment = async (paymentId) => {
-    await pool.query("DELETE FROM payments where id = $1", [paymentId]);
-    return { message: "Payment deleted" };
-};
+const deletePayment = async (paymentId) => await pool.query("DELETE FROM payments where id = $1", [paymentId]);
 
 module.exports = { getPayments, createPayment, getPaymentById, getPaymentsByStudentId, updatePayment, deletePayment };
