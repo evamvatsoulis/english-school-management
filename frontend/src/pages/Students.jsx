@@ -169,6 +169,7 @@ function Students() {
         }
 
         setStudents(response.data.result);
+        console.log(response.data.message);
     };
 
     const handleSubmit = (studentData) => {
