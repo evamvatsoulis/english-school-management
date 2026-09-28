@@ -5,8 +5,6 @@ import { healthColumns } from '../config/config';
 import DataTable from '../components/DataTable';
 import Sidebar from '../components/Sidebar';
 
-
-
 function Healths() {
     const [healths, setHealths] = useState([]);
     const [loadHealthsError, setLoadHealthsError] = useState("");

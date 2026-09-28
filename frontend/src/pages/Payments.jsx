@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getStudents } from '../services/studentService';
 import { getPayments } from '../services/paymentService';
-import '../components/Sidebar';
 import Sidebar from '../components/Sidebar';
 import PaymentsTable from '../components/payments/PaymentsTable';
 
