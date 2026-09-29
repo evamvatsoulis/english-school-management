@@ -4,10 +4,10 @@ import { getClassById } from '../services/classService';
 import { getEnrollmentsByClass, createEnrollment, deleteEnrollment } from '../services/enrollmentService';
 import { getStudents, getStudentById, getStudentsByIds } from '../services/studentService';
 import { studentColumns } from '../config/config';
-import Sidebar from '../components/Sidebar/Sidebar';
 import DataTable from "../components/tables/DataTable/DataTable";
 import DeleteMessage from '../components/DeleteMessage/DeleteMessage';
 import Select from '../components/Select/Select';
+import PageLayout from '../components/PageLayout/PageLayout';
 
 function ClassDetails() {
     const { id } = useParams();
@@ -173,46 +173,42 @@ function ClassDetails() {
     }, [id]);
 
     return (
-        <div className="page-layout">
-            <Sidebar />
+        <PageLayout>
+            {classLoading ? <p>Loading class...</p> : subject && !loadClassError && <h1>{subject.name} | {subject.school_year}</h1>}
 
-            <div className="page-content">
-                {classLoading ? <p>Loading class...</p> : subject && !loadClassError && <h1>{subject.name} | {subject.school_year}</h1>}
+            {enrollmentsLoading ? <p>Loading enrollments...</p> :
+                studentsLoading ? <p>Loading students...</p> :
+                    !loadEnrollmentsByClassError && !loadStudentsByClassError &&
+                    <DataTable
+                        columns={studentColumns}
+                        data={enrollments}
+                        title={"Students"}
+                        actions={[
+                            { label: "delete", function: openDeleteMessage }
+                        ]}
+                    />
+            }
 
-                {enrollmentsLoading ? <p>Loading enrollments...</p> :
-                    studentsLoading ? <p>Loading students...</p> :
-                        !loadEnrollmentsByClassError && !loadStudentsByClassError &&
-                        <DataTable
-                            columns={studentColumns}
-                            data={enrollments}
-                            title={"Students"}
-                            actions={[
-                                { label: "delete", function: openDeleteMessage }
-                            ]}
+            {showDeleteMessage &&
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <DeleteMessage
+                            deleteFunction={removeEnrollment}
+                            closeDeleteMessage={closeDeleteMessage}
+                            item={"student from this class"}
                         />
-                }
-
-                {showDeleteMessage &&
-                    <div className="modal-overlay">
-                        <div className="modal-content">
-                            <DeleteMessage
-                                deleteFunction={removeEnrollment}
-                                closeDeleteMessage={closeDeleteMessage}
-                                item={"student from this class"}
-                            />
-                        </div>
                     </div>
-                }
+                </div>
+            }
 
-                <Select
-                    data={!loadStudentsError ? students : []}
-                    item={"student"}
-                    handleSelect={handleSelect}
-                />
+            <Select
+                data={!loadStudentsError ? students : []}
+                item={"student"}
+                handleSelect={handleSelect}
+            />
 
-                <button className="add-button" onClick={() => addEnrollment(selectedStudentId)}>Add student to class</button>
-            </div>
-        </div>
+            <button className="add-button" onClick={() => addEnrollment(selectedStudentId)}>Add student to class</button>
+        </PageLayout>
     );
 }
 

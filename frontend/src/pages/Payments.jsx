@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getStudents } from '../services/studentService';
 import { getPayments } from '../services/paymentService';
-import Sidebar from '../components/Sidebar/Sidebar';
 import PaymentsTable from '../components/tables/PaymentsTable/PaymentsTable';
+import PageLayout from '../components/PageLayout/PageLayout';
 
 function Payments({ }) {
     const [students, setStudents] = useState([]);
@@ -69,22 +69,18 @@ function Payments({ }) {
     }, [])
 
     return (
-        <div className="page-layout">
-            <Sidebar />
+        <PageLayout>
+            <h1>Payments 2026-27</h1>
 
-            <div className="page-content">
-                <h1>Payments 2026-27</h1>
-
-                {studentsLoading ? <p>Loading students...</p> :
-                    paymentsLoading ? <p>Loading payments...</p> :
-                        !loadPaymentsError && !loadStudentsError &&
-                        <PaymentsTable
-                            students={students}
-                            payments={payments}
-                        />
-                }
-            </div>
-        </div>
+            {studentsLoading ? <p>Loading students...</p> :
+                paymentsLoading ? <p>Loading payments...</p> :
+                    !loadPaymentsError && !loadStudentsError &&
+                    <PaymentsTable
+                        students={students}
+                        payments={payments}
+                    />
+            }
+        </PageLayout>
     );
 }
 

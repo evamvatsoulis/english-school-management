@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getHealths } from "../services/healthService";
 import { healthColumns } from '../config/config';
 import DataTable from '../components/tables/DataTable/DataTable';
-import Sidebar from '../components/Sidebar/Sidebar';
+import PageLayout from '../components/PageLayout/PageLayout';
 
 function Healths() {
     const [healths, setHealths] = useState([]);
@@ -45,20 +45,16 @@ function Healths() {
     }, [])
 
     return (
-        <div className="page-layout">
-            <div className="page-content">
-                <Sidebar />
+        <PageLayout>
+            <h1>Health</h1>
 
-                <h1>Health</h1>
-
-                {loading ? <p>Loading...</p> : !loadHealthsError &&
-                    <DataTable
-                        columns={healthColumns}
-                        data={healths}
-                    />
-                }
-            </div>
-        </div>
+            {loading ? <p>Loading...</p> : !loadHealthsError &&
+                <DataTable
+                    columns={healthColumns}
+                    data={healths}
+                />
+            }
+        </PageLayout>
     )
 }
 

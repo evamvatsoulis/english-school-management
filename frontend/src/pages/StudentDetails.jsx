@@ -4,11 +4,11 @@ import { getStudentById } from '../services/studentService';
 import { getPaymentsByStudentId, createPayment, updatePayment, deletePayment } from "../services/paymentService";
 import { getEnrollmentsByStudent } from "../services/enrollmentService";
 import { paymentColumns } from "../config/config";
-import Sidebar from '../components/Sidebar/Sidebar';
 import StudentPayments from "../components/tables/StudentPayments/StudentPayments";
 import PaymentForm from "../components/forms/PaymentForm";
 import DataTable from "../components/tables/DataTable/DataTable";
 import DeleteMessage from '../components/DeleteMessage/DeleteMessage';
+import PageLayout from '../components/PageLayout/PageLayout';
 
 function StudentDetails() {
   const { id } = useParams();
@@ -200,68 +200,64 @@ function StudentDetails() {
   }, [id]);
 
   return (
-    <div className="page-layout">
-      <Sidebar />
+    <PageLayout>
+      <div>
+        {studentLoading ? <p>Loading student...</p> : student && !loadStudentError && (
+          <h1>{student.first_name} {student.last_name}</h1>
+        )}
 
-      <div className="page-content">
-        <div>
-          {studentLoading ? <p>Loading student...</p> : student && !loadStudentError && (
-            <h1>{student.first_name} {student.last_name}</h1>
-          )}
-
-          {enrollmentLoading ? <p>Loading enrollment...</p> : !loadEnrollmentsByStudentError && (
-            enrollments.map((enrollment) => (
-              enrollment.school_year === "2026-2027" && <h2 key={enrollment.id}>Class: {enrollment.name}</h2>
-            ))
-          )}
-        </div>
-
-        {paymentsLoading ? <p>Loading payments...</p> :
-          !loadPaymentsError &&
-          <>
-            <StudentPayments
-              payments={payments}
-              openCreateForm={openCreateForm}
-              openEditForm={openEditForm}
-              openDeleteMessage={openDeleteMessage}
-            />
-
-            <DataTable
-              columns={paymentColumns}
-              data={payments}
-              title={"Payments History"}
-            />
-          </>
-        }
-
-        {showForm &&
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <PaymentForm
-                studentId={id}
-                selectedMonth={selectedMonth}
-                selectedPayment={selectedPayment}
-                closeForm={closeForm}
-                onSubmit={handleSubmit}
-                formError={selectedPayment ? editPaymentError : addPaymentError}
-              />
-            </div>
-          </div>
-        }
-
-        {showDeleteMessage &&
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <DeleteMessage
-                deleteFunction={removePayment}
-                closeDeleteMessage={closeDeleteMessage}
-                item={"payment"}
-              />
-            </div>
-          </div>
-        }
+        {enrollmentLoading ? <p>Loading enrollment...</p> : !loadEnrollmentsByStudentError && (
+          enrollments.map((enrollment) => (
+            enrollment.school_year === "2026-2027" && <h2 key={enrollment.id}>Class: {enrollment.name}</h2>
+          ))
+        )}
       </div>
-    </div>
+
+      {paymentsLoading ? <p>Loading payments...</p> :
+        !loadPaymentsError &&
+        <>
+          <StudentPayments
+            payments={payments}
+            openCreateForm={openCreateForm}
+            openEditForm={openEditForm}
+            openDeleteMessage={openDeleteMessage}
+          />
+
+          <DataTable
+            columns={paymentColumns}
+            data={payments}
+            title={"Payments History"}
+          />
+        </>
+      }
+
+      {showForm &&
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <PaymentForm
+              studentId={id}
+              selectedMonth={selectedMonth}
+              selectedPayment={selectedPayment}
+              closeForm={closeForm}
+              onSubmit={handleSubmit}
+              formError={selectedPayment ? editPaymentError : addPaymentError}
+            />
+          </div>
+        </div>
+      }
+
+      {showDeleteMessage &&
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <DeleteMessage
+              deleteFunction={removePayment}
+              closeDeleteMessage={closeDeleteMessage}
+              item={"payment"}
+            />
+          </div>
+        </div>
+      }
+    </PageLayout>
   );
 }
 

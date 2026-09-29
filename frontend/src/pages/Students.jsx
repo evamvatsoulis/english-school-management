@@ -4,11 +4,11 @@ import { getStudents, createStudent, updateStudent, deactivateStudent, getStuden
 import { getClasses } from '../services/classService';
 import { getEnrollmentsByClass } from '../services/enrollmentService';
 import { studentColumns } from '../config/config';
-import Sidebar from "../components/Sidebar/Sidebar";
 import StudentForm from '../components/forms/StudentForm';
 import DeleteMessage from '../components/DeleteMessage/DeleteMessage';
 import DataTable from '../components/tables/DataTable/DataTable';
 import Filter from '../components/Filter/Filter';
+import PageLayout from '../components/PageLayout/PageLayout';
 
 function Students() {
     const [students, setStudents] = useState([]);
@@ -218,61 +218,57 @@ function Students() {
     }, [])
 
     return (
-        <div className="page-layout">
-            <Sidebar />
+        <PageLayout>
+            <h1>Students</h1>
 
-            <div className="page-content">
-                <h1>Students</h1>
+            <div className="page-actions">
+                <Filter
+                    data={loadClassesError ? [] : classes}
+                    item={"class"}
+                    handleFilter={handleFilter}
+                />
 
-                <div className="page-actions">
-                    <Filter
-                        data={loadClassesError ? [] : classes}
-                        item={"class"}
-                        handleFilter={handleFilter}
-                    />
-
-                    <button className="add-button" onClick={openCreateForm}>Add new student</button>
-                </div>
-
-                {showForm && (
-                    <div className="modal-overlay">
-                        <div className="modal-content">
-                            <StudentForm
-                                selectedStudent={selectedStudent}
-                                closeForm={closeForm}
-                                formError={selectedStudent ? editStudentError : addStudentError}
-                                onSubmit={handleSubmit}
-                            />
-                        </div>
-                    </div>
-                )}
-
-                {loading ? <p>Loading...</p> :
-                    !loadStudentsError &&
-                    <DataTable
-                        columns={studentColumns}
-                        data={students}
-                        actions={[
-                            { label: "edit", function: openEditForm },
-                            { label: "eye_tracking", function: navigateToStudentDetails },
-                            { label: "delete", function: openDeleteMessage }
-                        ]}
-                    />
-                }
-
-                {showDeleteMessage && (
-                    <div className="modal-overlay">
-                        <div className="modal-content">
-                            <DeleteMessage
-                                deleteFunction={deleteStudent}
-                                closeDeleteMessage={closeDeleteMessage}
-                                item={"student"}
-                            />
-                        </div>
-                    </div>
-                )}
+                <button className="add-button" onClick={openCreateForm}>Add new student</button>
             </div>
-        </div>
+
+            {showForm && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <StudentForm
+                            selectedStudent={selectedStudent}
+                            closeForm={closeForm}
+                            formError={selectedStudent ? editStudentError : addStudentError}
+                            onSubmit={handleSubmit}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {loading ? <p>Loading...</p> :
+                !loadStudentsError &&
+                <DataTable
+                    columns={studentColumns}
+                    data={students}
+                    actions={[
+                        { label: "edit", function: openEditForm },
+                        { label: "eye_tracking", function: navigateToStudentDetails },
+                        { label: "delete", function: openDeleteMessage }
+                    ]}
+                />
+            }
+
+            {showDeleteMessage && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <DeleteMessage
+                            deleteFunction={deleteStudent}
+                            closeDeleteMessage={closeDeleteMessage}
+                            item={"student"}
+                        />
+                    </div>
+                </div>
+            )}
+        </PageLayout>
     );
 }
 

@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { getClasses, createClass, updateClass, deactivateClass } from '../services/classService';
 import { classColumns } from '../config/config';
 import DataTable from '../components/tables/DataTable/DataTable';
-import Sidebar from '../components/Sidebar/Sidebar';
 import ClassForm from '../components/forms/ClassForm';
 import DeleteMessage from '../components/DeleteMessage/DeleteMessage';
+import PageLayout from '../components/PageLayout/PageLayout';
 
 function Classes() {
     const [classes, setClasses] = useState([]);
@@ -135,56 +135,52 @@ function Classes() {
     }, []);
 
     return (
-        <div className="page-layout">
-            <Sidebar />
+        <PageLayout>
+            <h1>Classes</h1>
 
-            <div className="page-content">
-                <h1>Classes</h1>
+            {!loadClassesError &&
+                <div className="page-actions">
+                    <button className="add-button" onClick={openCreateForm}>Add new class</button>
+                </div>
+            }
 
-                {!loadClassesError &&
-                    <div className="page-actions">
-                        <button className="add-button" onClick={openCreateForm}>Add new class</button>
+            {loading ? <p>Loading...</p> : !loadClassesError &&
+                <DataTable
+                    columns={classColumns}
+                    data={classes}
+                    actions={[
+                        { label: "edit", function: openEditForm },
+                        { label: "eye_tracking", function: navigateToClassDetails },
+                        { label: "delete", function: openDeleteMessage }
+                    ]}
+                />
+            }
+
+            {showForm && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <ClassForm
+                            selectedClass={selectedClass}
+                            closeForm={closeForm}
+                            onSubmit={handleSubmit}
+                            formError={selectedClass ? editClassError : addClassError}
+                        />
                     </div>
-                }
+                </div>
+            )}
 
-                {loading ? <p>Loading...</p> : !loadClassesError &&
-                    <DataTable
-                        columns={classColumns}
-                        data={classes}
-                        actions={[
-                            { label: "edit", function: openEditForm },
-                            { label: "eye_tracking", function: navigateToClassDetails },
-                            { label: "delete", function: openDeleteMessage }
-                        ]}
-                    />
-                }
-
-                {showForm && (
-                    <div className="modal-overlay">
-                        <div className="modal-content">
-                            <ClassForm
-                                selectedClass={selectedClass}
-                                closeForm={closeForm}
-                                onSubmit={handleSubmit}
-                                formError={selectedClass ? editClassError : addClassError}
-                            />
-                        </div>
+            {showDeleteMessage && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <DeleteMessage
+                            deleteFunction={deleteClass}
+                            closeDeleteMessage={closeDeleteMessage}
+                            item={"class"}
+                        />
                     </div>
-                )}
-
-                {showDeleteMessage && (
-                    <div className="modal-overlay">
-                        <div className="modal-content">
-                            <DeleteMessage
-                                deleteFunction={deleteClass}
-                                closeDeleteMessage={closeDeleteMessage}
-                                item={"class"}
-                            />
-                        </div>
-                    </div>
-                )}
-            </div>
-        </div>
+                </div>
+            )}
+        </PageLayout>
     );
 }
 
