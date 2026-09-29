@@ -10,6 +10,16 @@ const {
 
 const notFound = (result) => result.length === 0;
 
+const classDoesNotExist = async (classId) => {
+    const result = await getClassById(classId);
+    return !result;
+};
+
+const alreadyExists = async (studentId, classId) => {
+    const result = await getEnrollment(studentId, classId);
+    return result;
+};
+
 const createEnrollment = async (req, res) => {
     try {
         const { error, value } = enrollmentSchema.validate(req.body);
@@ -18,13 +28,16 @@ const createEnrollment = async (req, res) => {
             return res.status(400).json({ error: error.details[0].message });
         }
 
-        const classResponse = await getClassById(value.classId);
+        const { studentId, classId } = value;
 
-        if (!classResponse) {
+        if (await classDoesNotExist(classId)) {
             return res.status(404).json({ error: "Class not found" });
         }
 
-        const { studentId, classId } = value;
+        if (await alreadyExists(studentId, classId)) {
+            return res.status(400).json({ error: "Student is already enrolled in this class" });
+        }
+
         const result = await createEnrollmentRepository(studentId, classId);
 
         return res.status(201).json({ message: "Student added to class", result });
@@ -53,9 +66,7 @@ const getEnrollmentsByClass = async (req, res) => {
     try {
         const { classId } = req.params;
 
-        const classResponse = await getClassById(classId);
-
-        if (!classResponse) {
+        if (await classDoesNotExist(classId)) {
             return res.status(404).json({ error: "Class not found" });
         }
 
@@ -74,15 +85,11 @@ const getEnrollmentsByClass = async (req, res) => {
 const deleteEnrollment = async (req, res) => {
     const { classId, studentId } = req.params;
 
-    const classResponse = await getClassById(classId);
-
-    if (!classResponse) {
+    if (await classDoesNotExist(classId)) {
         return res.status(404).json({ error: "Class not found" });
     }
 
-    const enrollment = await getEnrollment(classId, studentId);
-
-    if (!enrollment) {
+    if (!await alreadyExists(studentId, classId)) {
         return res.status(404).json({ error: "Enrollment not found" });
     }
 

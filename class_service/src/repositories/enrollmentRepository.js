@@ -27,10 +27,10 @@ const getEnrollmentsByClass = async (classId) => {
     return result.rows;
 };
 
-const getEnrollment = async (classId, studentId) => {
+const getEnrollment = async (studentId, classId) => {
     const result = await pool.query(
         `SELECT * FROM enrollments
-        WHERE class_id = $1 AND student_id = $2`, [classId, studentId]
+        WHERE student_id = $1 AND class_id = $2`, [studentId, classId]
     );
     return result.rows[0];
 };
