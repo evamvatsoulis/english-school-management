@@ -50,15 +50,4 @@ const deactivateStudent = async (id) => {
     return result.rows[0];
 };
 
-const activateStudent = async (id) => {
-    const result = await pool.query(
-        `UPDATE students
-        SET active = TRUE
-        WHERE id = $1
-        RETURNING *`,
-        [id]
-    );
-    return result.rows[0];
-};
-
-module.exports = { getStudentById, getStudentsByIds, getStudents, createStudent, updateStudent, deactivateStudent, activateStudent };
+module.exports = { getStudentById, getStudentsByIds, getStudents, createStudent, updateStudent, deactivateStudent };

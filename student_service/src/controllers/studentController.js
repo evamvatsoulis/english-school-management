@@ -5,11 +5,15 @@ const {
     getStudentsByIds: getStudentsByIdsRepository,
     createStudent: createStudentRepository,
     updateStudent: updateStudentRepository,
-    deactivateStudent: deactivateStudentRepository,
-    activateStudent: activateStudentRepository,
+    deactivateStudent: deactivateStudentRepository
 } = require('../repositories/studentRepository');
 
 const notFound = (result) => result.length === 0;
+
+const doesNotExist = async (id) => {
+    const result = await getStudentByIdRepository(id);
+    return !result;
+};
 
 const updatedStudentData = (value, student) => {
     const firstName = value.firstName ?? student.first_name;
@@ -109,9 +113,7 @@ const deactivateStudent = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const currentStudent = await getStudentByIdRepository(id);
-
-        if (!currentStudent) {
+        if (await doesNotExist(id)) {
             return res.status(404).json({ error: "Student not found" });
         }
 
@@ -123,22 +125,4 @@ const deactivateStudent = async (req, res) => {
     }
 };
 
-const activateStudent = async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const currentStudent = await getStudentByIdRepository(id);
-
-        if (!currentStudent) {
-            return res.status(404).json({ error: "Student not found" });
-        }
-
-        const result = await activateStudentRepository(id);
-
-        return res.status(200).json({ message: "Student activated", result });
-    } catch (err) {
-        return res.status(500).json({ error: "Failed to activate student" });
-    }
-};
-
-module.exports = { getStudents, getStudentById, getStudentsByIds, createStudent, updateStudent, deactivateStudent, activateStudent };
+module.exports = { getStudents, getStudentById, getStudentsByIds, createStudent, updateStudent, deactivateStudent };
