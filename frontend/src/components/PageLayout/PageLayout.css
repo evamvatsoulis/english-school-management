@@ -1,0 +1,14 @@
+.page-layout {
+    display: flex;
+    min-height: 150vh;
+}
+
+.page-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 20px;
+    min-width: 0;
+    padding: 30px;
+    margin-left: 220px
+}

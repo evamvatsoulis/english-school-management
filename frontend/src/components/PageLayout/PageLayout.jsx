@@ -1,4 +1,5 @@
 import Sidebar from '../Sidebar/Sidebar';
+import './PageLayout.css';
 
 function PageLayout({ children }) {
     return (
