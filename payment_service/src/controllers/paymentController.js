@@ -10,6 +10,11 @@ const {
 
 const notFound = (result) => result.length === 0;
 
+const doesNotExist = async (id) => {
+    const result = await getPaymentByIdRepository(id);
+    return !result;
+};
+
 const updatePaymentData = (value, payment) => {
     const studentId = value.studentId ?? payment.student_id;
     const amount = value.amount ?? payment.amount;
@@ -111,10 +116,8 @@ const deletePayment = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const currentPayment = await getPaymentByIdRepository(id);
-
-        if (!currentPayment) {
-            return res.status(404).json({ error: "Payment not found" });
+        if (await doesNotExist(id)) {
+            return res.status(404).json({ message: "Payment not found" });
         }
 
         await deletePaymentRepository(id);
