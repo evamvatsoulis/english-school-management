@@ -4,11 +4,11 @@ import { getStudents, createStudent, updateStudent, deactivateStudent, getStuden
 import { getClasses } from '../services/classService';
 import { getEnrollmentsByClass } from '../services/enrollmentService';
 import { studentColumns } from '../config/config';
-import Sidebar from "../components/Sidebar";
-import StudentForm from '../components/StudentForm';
-import DeleteMessage from '../components/DeleteMessage';
-import DataTable from '../components/DataTable';
-import Filter from '../components/Filter';
+import Sidebar from "../components/Sidebar/Sidebar";
+import StudentForm from '../components/forms/StudentForm';
+import DeleteMessage from '../components/DeleteMessage/DeleteMessage';
+import DataTable from '../components/tables/DataTable/DataTable';
+import Filter from '../components/Filter/Filter';
 
 function Students() {
     const [students, setStudents] = useState([]);

@@ -4,11 +4,11 @@ import { getStudentById } from '../services/studentService';
 import { getPaymentsByStudentId, createPayment, updatePayment, deletePayment } from "../services/paymentService";
 import { getEnrollmentsByStudent } from "../services/enrollmentService";
 import { paymentColumns } from "../config/config";
-import Sidebar from '../components/Sidebar';
-import StudentPayments from "../components/payments/StudentPayments";
-import PaymentForm from "../components/payments/PaymentForm";
-import DataTable from "../components/DataTable";
-import DeleteMessage from '../components/DeleteMessage';
+import Sidebar from '../components/Sidebar/Sidebar';
+import StudentPayments from "../components/tables/StudentPayments/StudentPayments";
+import PaymentForm from "../components/forms/PaymentForm";
+import DataTable from "../components/tables/DataTable/DataTable";
+import DeleteMessage from '../components/DeleteMessage/DeleteMessage';
 
 function StudentDetails() {
   const { id } = useParams();

@@ -1,6 +1,6 @@
-import { schoolYearMonths } from '../../config/config';
-import '../../styles/components/StudentPayments.css';
-import '../../styles/components/DataTable.css';
+import { schoolYearMonths } from '../../../config/config';
+import './StudentPayments.css';
+import '../DataTable/DataTable.css';
 
 function StudentPayments({ payments, openCreateForm, openEditForm, openDeleteMessage }) {
     return (

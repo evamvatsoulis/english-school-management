@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../styles/components/form.css';
+import '../../styles/form.css';
 
 function StudentForm({ selectedStudent, closeForm, formError, onSubmit }) {
     const [firstName, setFirstName] = useState(selectedStudent ? selectedStudent.first_name : "");

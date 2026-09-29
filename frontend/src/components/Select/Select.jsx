@@ -1,4 +1,4 @@
-import '../styles/components/Select.css';
+import './Select.css';
 
 function Select({ data, item, handleSelect }) {
     return (

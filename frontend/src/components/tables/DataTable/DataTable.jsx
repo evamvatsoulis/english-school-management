@@ -1,4 +1,4 @@
-import '../styles/components/DataTable.css';
+import './DataTable.css';
 
 const formatDate = (date, key) => {
     if (key === "payment_date") {

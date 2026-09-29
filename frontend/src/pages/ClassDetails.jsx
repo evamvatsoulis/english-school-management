@@ -4,10 +4,10 @@ import { getClassById } from '../services/classService';
 import { getEnrollmentsByClass, createEnrollment, deleteEnrollment } from '../services/enrollmentService';
 import { getStudents, getStudentById, getStudentsByIds } from '../services/studentService';
 import { studentColumns } from '../config/config';
-import Sidebar from '../components/Sidebar';
-import DataTable from "../components/DataTable";
-import DeleteMessage from '../components/DeleteMessage';
-import Select from '../components/Select';
+import Sidebar from '../components/Sidebar/Sidebar';
+import DataTable from "../components/tables/DataTable/DataTable";
+import DeleteMessage from '../components/DeleteMessage/DeleteMessage';
+import Select from '../components/Select/Select';
 
 function ClassDetails() {
     const { id } = useParams();

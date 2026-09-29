@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { getUserFromToken } from '../utils/auth';
-import '../styles/components/Sidebar.css';
+import { getUserFromToken } from '../../utils/auth';
+import './Sidebar.css';
 
 function Sidebar() {
     const navigate = useNavigate();

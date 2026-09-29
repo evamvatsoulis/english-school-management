@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getClasses, createClass, updateClass, deactivateClass } from '../services/classService';
 import { classColumns } from '../config/config';
-import DataTable from '../components/DataTable';
-import Sidebar from '../components/Sidebar';
-import ClassForm from '../components/ClassForm';
-import DeleteMessage from '../components/DeleteMessage';
+import DataTable from '../components/tables/DataTable/DataTable';
+import Sidebar from '../components/Sidebar/Sidebar';
+import ClassForm from '../components/forms/ClassForm';
+import DeleteMessage from '../components/DeleteMessage/DeleteMessage';
 
 function Classes() {
     const [classes, setClasses] = useState([]);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../../styles/components/form.css';
+import '../../styles/form.css';
 
 function PaymentForm({ studentId, selectedMonth, selectedPayment, closeForm, formError, onSubmit }) {
     const formatDate = (date) => new Date(date).toLocaleDateString('en-CA');

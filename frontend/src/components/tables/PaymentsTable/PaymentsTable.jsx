@@ -1,6 +1,6 @@
-import { schoolYearMonths } from "../../config/config";
-import '../../styles/components/DataTable.css';
-import '../../styles/components/StudentPayments.css';
+import { schoolYearMonths } from "../../../config/config";
+import '../DataTable/DataTable.css';
+import '../StudentPayments/StudentPayments.css';
 
 function PaymentsTable({ students, payments }) {
     return (

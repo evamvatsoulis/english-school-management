@@ -1,4 +1,4 @@
-import '../styles/components/DeleteMessage.css';
+import './DeleteMessage.css';
 
 function DeleteMessage({ deleteFunction, closeDeleteMessage, item }) {
     return (

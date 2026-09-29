@@ -1,4 +1,4 @@
-import '../styles/components/select.css'
+import '../Select/Select.css';
 
 function Filter({ data, item, handleFilter }) {
     return (

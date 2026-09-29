@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getHealths } from "../services/healthService";
 import { healthColumns } from '../config/config';
-import DataTable from '../components/DataTable';
-import Sidebar from '../components/Sidebar';
+import DataTable from '../components/tables/DataTable/DataTable';
+import Sidebar from '../components/Sidebar/Sidebar';
 
 function Healths() {
     const [healths, setHealths] = useState([]);

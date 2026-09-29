@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getStudents } from '../services/studentService';
 import { getPayments } from '../services/paymentService';
-import Sidebar from '../components/Sidebar';
-import PaymentsTable from '../components/payments/PaymentsTable';
+import Sidebar from '../components/Sidebar/Sidebar';
+import PaymentsTable from '../components/tables/PaymentsTable/PaymentsTable';
 
 function Payments({ }) {
     const [students, setStudents] = useState([]);
