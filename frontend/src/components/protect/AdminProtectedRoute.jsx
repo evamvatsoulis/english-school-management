@@ -2,7 +2,6 @@ import { Navigate } from "react-router-dom";
 import { getUserFromToken } from "../../utils/auth";
 
 function AdminProtectedRoute({ children }) {
-    const token = localStorage.getItem("token");
     const user = getUserFromToken();
 
     if (user?.role !== "admin") {

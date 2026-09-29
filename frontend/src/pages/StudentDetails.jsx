@@ -7,7 +7,7 @@ import { paymentColumns } from "../config/config";
 import StudentPayments from "../components/tables/StudentPayments/StudentPayments";
 import PaymentForm from "../components/forms/PaymentForm";
 import DataTable from "../components/tables/DataTable/DataTable";
-import DeleteMessage from '../components/DeleteMessage/DeleteMessage';
+import Modal from "../components/Modal/Modal";
 import PageLayout from '../components/PageLayout/PageLayout';
 
 function StudentDetails() {
@@ -19,7 +19,7 @@ function StudentDetails() {
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [enrollments, setEnrollments] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [loadStudentError, setLoadStudentError] = useState("");
   const [loadPaymentsError, setLoadPaymentsError] = useState("");
   const [addPaymentError, setAddPaymentError] = useState("");
@@ -138,7 +138,7 @@ function StudentDetails() {
     }
 
     console.log(response.data.message);
-    closeDeleteMessage();
+    closeDeleteModal();
     loadPaymentsByStudentId();
   };
 
@@ -175,9 +175,9 @@ function StudentDetails() {
     setShowForm(true);
   };
 
-  const openDeleteMessage = (payment) => {
+  const openDeleteModal = (payment) => {
     setSelectedPayment(payment);
-    setShowDeleteMessage(true);
+    setShowDeleteModal(true);
   };
 
   const closeForm = () => {
@@ -186,7 +186,7 @@ function StudentDetails() {
     setEditPaymentError("");
   };
 
-  const closeDeleteMessage = () => setShowDeleteMessage(false);
+  const closeDeleteModal = () => setShowDeleteModal(false);
 
   const handleSubmit = (paymentData) => {
     selectedPayment ? editPayment(paymentData) :
@@ -220,7 +220,7 @@ function StudentDetails() {
             payments={payments}
             openCreateForm={openCreateForm}
             openEditForm={openEditForm}
-            openDeleteMessage={openDeleteMessage}
+            openDeleteModal={openDeleteModal}
           />
 
           <DataTable
@@ -246,16 +246,12 @@ function StudentDetails() {
         </div>
       }
 
-      {showDeleteMessage &&
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <DeleteMessage
-              deleteFunction={removePayment}
-              closeDeleteMessage={closeDeleteMessage}
-              item={"payment"}
-            />
-          </div>
-        </div>
+      {showDeleteModal &&
+        <DeleteMessage
+          message={"Are you sure you want to delete this payment ?"}
+          deleteFunction={removePayment}
+          closeModal={closeDeleteModal}
+        />
       }
     </PageLayout>
   );

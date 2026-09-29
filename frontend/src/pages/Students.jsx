@@ -5,7 +5,7 @@ import { getClasses } from '../services/classService';
 import { getEnrollmentsByClass } from '../services/enrollmentService';
 import { studentColumns } from '../config/config';
 import StudentForm from '../components/forms/StudentForm';
-import DeleteMessage from '../components/DeleteMessage/DeleteMessage';
+import Modal from '../components/Modal/Modal';
 import DataTable from '../components/tables/DataTable/DataTable';
 import Filter from '../components/Filter/Filter';
 import PageLayout from '../components/PageLayout/PageLayout';
@@ -16,7 +16,7 @@ function Students() {
     const [classes, setClasses] = useState([]);
     const [selectedClassId, setSelectedClassId] = useState(null);
     const [showForm, setShowForm] = useState(false);
-    const [showDeleteMessage, setShowDeleteMessage] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [loadStudentsError, setLoadStudentsError] = useState("");
     const [addStudentError, setAddStudentError] = useState("");
     const [editStudentError, setEditStudentError] = useState("");
@@ -112,7 +112,7 @@ function Students() {
         }
 
         console.log(response.data.message);
-        closeDeleteMessage();
+        closeDeleteModal();
         selectedClassId ? loadEnrollmentsByClass(selectedClassId) :
             loadStudents();
     };
@@ -197,12 +197,12 @@ function Students() {
         setShowForm(true);
     };
 
-    const openDeleteMessage = (student) => {
+    const openDeleteModal = (student) => {
         setSelectedStudent(student);
-        setShowDeleteMessage(true);
+        setShowDeleteModal(true);
     };
 
-    const closeDeleteMessage = () => setShowDeleteMessage(false);
+    const closeDeleteModal = () => setShowDeleteModal(false);
 
     const closeForm = () => {
         setShowForm(false);
@@ -252,21 +252,17 @@ function Students() {
                     actions={[
                         { label: "edit", function: openEditForm },
                         { label: "eye_tracking", function: navigateToStudentDetails },
-                        { label: "delete", function: openDeleteMessage }
+                        { label: "delete", function: openDeleteModal }
                     ]}
                 />
             }
 
-            {showDeleteMessage && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <DeleteMessage
-                            deleteFunction={deleteStudent}
-                            closeDeleteMessage={closeDeleteMessage}
-                            item={"student"}
-                        />
-                    </div>
-                </div>
+            {showDeleteModal && (
+                <Modal
+                    message={"Are you sure you want to delete this student ?"}
+                    deleteFunction={deleteStudent}
+                    closeModal={closeDeleteModal}
+                />
             )}
         </PageLayout>
     );

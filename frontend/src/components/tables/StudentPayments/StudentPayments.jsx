@@ -2,7 +2,7 @@ import { schoolYearMonths } from '../../../config/config';
 import './StudentPayments.css';
 import '../DataTable/DataTable.css';
 
-function StudentPayments({ payments, openCreateForm, openEditForm, openDeleteMessage }) {
+function StudentPayments({ payments, openCreateForm, openEditForm, openDeleteModal }) {
     return (
         <div>
             <h2>Payments 2026/2027</h2>
@@ -35,7 +35,7 @@ function StudentPayments({ payments, openCreateForm, openEditForm, openDeleteMes
                                         <button className="add-button" onClick={() => openCreateForm(item)}>Add Payment</button>
                                         : <div className="actions">
                                             <span className="material-symbols-outlined" onClick={() => openEditForm(payment)}>edit</span>
-                                            <span className="material-symbols-outlined" onClick={() => openDeleteMessage(payment)}>delete</span>
+                                            <span className="material-symbols-outlined" onClick={() => openDeleteModal(payment)}>delete</span>
                                         </div>
                                     }
                                 </td>

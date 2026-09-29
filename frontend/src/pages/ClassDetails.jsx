@@ -5,7 +5,7 @@ import { getEnrollmentsByClass, createEnrollment, deleteEnrollment } from '../se
 import { getStudents, getStudentById, getStudentsByIds } from '../services/studentService';
 import { studentColumns } from '../config/config';
 import DataTable from "../components/tables/DataTable/DataTable";
-import DeleteMessage from '../components/DeleteMessage/DeleteMessage';
+import Modal from "../components/Modal/Modal";
 import Select from '../components/Select/Select';
 import PageLayout from '../components/PageLayout/PageLayout';
 
@@ -18,7 +18,7 @@ function ClassDetails() {
     const [students, setStudents] = useState([]);
     const [selectedStudentId, setSelectedStudentId] = useState(null);
     const [selectedEnrollment, setSelectedEnrollment] = useState(null);
-    const [showDeleteMessage, setShowDeleteMessage] = useState("");
+    const [showDeleteModal, setShowDeleteModal] = useState("");
     const [loadClassError, setLoadClassError] = useState("");
     const [loadEnrollmentsByClassError, setLoadEnrollmentsByClassError] = useState("");
     const [loadStudentsByClassError, setLoadStudentsByClassError] = useState("");
@@ -154,15 +154,15 @@ function ClassDetails() {
 
         loadEnrollmentsByClass();
         console.log(response.data.message);
-        closeDeleteMessage();
+        closeDeleteModal();
     };
 
-    const openDeleteMessage = (enrollment) => {
+    const openDeleteModal = (enrollment) => {
         setSelectedEnrollment(enrollment);
-        setShowDeleteMessage(true);
+        setShowDeleteModal(true);
     };
 
-    const closeDeleteMessage = () => setShowDeleteMessage(false);
+    const closeDeleteModal = () => setShowDeleteModal(false);
 
     const handleSelect = (studentId) => setSelectedStudentId(studentId);
 
@@ -184,21 +184,17 @@ function ClassDetails() {
                         data={enrollments}
                         title={"Students"}
                         actions={[
-                            { label: "delete", function: openDeleteMessage }
+                            { label: "delete", function: openDeleteModal }
                         ]}
                     />
             }
 
-            {showDeleteMessage &&
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <DeleteMessage
-                            deleteFunction={removeEnrollment}
-                            closeDeleteMessage={closeDeleteMessage}
-                            item={"student from this class"}
-                        />
-                    </div>
-                </div>
+            {showDeleteModal &&
+                <DeleteMessage
+                    message={"Are you sure you want to delete this student from this class ?"}
+                    deleteFunction={removeEnrollment}
+                    closeModal={closeDeleteModal}
+                />
             }
 
             <Select

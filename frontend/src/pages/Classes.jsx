@@ -4,14 +4,14 @@ import { getClasses, createClass, updateClass, deactivateClass } from '../servic
 import { classColumns } from '../config/config';
 import DataTable from '../components/tables/DataTable/DataTable';
 import ClassForm from '../components/forms/ClassForm';
-import DeleteMessage from '../components/DeleteMessage/DeleteMessage';
+import Modal from '../components/Modal/Modal';
 import PageLayout from '../components/PageLayout/PageLayout';
 
 function Classes() {
     const [classes, setClasses] = useState([]);
     const [selectedClass, setSelectedClass] = useState(null);
     const [showForm, setShowForm] = useState(false);
-    const [showDeleteMessage, setShowDeleteMessage] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [loadClassesError, setLoadClassesError] = useState("");
     const [addClassError, setAddClassError] = useState("");
     const [editClassError, setEditClassError] = useState("");
@@ -97,7 +97,7 @@ function Classes() {
 
         console.log(response.data.message);
         loadClasses();
-        setShowDeleteMessage(false);
+        setShowDeleteModal(false);
     };
 
     const openCreateForm = () => {
@@ -110,9 +110,9 @@ function Classes() {
         setShowForm(true);
     };
 
-    const openDeleteMessage = (subject) => {
+    const openDeleteModal = (subject) => {
         setSelectedClass(subject);
-        setShowDeleteMessage(true);
+        setShowDeleteModal(true);
     };
 
     const closeForm = () => {
@@ -121,7 +121,7 @@ function Classes() {
         setAddClassError("");
     };
 
-    const closeDeleteMessage = () => setShowDeleteMessage(false);
+    const closeDeleteModal = () => setShowDeleteModal(false);
 
     const navigateToClassDetails = (subject) => navigate(`/classes/${subject.id}`);
 
@@ -151,7 +151,7 @@ function Classes() {
                     actions={[
                         { label: "edit", function: openEditForm },
                         { label: "eye_tracking", function: navigateToClassDetails },
-                        { label: "delete", function: openDeleteMessage }
+                        { label: "delete", function: openDeleteModal }
                     ]}
                 />
             }
@@ -169,16 +169,12 @@ function Classes() {
                 </div>
             )}
 
-            {showDeleteMessage && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <DeleteMessage
-                            deleteFunction={deleteClass}
-                            closeDeleteMessage={closeDeleteMessage}
-                            item={"class"}
-                        />
-                    </div>
-                </div>
+            {showDeleteModal && (
+                <Modal
+                    message={"Are you sure you want to delete this class ?"}
+                    deleteFunction={deleteClass}
+                    closeModal={closeDeleteModal}
+                />
             )}
         </PageLayout>
     );
