@@ -16,7 +16,7 @@ const getClasses = async () => {
 };
 
 const getClassById = async (id) => {
-    const result = await pool.query(`SELECT * FROM classes WHERE id = $1`, [id]);
+    const result = await pool.query(`SELECT * FROM classes WHERE id = $1 AND active = TRUE`, [id]);
     return result.rows[0];
 };
 
@@ -37,9 +37,12 @@ const deactivateClass = async (id) => {
     return result.rows[0];
 };
 
-const activateClass = async (id) => {
-    const result = await pool.query(`UPDATE classes SET active = TRUE WHERE id = $1 RETURNING *`, [id]);
+const getClassByNameAndYear = async (name, schoolYear) => {
+    const result = await pool.query(
+        "SELECT * FROM classes WHERE name = $1 AND school_year = $2 AND active = TRUE",
+        [name, schoolYear]
+    );
     return result.rows[0];
 };
 
-module.exports = { createClass, getClasses, getClassById, updateClass, deactivateClass, activateClass };
+module.exports = { createClass, getClasses, getClassById, updateClass, deactivateClass, getClassByNameAndYear };

@@ -5,10 +5,21 @@ const {
     getClassById: getClassByIdRepository,
     updateClass: updateClassRepository,
     deactivateClass: deactivateClassRepository,
-    activateClass: activateClassRepository
+    activateClass: activateClassRepository,
+    getClassByNameAndYear
 } = require('../repositories/classRepository');
 
 const notFound = (result) => result.length === 0;
+
+const doesNotExist = async (id) => {
+    const result = await getClassByIdRepository(id);
+    return !result;
+};
+
+const alreadyExists = async (name, schoolYear) => {
+    const result = await getClassByNameAndYear(name, schoolYear);
+    return result;
+};
 
 const updateClassData = (value, className) => {
     const name = value.name ?? className.name;
@@ -26,6 +37,11 @@ const createClass = async (req, res) => {
         }
 
         const { name, schoolYear } = value;
+
+        if (await alreadyExists(name, schoolYear)) {
+            return res.status(400).json({ error: "Class already exists" });
+        }
+
         const result = await createClassRepository(name, schoolYear);
 
         return res.status(201).json({ message: "Class added", result });
@@ -89,11 +105,11 @@ const updateClass = async (req, res) => {
 const deactivateClass = async (req, res) => {
     try {
         const { id } = req.params;
-        const currentClass = await getClassByIdRepository(id);
 
-        if (!currentClass) {
+        if (await doesNotExist(id)) {
             return res.status(404).json({ error: "Class not found" });
         }
+
         const result = await deactivateClassRepository(id);
         return res.status(200).json({ message: "Class deleted", result });
     } catch (err) {
@@ -101,19 +117,4 @@ const deactivateClass = async (req, res) => {
     }
 };
 
-const activateClass = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const currentClass = await getClassByIdRepository(id);
-
-        if (!currentClass) {
-            return res.status(404).json({ error: "Class not found" });
-        }
-        const result = await activateClassRepository(id);
-        return res.status(200).json({ message: "Class activated", result });
-    } catch (err) {
-        return res.status(500).json({ error: "Failed to activate class" });
-    }
-};
-
-module.exports = { createClass, getClasses, getClassById, updateClass, deactivateClass, activateClass };
+module.exports = { createClass, getClasses, getClassById, updateClass, deactivateClass };
