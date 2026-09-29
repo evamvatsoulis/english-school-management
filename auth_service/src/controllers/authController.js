@@ -60,7 +60,7 @@ const login = async (req, res) => {
         }
 
         if (!await passwordMatches(password, user.password_hash)) {
-            return res.status(401).json({ error: "Invalid email or password" });
+            return res.status(401).json({ error: "Invalid username or password" });
         }
 
         const token = generateToken(user);
