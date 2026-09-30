@@ -4,7 +4,8 @@ import { getClasses, createClass, updateClass, deactivateClass } from '../servic
 import { classColumns } from '../config/config';
 import DataTable from '../components/tables/DataTable/DataTable';
 import ClassForm from '../components/forms/ClassForm';
-import Modal from '../components/Modal/Modal';
+import Modal from '../components/modal/Modal';
+import ModalOverlay from '../components/modal/ModalOverlay';
 import PageLayout from '../components/PageLayout/PageLayout';
 
 function Classes() {
@@ -31,6 +32,7 @@ function Classes() {
         setClasses([]);
 
         const response = await getClasses();
+
         if (response.status === 401) {
             handleUnauthorizedError();
             return;
@@ -49,7 +51,10 @@ function Classes() {
     };
 
     const addClass = async (classData) => {
+        setAddClassError("");
+
         const response = await createClass(classData);
+
         if (response.status === 401) {
             handleUnauthorizedError();
             return;
@@ -67,7 +72,10 @@ function Classes() {
     };
 
     const editClass = async (classData) => {
+        setEditClassError("");
+
         const response = await updateClass(selectedClass.id, classData);
+
         if (response.status === 401) {
             handleUnauthorizedError();
             return;
@@ -78,6 +86,7 @@ function Classes() {
             setEditClassError(response.data.error);
             return;
         }
+
         loadClasses();
         closeForm();
         console.log(response.data.message);
@@ -85,6 +94,7 @@ function Classes() {
 
     const deleteClass = async () => {
         const response = await deactivateClass(selectedClass.id);
+
         if (response.status === 401) {
             localStorage.removeItem("token");
         }
@@ -121,7 +131,10 @@ function Classes() {
         setAddClassError("");
     };
 
-    const closeDeleteModal = () => setShowDeleteModal(false);
+    const closeDeleteModal = () => {
+        setShowDeleteModal(false);
+        setSelectedClass(null);
+    };
 
     const navigateToClassDetails = (subject) => navigate(`/classes/${subject.id}`);
 
@@ -157,16 +170,14 @@ function Classes() {
             }
 
             {showForm && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <ClassForm
-                            selectedClass={selectedClass}
-                            closeForm={closeForm}
-                            onSubmit={handleSubmit}
-                            formError={selectedClass ? editClassError : addClassError}
-                        />
-                    </div>
-                </div>
+                <ModalOverlay>
+                    <ClassForm
+                        selectedClass={selectedClass}
+                        closeForm={closeForm}
+                        onSubmit={handleSubmit}
+                        formError={selectedClass ? editClassError : addClassError}
+                    />
+                </ModalOverlay>
             )}
 
             {showDeleteModal && (
