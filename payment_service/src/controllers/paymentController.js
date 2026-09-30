@@ -1,3 +1,4 @@
+const config = require('../config/config');
 const { paymentSchema, updatePaymentSchema } = require('../schemas/paymentSchema');
 const {
     getPayments: getPaymentsRepository,
@@ -8,11 +9,39 @@ const {
     deletePayment: deletePaymentRepository
 } = require('../repositories/paymentRepository');
 
+const notificationServiceUrl = `http://${config.notificationServiceHost}:${config.notificationServicePort}`;
+
 const notFound = (result) => result.length === 0;
 
 const doesNotExist = async (id) => {
     const result = await getPaymentByIdRepository(id);
     return !result;
+};
+
+const sendEmail = async (emailData) => {
+    try {
+        const response = await fetch(
+            `${notificationServiceUrl}/notification/email`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(emailData)
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            return { ok: response.ok, error: data.error };
+        }
+
+        return { ok: response.ok, message: data.message };
+
+    } catch (error) {
+        return { ok: false, error: "Notification service is currently unavailable" };
+    }
 };
 
 const updatePaymentData = (value, payment) => {
@@ -48,8 +77,25 @@ const createPayment = async (req, res) => {
             return res.status(400).json({ error: error.details[0].message });
         }
 
-        const { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes } = value;
+        const { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes, email } = value;
         const result = await createPaymentRepository(studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes);
+
+        if (email) {
+            const emailData = {
+                to: email,
+                subject: "Payment confirmation",
+                text: `The payment for ${paymentMonth}/${paymentYear} was successfully recorded`
+            };
+
+            const emailResponse = await sendEmail(emailData);
+
+            if (!emailResponse.ok) {
+                return res.status(201).json({ message: "Payment added", emailStatus: emailResponse.error, result });
+
+            }
+
+            return res.status(201).json({ message: "Payment added", emailStatus: emailResponse.message, result });
+        }
 
         return res.status(201).json({ message: "Payment added", result });
     } catch (err) {
