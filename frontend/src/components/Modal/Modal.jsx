@@ -1,19 +1,18 @@
-import './Modal.css';
+import ModalOverlay from './ModalOverlay';
+import './modal.css';
 
 function Modal({ message, deleteFunction, closeModal }) {
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <p>{message}</p>
+        <ModalOverlay>
+            <p>{message}</p>
 
-                {deleteFunction &&
-                    <div className="delete-actions">
-                        <button className="yes-button" onClick={deleteFunction}>Yes</button>
-                        <button className="no-button" onClick={closeModal}>No</button>
-                    </div>
-                }
-            </div>
-        </div>
+            {deleteFunction &&
+                <div className="delete-actions">
+                    <button className="yes-button" onClick={deleteFunction}>Yes</button>
+                    <button className="no-button" onClick={closeModal}>No</button>
+                </div>
+            }
+        </ModalOverlay>
     );
 }
 

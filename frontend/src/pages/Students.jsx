@@ -5,7 +5,8 @@ import { getClasses } from '../services/classService';
 import { getEnrollmentsByClass } from '../services/enrollmentService';
 import { studentColumns } from '../config/config';
 import StudentForm from '../components/forms/StudentForm';
-import Modal from '../components/Modal/Modal';
+import Modal from '../components/modal/Modal';
+import ModalOverlay from '../components/modal/ModalOverlay';
 import DataTable from '../components/tables/DataTable/DataTable';
 import Filter from '../components/Filter/Filter';
 import PageLayout from '../components/PageLayout/PageLayout';
@@ -243,16 +244,14 @@ function Students() {
             </div>
 
             {showForm && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <StudentForm
-                            selectedStudent={selectedStudent}
-                            closeForm={closeForm}
-                            formError={selectedStudent ? editStudentError : addStudentError}
-                            onSubmit={handleSubmit}
-                        />
-                    </div>
-                </div>
+                <ModalOverlay>
+                    <StudentForm
+                        selectedStudent={selectedStudent}
+                        closeForm={closeForm}
+                        formError={selectedStudent ? editStudentError : addStudentError}
+                        onSubmit={handleSubmit}
+                    />
+                </ModalOverlay>
             )}
 
             {loading ? <p>Loading...</p> :
