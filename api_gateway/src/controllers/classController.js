@@ -85,24 +85,4 @@ const deactivateClass = async (req, res) => {
     }
 };
 
-const activateClass = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const response = await fetch(
-            `${classServiceUrl}/classes/${id}/activate`,
-            {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(req.body)
-            }
-        );
-        const result = await response.json();
-        return res.status(response.status).json(result);
-    } catch (err) {
-        return res.status(503).json({ error: "Class service is currently unavailable" });
-    }
-};
-
-module.exports = { createClass, getClasses, getClassById, updateClass, deactivateClass, activateClass };
+module.exports = { createClass, getClasses, getClassById, updateClass, deactivateClass };
