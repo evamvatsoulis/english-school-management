@@ -39,6 +39,7 @@ function Students() {
         setStudents([]);
 
         const response = await getStudents();
+
         if (response.status === 401) {
             handleUnauthorizedError();
             return;
@@ -50,6 +51,7 @@ function Students() {
             setLoading(false);
             return;
         }
+
         setStudents(response.data.result);
         console.log(response.data.message);
         setLoading(false);
@@ -59,6 +61,7 @@ function Students() {
         setAddStudentError("");
 
         const response = await createStudent(studentData);
+
         if (response.status === 401) {
             handleUnauthorizedError();
             return;
@@ -81,6 +84,7 @@ function Students() {
         setEditStudentError("");
 
         const response = await updateStudent(selectedStudent.id, studentData);
+
         if (response.status === 401) {
             handleUnauthorizedError();
             return;
@@ -100,6 +104,7 @@ function Students() {
 
     const deleteStudent = async () => {
         const response = await deactivateStudent(selectedStudent.id);
+
         if (response.status === 401) {
             handleUnauthorizedError();
             return;
@@ -121,6 +126,7 @@ function Students() {
         setLoadClassesError("");
 
         const response = await getClasses();
+
         if (response.status === 401) {
             handleUnauthorizedError();
             return;
@@ -149,6 +155,7 @@ function Students() {
             setLoadEnrollmentsByClassError(response.data.error);
             return;
         }
+
         loadStudentsByClass(response.data.result);
         console.log(response.data.message);
     };
@@ -202,10 +209,14 @@ function Students() {
         setShowDeleteModal(true);
     };
 
-    const closeDeleteModal = () => setShowDeleteModal(false);
+    const closeDeleteModal = () => {
+        setShowDeleteModal(false);
+        setSelectedStudent(null);
+    };
 
     const closeForm = () => {
         setShowForm(false);
+        setSelectedStudent(null);
         setAddStudentError("");
         setEditStudentError("");
     };
