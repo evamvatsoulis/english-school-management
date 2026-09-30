@@ -7,7 +7,8 @@ import { paymentColumns } from "../config/config";
 import StudentPayments from "../components/tables/StudentPayments/StudentPayments";
 import PaymentForm from "../components/forms/PaymentForm";
 import DataTable from "../components/tables/DataTable/DataTable";
-import Modal from "../components/Modal/Modal";
+import Modal from "../components/modal/Modal";
+import ModalOverlay from "../components/modal/ModalOverlay";
 import PageLayout from '../components/PageLayout/PageLayout';
 
 function StudentDetails() {
@@ -148,6 +149,7 @@ function StudentDetails() {
     setEnrollments([]);
 
     const response = await getEnrollmentsByStudent(id);
+
     if (response.status === 401) {
       handleUnauthorizedError();
       return;
@@ -186,7 +188,10 @@ function StudentDetails() {
     setEditPaymentError("");
   };
 
-  const closeDeleteModal = () => setShowDeleteModal(false);
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedPayment(null);
+  };
 
   const handleSubmit = (paymentData) => {
     selectedPayment ? editPayment(paymentData) :
@@ -232,22 +237,20 @@ function StudentDetails() {
       }
 
       {showForm &&
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <PaymentForm
-              studentId={id}
-              selectedMonth={selectedMonth}
-              selectedPayment={selectedPayment}
-              closeForm={closeForm}
-              onSubmit={handleSubmit}
-              formError={selectedPayment ? editPaymentError : addPaymentError}
-            />
-          </div>
-        </div>
+        <ModalOverlay>
+          <PaymentForm
+            studentId={id}
+            selectedMonth={selectedMonth}
+            selectedPayment={selectedPayment}
+            closeForm={closeForm}
+            onSubmit={handleSubmit}
+            formError={selectedPayment ? editPaymentError : addPaymentError}
+          />
+        </ModalOverlay>
       }
 
       {showDeleteModal &&
-        <DeleteMessage
+        <Modal
           message={"Are you sure you want to delete this payment ?"}
           deleteFunction={removePayment}
           closeModal={closeDeleteModal}
