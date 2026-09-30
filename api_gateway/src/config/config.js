@@ -23,6 +23,12 @@ const services = {
     name: "auth-service",
     host: process.env.AUTH_SERVICE_HOST,
     port: process.env.AUTH_SERVICE_PORT
+  },
+
+  notification: {
+    name: "notification-service",
+    host: process.env.NOTIFICATION_SERVICE_HOST,
+    port: process.env.NOTIFICATION_SERVICE_PORT
   }
 };
 
