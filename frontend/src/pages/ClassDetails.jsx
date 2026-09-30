@@ -2,10 +2,10 @@ import { useParams, useNavigate } from "react-router-dom"
 import { useEffect, useState } from 'react';
 import { getClassById } from '../services/classService';
 import { getEnrollmentsByClass, createEnrollment, deleteEnrollment } from '../services/enrollmentService';
-import { getStudents, getStudentById, getStudentsByIds } from '../services/studentService';
+import { getStudents, getStudentsByIds } from '../services/studentService';
 import { studentColumns } from '../config/config';
 import DataTable from "../components/tables/DataTable/DataTable";
-import Modal from "../components/Modal/Modal";
+import Modal from "../components/modal/Modal";
 import Select from '../components/Select/Select';
 import PageLayout from '../components/PageLayout/PageLayout';
 
@@ -37,7 +37,9 @@ function ClassDetails() {
     };
 
     const loadClass = async () => {
+        setLoadClassError("");
         setClassLoading(true);
+
         const response = await getClassById(id);
 
         if (response.status === 401) {
@@ -51,8 +53,8 @@ function ClassDetails() {
             setClassLoading(false);
             return;
         }
+
         setSubject(response.data.result);
-        setLoadClassError("");
         setClassLoading(false);
     };
 
@@ -74,6 +76,7 @@ function ClassDetails() {
             setEnrollmentsLoading(false);
             return;
         }
+
         loadStudentsByClass(response.data.result);
         console.log(response.data.message);
         setEnrollmentsLoading(false);
@@ -116,10 +119,13 @@ function ClassDetails() {
             console.error(response.data.error);
             return;
         }
+
         setStudents(response.data.result);
     };
 
     const addEnrollment = async (studentId) => {
+        setAddEnrollmentError("");
+
         const response = await createEnrollment({ studentId, classId });
 
         if (response.status === 401) {
@@ -133,8 +139,8 @@ function ClassDetails() {
             console.error(response.data.error);
             return;
         }
+
         loadEnrollmentsByClass();
-        setAddEnrollmentError("");
         console.log(response.data.message);
     };
 
@@ -162,7 +168,10 @@ function ClassDetails() {
         setShowDeleteModal(true);
     };
 
-    const closeDeleteModal = () => setShowDeleteModal(false);
+    const closeDeleteModal = () => {
+        setSelectedEnrollment(null);
+        setShowDeleteModal(false);
+    };
 
     const handleSelect = (studentId) => setSelectedStudentId(studentId);
 
@@ -174,7 +183,7 @@ function ClassDetails() {
 
     return (
         <PageLayout>
-            {classLoading ? <p>Loading class...</p> : subject && !loadClassError && <h1>{subject.name} | {subject.school_year}</h1>}
+            {classLoading ? <p>Loading class...</p> : subject && !loadClassError && <h1>{subject.name}  {subject.school_year}</h1>}
 
             {enrollmentsLoading ? <p>Loading enrollments...</p> :
                 studentsLoading ? <p>Loading students...</p> :
@@ -190,20 +199,22 @@ function ClassDetails() {
             }
 
             {showDeleteModal &&
-                <DeleteMessage
+                <Modal
                     message={"Are you sure you want to delete this student from this class ?"}
                     deleteFunction={removeEnrollment}
                     closeModal={closeDeleteModal}
                 />
             }
 
-            <Select
-                data={!loadStudentsError ? students : []}
-                item={"student"}
-                handleSelect={handleSelect}
-            />
+            <div className="page-actions">
+                <Select
+                    data={!loadStudentsError ? students : []}
+                    item={"student"}
+                    handleSelect={handleSelect}
+                />
 
-            <button className="add-button" onClick={() => addEnrollment(selectedStudentId)}>Add student to class</button>
+                <button className="add-button" onClick={() => addEnrollment(selectedStudentId)}>Add student to class</button>
+            </div>
         </PageLayout>
     );
 }
