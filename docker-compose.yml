@@ -71,6 +71,21 @@ services:
       - ./class_service/.env
 
 
+  notification-service:
+    build: ./notification_service
+    container_name: notification_service_container
+
+    ports:
+      - "3004:3004"
+
+    volumes:
+      - ./notification_service:/app
+      - /app/node_modules
+
+    env_file:
+      - ./notification_service/.env
+
+
   api-gateway:
     build: ./api_gateway
     container_name: api_gateway_container
