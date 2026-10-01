@@ -8,10 +8,13 @@ const formatDate = (date, key) => {
     }
 }
 
-function DataTable({ columns, data, title, actions }) {
+function DataTable({ columns, data, title, actions, handleExport }) {
     return (
         <div className="table-section">
-            {title && <h2>{title}</h2>}
+            <div className="title-section">
+                {title && <h2>{title}</h2>}
+                {handleExport && <span key="export" className="material-symbols-outlined" onClick={handleExport}>download</span>}
+            </div>
 
             <table className="data-table">
                 <thead>

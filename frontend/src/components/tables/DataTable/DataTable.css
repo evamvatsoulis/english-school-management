@@ -32,3 +32,13 @@
 .down {
     color: var(--red);
 }
+
+.title-section {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+.title-section span {
+    margin: auto 0;
+}
