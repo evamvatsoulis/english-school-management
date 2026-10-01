@@ -16,7 +16,7 @@ const getPaymentsByStudentId = async (studentId) => {
     return { status: response.status, ok: response.ok, data };
 };
 
-const createPayment = async (paymentData) => {
+const createPayment = async (paymentData, notificationData) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
@@ -27,7 +27,7 @@ const createPayment = async (paymentData) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify(paymentData)
+            body: JSON.stringify({ paymentData, notificationData })
         }
     );
     const data = await response.json();
