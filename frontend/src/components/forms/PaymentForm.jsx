@@ -10,10 +10,11 @@ function PaymentForm({ studentId, selectedMonth, selectedPayment, closeForm, for
     const [paymentDate, setPaymentDate] = useState(selectedPayment ? formatDate(selectedPayment.payment_date) : formatDate(new Date()));
     const [paymentMethod, setPaymentMethod] = useState(selectedPayment ? selectedPayment.payment_method : "");
     const [notes, setNotes] = useState(selectedPayment ? selectedPayment.notes : "");
+    const [sendEmail, setSendEmail] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        onSubmit({ studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes });
+        onSubmit({ studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes }, sendEmail);
     };
 
 
@@ -49,6 +50,11 @@ function PaymentForm({ studentId, selectedMonth, selectedPayment, closeForm, for
                     <label htmlFor="notes">Notes:</label>
                     <input type="text" id="notes" placeholder="Notes" value={notes} onChange={(event) => setNotes(event.target.value)} />
                 </div>
+            </div>
+
+            <div className="email-checkbox">
+                <label htmlFor="email">Send confirmation email ?</label>
+                <input type="checkbox" id="email" value={sendEmail} onChange={(event) => setSendEmail(event.target.checked)} />
             </div>
 
             <p className="form-error">{formError}</p>
