@@ -25,9 +25,7 @@ const paymentSchema = Joi.object({
 
     notes: Joi.string()
         .trim()
-        .allow("", null),
-
-    email: Joi.string().email().allow("", null)
+        .allow("", null)
 });
 
 const updatePaymentSchema = Joi.object({
