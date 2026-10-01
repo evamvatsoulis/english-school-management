@@ -9,6 +9,8 @@ const {
     deletePayment: deletePaymentRepository
 } = require('../repositories/paymentRepository');
 
+const formatDate = (date) => new Date(date).toLocaleDateString('el-GR');
+
 const notificationServiceUrl = `http://${config.notificationServiceHost}:${config.notificationServicePort}`;
 
 const notFound = (result) => result.length === 0;
@@ -71,35 +73,43 @@ const getPayments = async (req, res) => {
 
 const createPayment = async (req, res) => {
     try {
-        const { error, value } = paymentSchema.validate(req.body);
+        const { error, value } = paymentSchema.validate(req.body.paymentData);
+        let emailStatus;
 
         if (error) {
             return res.status(400).json({ error: error.details[0].message });
         }
 
-        const { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes, email } = value;
+        if (req.body.notificationData && !req.body.notificationData.email) {
+            return res.status(400).json({ error: "Student does not have an email address" });
+        }
+
+        const { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes } = value;
         const result = await createPaymentRepository(studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes);
 
-        if (email) {
+        if (req.body.notificationData) {
+            const email = req.body.notificationData.email;
+
             const emailData = {
                 to: email,
                 subject: "Payment confirmation",
-                text: `The payment for ${paymentMonth}/${paymentYear} was successfully recorded`
+                text: `The payment for ${paymentMonth}/${paymentYear} was successfully recorded. Date: ${formatDate(paymentDate)}`
             };
 
             const emailResponse = await sendEmail(emailData);
 
             if (!emailResponse.ok) {
-                return res.status(201).json({ message: "Payment added", emailStatus: emailResponse.error, result });
-
+                emailStatus = emailResponse.error;
+            } else {
+                emailStatus = emailResponse.message;
             }
-
-            return res.status(201).json({ message: "Payment added", emailStatus: emailResponse.message, result });
+        } else {
+            emailStatus = "Payment confirmation email was not requested";
         }
 
-        return res.status(201).json({ message: "Payment added", result });
+        return res.status(201).json({ message: "Payment added", emailStatus, result });
     } catch (err) {
-        return res.status(500).json({ error: "Failed to create payment" });
+        return res.status(500).json({ error: err.message });
     }
 };
 
