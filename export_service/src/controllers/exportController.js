@@ -5,13 +5,20 @@ const fs = require('fs');
 
 pdfMake.addVirtualFileSystem(pdfFonts);
 
+const formatDate = (date) => new Date(date).toLocaleDateString('el-GR');
+
 const createTableBody = (columns, data) => {
     const tableBody = [columns.map((column) => ({ text: column, bold: true }))];
 
     data.map((row) => {
         const pdfRow = columns.map((column) => {
-            const value = row[column];
-            return value;
+            let value = row[column];
+
+            if (column === "payment_date") {
+                value = formatDate(row[column]);
+            }
+
+            return value !== null && value !== undefined ? value.toString() : '';
         });
         tableBody.push(pdfRow);
     });
@@ -38,13 +45,13 @@ const createDocDefinition = (tableName, columns, data) => {
 };
 
 const exportToPdf = async (req, res) => {
-    const { tableName, columns, data } = req.body;
+    const { tableName, columns, tableData } = req.body;
 
     try {
         const exportsPath = path.join(__dirname, "../../exports");
-        const fileName = "test.pdf";
+        const fileName = "abc.pdf";
 
-        const docDefinition = createDocDefinition(tableName, columns, data);
+        const docDefinition = createDocDefinition(tableName, columns, tableData);
         var pdfDoc = pdfMake.createPdf(docDefinition);
 
         const buffer = await pdfDoc.getBuffer();
