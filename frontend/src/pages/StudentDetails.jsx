@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getStudentById } from '../services/studentService';
 import { getPaymentsByStudentId, createPayment, updatePayment, deletePayment } from "../services/paymentService";
 import { getEnrollmentsByStudent } from "../services/enrollmentService";
+import { exportToPdf } from "../services/exportService";
 import { paymentColumns } from "../config/config";
 import StudentPayments from "../components/tables/StudentPayments/StudentPayments";
 import PaymentForm from "../components/forms/PaymentForm";
@@ -27,6 +28,7 @@ function StudentDetails() {
   const [editPaymentError, setEditPaymentError] = useState("");
   const [deletePaymentError, setDeletePaymentError] = useState("");
   const [loadEnrollmentsByStudentError, setLoadEnrollmentsByStudentError] = useState("");
+  const [downloadPdfError, setDownloadPdfError] = useState("");
   const [studentLoading, setStudentLoading] = useState(false);
   const [paymentsLoading, setPaymentsLoading] = useState(false);
   const [enrollmentLoading, setEnrollmentLoading] = useState(false);
@@ -176,7 +178,34 @@ function StudentDetails() {
 
     setEnrollments(response.data.result);
     setEnrollmentLoading(false);
-  }
+  };
+
+  const downloadPdf = async (tableName, columns, tableData) => {
+    setDownloadPdfError("");
+
+    const response = await exportToPdf(tableName, columns, tableData);
+
+    if (response.status === 401) {
+      handleUnauthorizedError();
+      return;
+    }
+
+    if (!response.ok) {
+      console.error(response.data.error);
+      setDownloadPdfError(response.data.error);
+      return;
+    }
+
+    console.log(response.data.message);
+  };
+
+  const handleExport = () => {
+    const columns = paymentColumns.map(obj => Object.values(obj)[0]);
+    const tableData = payments;
+    const tableName = "Payments History";
+
+    downloadPdf(tableName, columns, tableData);
+  };
 
   const openCreateForm = (month) => {
     setSelectedMonth(month);
@@ -244,6 +273,7 @@ function StudentDetails() {
             columns={paymentColumns}
             data={payments}
             title={"Payments History"}
+            handleExport={handleExport}
           />
         </>
       }
