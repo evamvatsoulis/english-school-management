@@ -1,0 +1,23 @@
+{
+  "name": "export_service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon -L src/app.js",
+    "start": "node src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "fs": "^0.0.1-security",
+    "pdfmake": "^0.3.11"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
