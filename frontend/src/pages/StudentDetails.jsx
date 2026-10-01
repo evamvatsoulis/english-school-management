@@ -196,13 +196,22 @@ function StudentDetails() {
       return;
     }
 
-    console.log(response.data.message);
+    const downloadUrl = URL.createObjectURL(response.data);
+    const link = document.createElement("a");
+
+    link.href = downloadUrl;
+    link.download = `${tableName}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
   };
 
   const handleExport = () => {
     const columns = paymentColumns.map(obj => Object.values(obj)[0]);
     const tableData = payments;
-    const tableName = "Payments History";
+    const tableName = `${student.first_name}_${student.last_name}_payments_history`;
 
     downloadPdf(tableName, columns, tableData);
   };

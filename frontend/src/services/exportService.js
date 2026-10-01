@@ -12,7 +12,7 @@ export const exportToPdf = async (tableName, columns, tableData) => {
         body: JSON.stringify({ tableName, columns, tableData })
     });
 
-    const data = await response.json();
+    const data = response.ok ? await response.blob() : await response.json();
 
     return { status: response.status, ok: response.ok, data };
 };

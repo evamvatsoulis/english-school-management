@@ -48,16 +48,14 @@ const exportToPdf = async (req, res) => {
     const { tableName, columns, tableData } = req.body;
 
     try {
-        const exportsPath = path.join(__dirname, "../../exports");
-        const fileName = "abc.pdf";
-
         const docDefinition = createDocDefinition(tableName, columns, tableData);
         var pdfDoc = pdfMake.createPdf(docDefinition);
 
         const buffer = await pdfDoc.getBuffer();
-        fs.writeFileSync(path.join(exportsPath, fileName), buffer);
 
-        return res.status(201).json({ message: "Pdf file created successfully" });
+        res.setHeader('Content-Type', 'application/pdf');
+
+        return res.status(200).send(buffer);
     } catch (err) {
         return res.status(500).json({ error: "Failed to export to pdf" });
     }
