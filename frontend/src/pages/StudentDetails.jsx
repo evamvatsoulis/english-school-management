@@ -84,9 +84,16 @@ function StudentDetails() {
     setPaymentsLoading(false);
   };
 
-  const addPayment = async (paymentData) => {
+  const addPayment = async (paymentData, sendEmail) => {
     setAddPaymentError("");
-    const response = await createPayment(paymentData);
+    let response;
+    const notificationData = { email: student.email };
+
+    if (sendEmail) {
+      response = await createPayment(paymentData, notificationData);
+    } else {
+      response = await createPayment(paymentData);
+    }
 
     if (response.status === 401) {
       handleUnauthorizedError();
@@ -100,6 +107,11 @@ function StudentDetails() {
     }
 
     console.log(response.data.message);
+
+    setTimeout(() => {
+      alert(response.data.emailStatus);
+    }, 50);
+
     loadPaymentsByStudentId(id);
     closeForm();
   };
@@ -193,9 +205,9 @@ function StudentDetails() {
     setSelectedPayment(null);
   };
 
-  const handleSubmit = (paymentData) => {
+  const handleSubmit = (paymentData, sendEmail) => {
     selectedPayment ? editPayment(paymentData) :
-      addPayment(paymentData);
+      addPayment(paymentData, sendEmail);
   };
 
   useEffect(() => {
