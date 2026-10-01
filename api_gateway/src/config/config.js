@@ -29,6 +29,12 @@ const services = {
     name: "notification-service",
     host: process.env.NOTIFICATION_SERVICE_HOST,
     port: process.env.NOTIFICATION_SERVICE_PORT
+  },
+
+  export: {
+    name: "export-service",
+    host: process.env.EXPORT_SERVICE_HOST,
+    port: process.env.EXPORT_SERVICE_PORT
   }
 };
 
