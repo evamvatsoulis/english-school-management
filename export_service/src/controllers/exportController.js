@@ -1,21 +1,21 @@
 const pdfMake = require('pdfmake/build/pdfmake');
 const pdfFonts = require('pdfmake/build/vfs_fonts');
-const path = require('path');
-const fs = require('fs');
 
 pdfMake.addVirtualFileSystem(pdfFonts);
 
 const formatDate = (date) => new Date(date).toLocaleDateString('el-GR');
 
 const createTableBody = (columns, data) => {
-    const tableBody = [columns.map((column) => ({ text: column, bold: true }))];
+    const tableColumns = columns.map((column) => column.label);
+
+    const tableBody = [tableColumns.map((column) => ({ text: column, bold: true }))];
 
     data.map((row) => {
         const pdfRow = columns.map((column) => {
-            let value = row[column];
+            let value = row[column.key];
 
-            if (column === "payment_date") {
-                value = formatDate(row[column]);
+            if (column.key === "payment_date") {
+                value = formatDate(row[column.key]);
             }
 
             return value !== null && value !== undefined ? value.toString() : '';

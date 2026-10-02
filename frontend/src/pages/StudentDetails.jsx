@@ -209,7 +209,7 @@ function StudentDetails() {
   };
 
   const handleExport = () => {
-    const columns = pdfPaymentsColumns.map(obj => Object.values(obj)[0]);
+    const columns = pdfPaymentsColumns;
     const tableData = payments;
     const tableName = `${student.first_name}_${student.last_name}_payments_history`;
 
