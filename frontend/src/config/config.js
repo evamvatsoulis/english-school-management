@@ -14,6 +14,14 @@ export const paymentColumns = [
     { key: "notes", label: "Notes" }
 ];
 
+export const pdfPaymentsColumns = [
+    { key: "payment_month", label: "Month" },
+    { key: "payment_year", label: "Year" },
+    { key: "payment_date", label: "Date" },
+    { key: "payment_method", label: "Method" },
+    { key: "notes", label: "Notes" }
+];
+
 export const classColumns = [
     { key: "name", label: "Level" },
     { key: "school_year", label: "School Year" }

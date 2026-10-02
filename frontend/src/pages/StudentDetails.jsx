@@ -4,7 +4,7 @@ import { getStudentById } from '../services/studentService';
 import { getPaymentsByStudentId, createPayment, updatePayment, deletePayment } from "../services/paymentService";
 import { getEnrollmentsByStudent } from "../services/enrollmentService";
 import { exportToPdf } from "../services/exportService";
-import { paymentColumns } from "../config/config";
+import { paymentColumns, pdfPaymentsColumns } from "../config/config";
 import StudentPayments from "../components/tables/StudentPayments/StudentPayments";
 import PaymentForm from "../components/forms/PaymentForm";
 import DataTable from "../components/tables/DataTable/DataTable";
@@ -209,7 +209,7 @@ function StudentDetails() {
   };
 
   const handleExport = () => {
-    const columns = paymentColumns.map(obj => Object.values(obj)[0]);
+    const columns = pdfPaymentsColumns.map(obj => Object.values(obj)[0]);
     const tableData = payments;
     const tableName = `${student.first_name}_${student.last_name}_payments_history`;
 
