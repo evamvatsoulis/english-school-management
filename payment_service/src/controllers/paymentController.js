@@ -1,4 +1,5 @@
 const config = require('../config/config');
+const { emailBody } = require('../utils/emailBody');
 const { paymentSchema, updatePaymentSchema } = require('../schemas/paymentSchema');
 const {
     getPayments: getPaymentsRepository,
@@ -89,11 +90,12 @@ const createPayment = async (req, res) => {
 
         if (req.body.notificationData) {
             const email = req.body.notificationData.email;
+            const htmlBody = `${emailBody(paymentMonth, paymentYear, formatDate(paymentDate))}`;
 
             const emailData = {
                 to: email,
                 subject: "Payment confirmation",
-                text: `The payment for ${paymentMonth}/${paymentYear} was successfully recorded. Date: ${formatDate(paymentDate)}`
+                html: htmlBody
             };
 
             const emailResponse = await sendEmail(emailData);
