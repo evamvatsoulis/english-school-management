@@ -52,10 +52,12 @@ function PaymentForm({ studentId, selectedMonth, selectedPayment, closeForm, for
                 </div>
             </div>
 
-            <div className="email-checkbox">
-                <label htmlFor="email">Send confirmation email ?</label>
-                <input type="checkbox" id="email" value={sendEmail} onChange={(event) => setSendEmail(event.target.checked)} />
-            </div>
+            {!selectedPayment &&
+                <div className="email-checkbox">
+                    <label htmlFor="email">Send confirmation email ?</label>
+                    <input type="checkbox" id="email" value={sendEmail} onChange={(event) => setSendEmail(event.target.checked)} />
+                </div>
+            }
 
             <p className="form-error">{formError}</p>
 
