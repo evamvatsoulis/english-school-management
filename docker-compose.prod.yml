@@ -57,6 +57,7 @@ services:
       context: ./export_service
       dockerfile: Dockerfile.prod
     container_name: export_service_container
+    restart: unless-stopped
     env_file:
       - ./export_service/.env
 
