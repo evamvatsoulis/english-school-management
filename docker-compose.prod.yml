@@ -1,151 +1,99 @@
 services:
   student-service:
-    build: ./student_service
+    build:
+      context: ./student_service
+      dockerfile: Dockerfile.prod
     container_name: student_service_container
-
-    ports:
-      - "3000:3000"
-
+    restart: unless-stopped
     depends_on:
       - postgres
-
-    volumes:
-      - ./student_service:/app
-      - /app/node_modules
-
     env_file:
       - ./student_service/.env
 
-
   payment-service:
-    build: ./payment_service
+    build:
+      context: ./payment_service
+      dockerfile: Dockerfile.prod
     container_name: payment_service_container
-
-    ports:
-      - "3001:3001"
-
+    restart: unless-stopped
     depends_on:
       - postgres
-
-    volumes:
-      - ./payment_service:/app
-      - /app/node_modules
-
     env_file:
       - ./payment_service/.env
 
-
   auth-service:
-    build: ./auth_service
+    build:
+      context: ./auth_service
+      dockerfile: Dockerfile.prod
     container_name: auth_service_container
-
-    ports:
-      - "3002:3002"
-
+    restart: unless-stopped
     depends_on:
       - postgres
-
-    volumes:
-      - ./auth_service:/app
-      - /app/node_modules
-
     env_file:
       - ./auth_service/.env
 
-
   class-service:
-    build: ./class_service
+    build:
+      context: ./class_service
+      dockerfile: Dockerfile.prod
     container_name: class_service_container
-
-    ports:
-      - "3003:3003"
-
+    restart: unless-stopped
     depends_on:
       - postgres
-
-    volumes:
-      - ./class_service:/app
-      - /app/node_modules
-
     env_file:
       - ./class_service/.env
 
-
   notification-service:
-    build: ./notification_service
+    build:
+      context: ./notification_service
+      dockerfile: Dockerfile.prod
     container_name: notification_service_container
-
-    ports:
-      - "3004:3004"
-
-    volumes:
-      - ./notification_service:/app
-      - /app/node_modules
-
+    restart: unless-stopped
     env_file:
       - ./notification_service/.env
 
-
   export-service:
-    build: ./export_service
+    build:
+      context: ./export_service
+      dockerfile: Dockerfile.prod
     container_name: export_service_container
-
-    ports:
-      - "3005:3005"
-
-    volumes:
-      - ./export_service:/app
-      - /app/node_modules
-
     env_file:
       - ./export_service/.env
 
-
   api-gateway:
-    build: ./api_gateway
+    build:
+      context: ./api_gateway
+      dockerfile: Dockerfile.prod
     container_name: api_gateway_container
-
+    restart: unless-stopped
     ports:
       - "4000:4000"
-
-    volumes:
-      - ./api_gateway:/app
-      - /app/node_modules
-
     env_file:
       - ./api_gateway/.env
 
-
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
     container_name: frontend_container
-
+    restart: unless-stopped
     ports:
       - "5173:5173"
-    
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-
     env_file:
       - ./frontend/.env
 
   postgres:
     image: postgres:15-alpine
-
     container_name: postgres_container
-
+    restart: unless-stopped
     ports:
       - "5433:5432"
-
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
-
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
 
 volumes:
   postgres_data:
