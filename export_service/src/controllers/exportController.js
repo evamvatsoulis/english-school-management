@@ -1,14 +1,17 @@
 const pdfMake = require('pdfmake/build/pdfmake');
 const pdfFonts = require('pdfmake/build/vfs_fonts');
+const { logoBase64 } = require('../utils/base64');
 
 pdfMake.addVirtualFileSystem(pdfFonts);
 
 const formatDate = (date) => new Date(date).toLocaleDateString('el-GR');
 
+const replaceUnderscoresWithSpaces = (item) => item.split('_').join(' ');
+
 const createTableBody = (columns, data) => {
     const tableColumns = columns.map((column) => column.label);
 
-    const tableBody = [tableColumns.map((column) => ({ text: column, bold: true }))];
+    const tableBody = [tableColumns.map((column) => ({ text: column, bold: true, alignment: 'center' }))];
 
     data.map((row) => {
         const pdfRow = columns.map((column) => {
@@ -26,18 +29,40 @@ const createTableBody = (columns, data) => {
 };
 
 const createDocDefinition = (tableName, columns, data) => {
+    const title = replaceUnderscoresWithSpaces(tableName);
     const docDefinition = {
+        header: {
+            text: 'Date: ' + formatDate(new Date()),
+            alignment: 'right',
+            margin: [0, 10, 5, 0]
+        },
         content: [
             {
-                text: `${tableName}`,
-                fontSize: 15,
-                bold: true
+                image: logoBase64,
+                width: 100,
+                height: 100,
+                alignment: 'center'
             },
             {
-                table: {
-                    headerRows: 1,
-                    body: createTableBody(columns, data)
-                }
+                text: title,
+                fontSize: 15,
+                bold: true,
+                alignment: 'center',
+                margin: [0, 20, 0, 0]
+            },
+            {
+                columns: [
+                    { width: '*', text: '' },
+                    {
+                        width: 'auto',
+                        table: {
+                            headerRows: 1,
+                            body: createTableBody(columns, data)
+                        }
+                    },
+                    { width: '*', text: '' }
+                ],
+                margin: [0, 10, 0, 0]
             }
         ]
     };
