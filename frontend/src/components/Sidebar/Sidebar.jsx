@@ -20,7 +20,6 @@ function Sidebar() {
                 <NavLink to="/students">Students</NavLink>
                 <NavLink to="/classes">Classes</NavLink>
                 <NavLink to="/payments">Payments</NavLink>
-                {/* <NavLink to="/healths">Healths</NavLink> */}
                 {user?.role === "admin" &&
                     <NavLink to="/healths">Healths</NavLink>
                 }

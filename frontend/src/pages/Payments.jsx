@@ -70,7 +70,7 @@ function Payments({ }) {
 
     return (
         <PageLayout>
-            <h1>Payments 2026-27</h1>
+            <h1>Payments 2026-2027</h1>
 
             {studentsLoading ? <p>Loading students...</p> :
                 paymentsLoading ? <p>Loading payments...</p> :

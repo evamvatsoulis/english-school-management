@@ -149,7 +149,7 @@ function Classes() {
 
     return (
         <PageLayout>
-            <h1>Classes</h1>
+            <h1>Classes 2026-2027</h1>
 
             {!loadClassesError &&
                 <div className="page-actions">

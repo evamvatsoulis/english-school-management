@@ -11,6 +11,7 @@
   --grey: #b7bccb;
   --green: #00ff00;
   --red: #e31414;
+  --secondary-red: #ca0e0e;
 }
 
 body {
@@ -40,9 +41,12 @@ a {
   padding: 10px;
   border: none;
   border-radius: 8px;
-  background-color: #2563eb;
+  background-color: var(--blue);
   color: white;
-  font-weight: 600;
+}
+
+.add-button:hover {
+  background-color: var(--secondary-blue);
 }
 
 .material-symbols-outlined {

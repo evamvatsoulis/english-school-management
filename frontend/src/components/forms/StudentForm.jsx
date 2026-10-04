@@ -17,13 +17,13 @@ function StudentForm({ selectedStudent, closeForm, formError, onSubmit }) {
         <form className="form" onSubmit={handleSubmit}>
             <div className="form-data">
                 <div className="form-group">
-                    <label htmlFor="firstname">Firstname:</label>
-                    <input type="text" id="firstname" placeholder="First name" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
+                    <label htmlFor="firstname">First Name:</label>
+                    <input type="text" id="firstname" placeholder="First Name" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="lastname">Lastname:</label>
-                    <input type="text" id="lastname" placeholder="Last name" value={lastName} onChange={(event) => setLastName(event.target.value)} />
+                    <label htmlFor="lastname">Last Name:</label>
+                    <input type="text" id="lastname" placeholder="Last Name" value={lastName} onChange={(event) => setLastName(event.target.value)} />
                 </div>
 
                 <div className="form-group">
