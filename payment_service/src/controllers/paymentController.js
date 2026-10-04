@@ -94,7 +94,7 @@ const createPayment = async (req, res) => {
 
             const emailData = {
                 to: email,
-                subject: "Payment confirmation",
+                subject: "Payment Confirmation",
                 html: htmlBody
             };
 

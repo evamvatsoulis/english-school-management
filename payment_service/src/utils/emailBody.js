@@ -3,14 +3,14 @@ const logoUrl = "https://scontent.fnic2-2.fna.fbcdn.net/v/t39.30808-6/453414973_
 const emailBody = (paymentMonth, paymentYear, paymentDate) => {
     return `
         <div style="text-align: center; background-color: #ffffff; padding: 20px; border-radius: 8px;">
-            <img src=${logoUrl} alt="logo" width="100" height="100"> <br>
+            <img src=${logoUrl} alt="logo" width="100" height="100">
             <h2>Payment Confirmation</h2>
             <p>Your payment for ${paymentMonth}/${paymentYear} has been successfully completed</p>
             <p>Payment Date: ${paymentDate}</p> <br>
 
             <p>&copy; 2026 Stefania Kyriakou Vamvatsouli</p>
             <p>English Private Institute</p>
-            <p>All right reserved.</p>
+            <p>All rights reserved.</p>
         </div>
     `;
 };

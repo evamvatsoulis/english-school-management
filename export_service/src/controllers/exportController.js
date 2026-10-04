@@ -6,7 +6,7 @@ pdfMake.addVirtualFileSystem(pdfFonts);
 
 const formatDate = (date) => new Date(date).toLocaleDateString('el-GR');
 
-const replaceUnderscoresWithSpaces = (item) => item.split('_').join(' ');
+const replaceHyphensWithSpaces = (item) => item.split('-').join(' ');
 
 const createTableBody = (columns, data) => {
     const tableColumns = columns.map((column) => column.label);
@@ -29,7 +29,7 @@ const createTableBody = (columns, data) => {
 };
 
 const createDocDefinition = (tableName, columns, data) => {
-    const title = replaceUnderscoresWithSpaces(tableName);
+    const title = replaceHyphensWithSpaces(tableName);
     const docDefinition = {
         header: {
             text: 'Date: ' + formatDate(new Date()),
