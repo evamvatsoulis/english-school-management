@@ -88,7 +88,7 @@ services:
     container_name: postgres_container
     restart: unless-stopped
     ports:
-      - "5433:5432"
+      - "5435:5432"
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
