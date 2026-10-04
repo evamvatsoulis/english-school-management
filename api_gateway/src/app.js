@@ -11,7 +11,7 @@ const exportRoutes = require('./routes/exportRoutes');
 
 const app = express();
 
-app.use(cors({ origin: [`http://localhost:${config.frontendPort}`, `http://${config.frontendHost}:${config.frontendPort}`] }));
+app.use(cors({ origin: `http://${config.frontendHost}:${config.frontendPort}` }));
 
 app.use(express.json());
 app.use('/health', healthRoutes);
