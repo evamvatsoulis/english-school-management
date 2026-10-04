@@ -15,7 +15,8 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: bold;
   background-color: var(--background-color);
   color: white;
 }
