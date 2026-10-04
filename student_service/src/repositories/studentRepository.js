@@ -6,12 +6,12 @@ const getStudentById = async (id) => {
 }
 
 const getStudents = async () => {
-    const result = await pool.query("SELECT * FROM students WHERE active = TRUE ORDER BY id");
+    const result = await pool.query("SELECT * FROM students WHERE active = TRUE ORDER BY LOWER(first_name) ASC");
     return result.rows;
 };
 
 const getStudentsByIds = async (studentIds) => {
-    const result = await pool.query(`SELECT * FROM students WHERE active = TRUE AND id = ANY($1) ORDER BY id`, [studentIds]);
+    const result = await pool.query(`SELECT * FROM students WHERE active = TRUE AND id = ANY($1) ORDER BY LOWER(first_name)`, [studentIds]);
     return result.rows;
 };
 
