@@ -33,6 +33,12 @@ export const healthColumns = [
     { key: "lastTimeChecked", label: "Last time checked"}
 ];
 
+export const userColumns = [
+    { key: "username", label: "Username" },
+    { key: "role", label: "role" },
+    { key: "created_at", label: "Created at"}
+];
+
 export const schoolYearMonths = [
     { month: 9, year: 2026, name: "September" },
     { month: 10, year: 2026, name: "October" },

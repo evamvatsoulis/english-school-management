@@ -6,6 +6,7 @@ import Classes from './pages/Classes';
 import ClassDetails from "./pages/ClassDetails";
 import Payments from './pages/Payments';
 import Healths from './pages/Healths';
+import Users from "./pages/Users";
 import ProtectedRoute from "./components/protect/ProtectedRoute";
 import LoginProtectedRoute from "./components/protect/LoginProtectedRoute";
 import AdminProtectedRoute from "./components/protect/AdminProtectedRoute";
@@ -25,6 +26,7 @@ function App() {
       <Route path="/classes/:id" element={<ProtectedRoute><ClassDetails /></ProtectedRoute>} />
       <Route path="/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
       <Route path="/healths" element={<ProtectedRoute><AdminProtectedRoute><Healths /></AdminProtectedRoute></ProtectedRoute>} />
+      <Route path="/users" element={<ProtectedRoute><AdminProtectedRoute><Users /></AdminProtectedRoute></ProtectedRoute>} />
     </Routes>
   );
 }

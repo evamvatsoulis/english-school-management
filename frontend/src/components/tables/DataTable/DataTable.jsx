@@ -30,7 +30,7 @@ function DataTable({ columns, data, title, actions, handleExport }) {
                     {data.map((item) => (
                         <tr key={`${item.id}-${item.service}`}>
                             {columns.map((column) => (
-                                column.key === "payment_date" || column.key === "lastTimeChecked" ?
+                                column.key === "payment_date" || column.key === "lastTimeChecked" || column.key === "created_at" ?
                                     <td key={column.key}>{formatDate(item[column.key], column.key)}</td> :
                                     column.key === "status" ?
                                         <td key={column.key} className={item[column.key] === "OK" ? "ok" : "down"}>{item[column.key]}</td> :
