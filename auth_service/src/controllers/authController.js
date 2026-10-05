@@ -1,6 +1,10 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { register: registerRepository, getUsers: getUsersRepository, findUserByUsername } = require('../repositories/authRepository');
+const { register: registerRepository,
+    getUsers: getUsersRepository,
+    findUserByUsername,
+    getUserById,
+    updateUser: updateUserRepository } = require('../repositories/authRepository');
 const { userSchema, updateUserSchema } = require('../schemas/userSchema');
 
 const encryptPassword = async (password) => bcrypt.hash(password, 10);
@@ -24,6 +28,14 @@ const generateToken = (user) => {
     return token;
 };
 
+const updatedUserData = async (value, user) => {
+    const username = value.username ?? user.username;
+    const password = value.password ? await encryptPassword(value.password) : user.password_hash;
+    const role = value.role ?? user.role;
+
+    return { username, password, role };
+};
+
 const register = async (req, res) => {
     try {
         const { error, value } = userSchema.validate(req.body);
@@ -40,6 +52,30 @@ const register = async (req, res) => {
         return res.status(201).json({ message: "User added", result });
     } catch (error) {
         return res.status(500).json({ error: "Failed to create user" });
+    }
+};
+
+const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error, value } = updateUserSchema.validate(req.body);
+
+        if (error) {
+            return res.status(400).json({ error: error.details[0].message });
+        }
+
+        const currentUser = await getUserById(id);
+
+        if (!currentUser) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const { username, password, role } = await updatedUserData(value, currentUser);
+        const result = await updateUserRepository(username, password, role, id);
+
+        return res.status(200).json({ message: "User edited", result });
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to update user" });
     }
 };
 
@@ -78,4 +114,4 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { register, getUsers, login };
+module.exports = { register, updateUser, getUsers, login };
