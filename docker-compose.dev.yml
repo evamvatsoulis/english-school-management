@@ -6,7 +6,7 @@ services:
     container_name: student_service_container
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     depends_on:
       - postgres
     volumes:
@@ -22,7 +22,7 @@ services:
     container_name: payment_service_container
     restart: unless-stopped
     ports:
-      - "3001:3001"
+      - "127.0.0.1:3001:3001"
     depends_on:
       - postgres
     volumes:
@@ -38,7 +38,7 @@ services:
     container_name: auth_service_container
     restart: unless-stopped
     ports:
-      - "3002:3002"
+      - "127.0.0.1:3002:3002"
     depends_on:
       - postgres
     volumes:
@@ -54,7 +54,7 @@ services:
     container_name: class_service_container
     restart: unless-stopped
     ports:
-      - "3003:3003"
+      - "127.0.0.1:3003:3003"
     depends_on:
       - postgres
     volumes:
@@ -70,7 +70,7 @@ services:
     container_name: notification_service_container
     restart: unless-stopped
     ports:
-      - "3004:3004"
+      - "127.0.0.1:3004:3004"
     volumes:
       - ./notification_service:/app
       - /app/node_modules
@@ -84,7 +84,7 @@ services:
     container_name: export_service_container
     restart: unless-stopped
     ports:
-      - "3005:3005"
+      - "127.0.0.1:3005:3005"
     volumes:
       - ./export_service:/app
       - /app/node_modules
@@ -98,7 +98,7 @@ services:
     container_name: api_gateway_container
     restart: unless-stopped
     ports:
-      - "4000:4000"
+      - "127.0.0.1:4000:4000"
     volumes:
       - ./api_gateway:/app
       - /app/node_modules
@@ -112,7 +112,7 @@ services:
     container_name: frontend_container
     restart: unless-stopped
     ports:
-      - "5173:5173"
+      - "127.0.0.1:5173:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -124,7 +124,7 @@ services:
     container_name: postgres_container
     restart: unless-stopped
     ports:
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
