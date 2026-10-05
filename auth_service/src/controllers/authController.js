@@ -13,6 +13,11 @@ const passwordMatches = async (password, passwordHash) => bcrypt.compare(passwor
 
 const notFound = (result) => result.length === 0;
 
+const userAlreadyExists = async (username) => {
+    const result = await findUserByUsername(username);
+    return result;
+};
+
 const generateToken = (user) => {
     const token = jwt.sign(
         {
@@ -45,6 +50,10 @@ const register = async (req, res) => {
         }
 
         const { username, password, role } = value;
+
+        if (userAlreadyExists(username)) {
+            return res.status(400).json({ error: "This username is already taken" });
+        }
 
         const passwordHash = await encryptPassword(password);
         const result = await registerRepository(username, passwordHash, role);
