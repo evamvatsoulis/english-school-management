@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { register: registerRepository, getUsers: getUsersRepository, findUserByUsername } = require('../repositories/authRepository');
+const { userSchema, updateUserSchema } = require('../schemas/userSchema');
 
 const encryptPassword = async (password) => bcrypt.hash(password, 10);
 
@@ -25,7 +26,13 @@ const generateToken = (user) => {
 
 const register = async (req, res) => {
     try {
-        const { username, password, role } = req.body;
+        const { error, value } = userSchema.validate(req.body);
+
+        if (error) {
+            return res.status(400).json({ error: error.details[0].message });
+        }
+
+        const { username, password, role } = value;
 
         const passwordHash = await encryptPassword(password);
         const result = await registerRepository(username, passwordHash, role);
