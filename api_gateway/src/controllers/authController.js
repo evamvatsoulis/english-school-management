@@ -12,6 +12,26 @@ const getUsers = async (req, res) => {
     }
 };
 
+const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const response = await fetch(
+            `${authServiceUrl}/auth/users/${id}`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(req.body)
+            }
+        );
+        const result = await response.json();
+        return res.status(response.status).json(result);
+    } catch (error) {
+        return res.status(503).json({ error: "Auth service is currently unavailable" });
+    }
+};
+
 const createUser = async (req, res) => {
     try {
         const response = await fetch(
@@ -51,4 +71,4 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { getUsers, createUser, login };
+module.exports = { getUsers, updateUser, createUser, login };
