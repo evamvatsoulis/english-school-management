@@ -79,6 +79,10 @@ const updateUser = async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
+        if (await userAlreadyExists(value.username)) {
+            return res.status(400).json({ error: "This username is already taken" });
+        }
+
         const { username, password, role } = await updatedUserData(value, currentUser);
         const result = await updateUserRepository(username, password, role, id);
 
