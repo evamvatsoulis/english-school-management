@@ -32,7 +32,7 @@ const updateUser = async (req, res) => {
     }
 };
 
-const createUser = async (req, res) => {
+const register = async (req, res) => {
     try {
         const response = await fetch(
             `${authServiceUrl}/auth/register`,
@@ -71,4 +71,4 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { getUsers, updateUser, createUser, login };
+module.exports = { getUsers, updateUser, register, login };
