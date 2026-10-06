@@ -4,7 +4,9 @@ const { register: registerRepository,
     getUsers: getUsersRepository,
     findUserByUsername,
     getUserById,
-    updateUser: updateUserRepository } = require('../repositories/authRepository');
+    updateUser: updateUserRepository,
+    deleteUser: deleteUserRepository
+} = require('../repositories/authRepository');
 const { userSchema, updateUserSchema } = require('../schemas/userSchema');
 
 const encryptPassword = async (password) => bcrypt.hash(password, 10);
@@ -16,6 +18,11 @@ const notFound = (result) => result.length === 0;
 const userAlreadyExists = async (username) => {
     const result = await findUserByUsername(username);
     return result;
+};
+
+const userDoesNotExist = async (id) => {
+    const result = await getUserById(id);
+    return !result;
 };
 
 const generateToken = (user) => {
@@ -127,4 +134,20 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { register, updateUser, getUsers, login };
+const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (await userDoesNotExist(id)) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        await deleteUserRepository(id);
+
+        return res.status(200).json({ message: "User deleted" });
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to delete user" });
+    }
+}
+
+module.exports = { register, updateUser, getUsers, login, deleteUser };
