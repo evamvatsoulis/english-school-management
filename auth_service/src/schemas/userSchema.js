@@ -8,7 +8,7 @@ const userSchema = Joi.object({
 
 const updateUserSchema = Joi.object({
     username: Joi.string().trim().min(2),
-    password: Joi.string().trim().min(8),
+    password: Joi.string().trim().min(8).allow("", null),
     role: Joi.string().trim().min(2)
 }).min(1);
 

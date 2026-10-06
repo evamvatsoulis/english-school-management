@@ -51,7 +51,7 @@ const register = async (req, res) => {
 
         const { username, password, role } = value;
 
-        if (userAlreadyExists(username)) {
+        if (await userAlreadyExists(username)) {
             return res.status(400).json({ error: "This username is already taken" });
         }
 

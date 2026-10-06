@@ -32,3 +32,20 @@ export const getUsers = async () => {
 
     return { status: response.status, ok: response.ok, data };
 };
+
+export const register = async (userData) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_GATEWAY_URL}/auth/register`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(userData)
+    });
+
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
