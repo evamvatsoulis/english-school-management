@@ -1,19 +1,22 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUsers, register, updateUser } from "../services/authService";
+import { getUsers, register, updateUser, deleteUser } from "../services/authService";
 import { userColumns } from "../config/config";
 import PageLayout from "../components/PageLayout/PageLayout";
 import DataTable from '../components/tables/DataTable/DataTable';
 import ModalOverlay from '../components/modal/ModalOverlay';
 import UserForm from "../components/forms/UserForm";
+import Modal from "../components/modal/Modal";
 
 function Users() {
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [showForm, setShowForm] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [loadUsersError, setLoadUsersError] = useState("");
     const [createUserError, setCreateUserError] = useState("");
     const [editUserError, setEditUserError] = useState("");
+    const [removeUserError, setRemoveUserError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -88,6 +91,27 @@ function Users() {
         loadUsers();
     };
 
+    const removeUser = async () => {
+        setRemoveUserError("");
+
+        const response = await deleteUser(selectedUser.id);
+
+        if (response.status === 401) {
+            handleUnauthorizedError();
+            return;
+        }
+
+        if (!response.ok) {
+            setRemoveUserError(response.data.error);
+            console.error(response.data.error);
+            return;
+        }
+
+        console.log(response.data.message);
+        closeDeleteModal();
+        loadUsers();
+    };
+
     const handleSubmit = (userData) => {
         selectedUser ? editUser(selectedUser.id, userData) :
             createUser(userData);
@@ -103,6 +127,16 @@ function Users() {
         setSelectedUser(null);
         setCreateUserError("");
         setEditUserError("");
+    };
+
+    const openDeleteModal = (user) => {
+        setSelectedUser(user);
+        setShowDeleteModal(true);
+    };
+
+    const closeDeleteModal = () => {
+        setSelectedUser(null);
+        setShowDeleteModal(false);
     };
 
     useEffect(() => {
@@ -133,10 +167,20 @@ function Users() {
                     columns={userColumns}
                     data={users}
                     actions={[
-                        { label: "edit", function: openForm }
+                        { label: "edit", function: openForm },
+                        { label: "delete", function: openDeleteModal }
                     ]}
                 />
             }
+
+            {showDeleteModal &&
+                <Modal
+                    message={"Are you sure you want to delete this user ?"}
+                    deleteFunction={removeUser}
+                    closeModal={closeDeleteModal}
+                />
+            }
+
         </PageLayout>
     );
 }
