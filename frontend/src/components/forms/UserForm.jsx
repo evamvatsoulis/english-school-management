@@ -22,7 +22,7 @@ function UserForm({ selectedUser, closeForm, formError, onSubmit }) {
 
                 <div className="form-group">
                     <label htmlFor="password">Password:</label>
-                    <input type="password" id="password" placeholder="Password" value={password} onChange={(event) => setPassword(event.target.value)} />
+                    <input type="password" id="password" placeholder="Leave empty to keep your current password" value={password} onChange={(event) => setPassword(event.target.value)} />
                 </div>
 
                 <div className="form-group">
