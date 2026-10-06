@@ -49,3 +49,20 @@ export const register = async (userData) => {
 
     return { status: response.status, ok: response.ok, data };
 };
+
+export const updateUser = async (userId, userData) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_GATEWAY_URL}/auth/users/${userId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(userData)
+    });
+
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
