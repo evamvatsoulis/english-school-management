@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getStudents, createStudent, updateStudent, deactivateStudent, getStudentsByIds } from "../services/studentService";
 import { getClasses } from '../services/classService';
 import { getEnrollmentsByClass } from '../services/enrollmentService';
+import { exportToPdf } from '../services/exportService';
 import { studentColumns } from '../config/config';
 import StudentForm from '../components/forms/StudentForm';
 import Modal from '../components/modal/Modal';
@@ -25,6 +26,7 @@ function Students() {
     const [loadClassesError, setLoadClassesError] = useState("");
     const [loadEnrollmentsByClassError, setLoadEnrollmentsByClassError] = useState("");
     const [loadStudentsByClassError, setLoadStudentsByClassError] = useState("");
+    const [downloadPdfError, setDownloadPdfError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -180,6 +182,42 @@ function Students() {
         console.log(response.data.message);
     };
 
+    const downloadPdf = async (tableName, columns, tableData) => {
+        setDownloadPdfError("");
+
+        const response = await exportToPdf(tableName, columns, tableData);
+
+        if (response.status === 401) {
+            handleUnauthorizedError();
+            return;
+        }
+
+        if (!response.ok) {
+            console.error(response.data.error);
+            setDownloadPdfError(response.data.error);
+            return;
+        }
+
+        const downloadUrl = URL.createObjectURL(response.data);
+        const link = document.createElement("a");
+
+        link.href = downloadUrl;
+        link.download = `${tableName}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+    };
+
+    const handleExport = () => {
+        const columns = studentColumns;
+        const tableData = students;
+        const tableName = "students_2026-2027";
+
+        downloadPdf(tableName, columns, tableData);
+    };
+
     const handleSubmit = (studentData) => {
         selectedStudent ? editStudent(studentData) :
             addStudent(studentData);
@@ -264,6 +302,7 @@ function Students() {
                         { label: "eye_tracking", function: navigateToStudentDetails },
                         { label: "delete", function: openDeleteModal }
                     ]}
+                    handleExport={handleExport}
                 />
             }
 
