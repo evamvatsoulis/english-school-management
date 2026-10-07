@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, deleteEnrollment } = require('../controllers/enrollmentController');
+const { getEnrollments, createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, deleteEnrollment } = require('../controllers/enrollmentController');
 
+router.get('/', getEnrollments);
 router.post('/', createEnrollment);
 router.get('/students/:studentId', getEnrollmentsByStudent);
 router.get('/class/:classId', getEnrollmentsByClass);

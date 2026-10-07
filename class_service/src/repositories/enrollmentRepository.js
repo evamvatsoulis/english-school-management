@@ -1,5 +1,14 @@
 const { pool } = require('../config/db');
 
+const getEnrollments = async () => {
+    const result = await pool.query(
+        `SELECT e.id, e.student_id, c.name, c.school_year, e.created_at
+        FROM ENROLLMENTS e JOIN classes c on e.class_id = c.id
+        WHERE c.active = TRUE ORDER BY e.created_at DESC`
+    );
+    return result.rows;
+};
+
 const createEnrollment = async (studentId, classId) => {
     const result = await pool.query(
         `INSERT INTO enrollments (student_id, class_id)
@@ -39,4 +48,4 @@ const deleteEnrollment = async (classId, studentId) => await pool.query(
     `DELETE FROM enrollments WHERE class_id = $1 AND student_id = $2`, [classId, studentId]
 );
 
-module.exports = { createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, getEnrollment, deleteEnrollment };
+module.exports = { getEnrollments, createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, getEnrollment, deleteEnrollment };
