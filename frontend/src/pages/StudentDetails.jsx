@@ -200,7 +200,7 @@ function StudentDetails() {
     const link = document.createElement("a");
 
     link.href = downloadUrl;
-    link.download = `${tableName}.pdf`;
+    link.download = `${tableName.toLowerCase().replace(/\s+/g, "-")}.pdf`;
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -211,7 +211,7 @@ function StudentDetails() {
   const handleExport = () => {
     const columns = pdfPaymentsColumns;
     const tableData = payments;
-    const tableName = `${student.first_name}-${student.last_name}-payments-history`;
+    const tableName = `${student.first_name} ${student.last_name} payments history`;
 
     downloadPdf(tableName, columns, tableData);
   };

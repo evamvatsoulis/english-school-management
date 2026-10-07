@@ -202,7 +202,7 @@ function Students() {
         const link = document.createElement("a");
 
         link.href = downloadUrl;
-        link.download = `${tableName}.pdf`;
+        link.download = `${tableName.toLowerCase().replace(/\s+/g, "-")}.pdf`;
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -213,7 +213,7 @@ function Students() {
     const handleExport = () => {
         const columns = studentColumns;
         const tableData = students;
-        const tableName = "students_2026-2027";
+        const tableName = "Students 2026-2027";
 
         downloadPdf(tableName, columns, tableData);
     };
