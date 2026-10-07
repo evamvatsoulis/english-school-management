@@ -30,13 +30,12 @@ export const classColumns = [
 export const healthColumns = [
     { key: "service", label: "Service" },
     { key: "status", label: "Status" },
-    { key: "lastTimeChecked", label: "Last time checked"}
+    { key: "lastTimeChecked", label: "Last time checked" }
 ];
 
 export const userColumns = [
     { key: "username", label: "Username" },
-    { key: "role", label: "role" },
-    { key: "created_at", label: "Created at"}
+    { key: "role", label: "role" }
 ];
 
 export const schoolYearMonths = [
