@@ -1,14 +1,20 @@
+import { getUserFromToken } from '../../../utils/auth';
 import './DataTable.css';
+
+const isAdmin = () => {
+    const user = getUserFromToken();
+    return user?.role === "admin";
+};
 
 const formatDate = (date, key) => {
     if (key === "payment_date") {
         return new Date(date).toLocaleDateString('el-GR');
     } else {
-        return new Date(date).toLocaleString('el-GR');
+        return new Date(date).toLocaleString('en-US');
     }
 }
 
-function DataTable({ columns, data, title, actions, handleExport }) {
+function DataTable({ columns, data, title, actions, handleExport, isHealthPage }) {
     return (
         <div className="table-section">
             <div className="title-section">
@@ -22,6 +28,7 @@ function DataTable({ columns, data, title, actions, handleExport }) {
                         {columns.map((column) => (
                             <th key={column.key}>{column.label}</th>
                         ))}
+                        {isAdmin() && !isHealthPage && <th key="created_at">Created at</th>}
                         {actions && <th>Actions</th>}
                     </tr>
                 </thead>
@@ -36,7 +43,7 @@ function DataTable({ columns, data, title, actions, handleExport }) {
                                         <td key={column.key} className={item[column.key] === "OK" ? "ok" : "down"}>{item[column.key]}</td> :
                                         <td key={column.key}>{item[column.key]}</td>
                             ))}
-
+                            {isAdmin() && !isHealthPage && <td key="created_at">{formatDate(item.created_at, "created_at")}</td>}
                             {actions &&
                                 <td className="actions">
                                     {actions.map((action) => (
