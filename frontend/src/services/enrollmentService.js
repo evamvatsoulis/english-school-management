@@ -1,5 +1,21 @@
 const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL;
 
+const getEnrollments = async () => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_GATEWAY_URL}/enrollments`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    const data = await response.json();
+
+    return { status: response.status, ok: response.ok, data };
+};
+
 const getEnrollmentsByStudent = async (studentId) => {
     const token = localStorage.getItem("token");
 
@@ -69,4 +85,4 @@ const deleteEnrollment = async (classId, studentId) => {
     return { status: response.status, ok: response.ok, data };
 };
 
-export { getEnrollmentsByStudent, getEnrollmentsByClass, createEnrollment, deleteEnrollment };
+export { getEnrollments, getEnrollmentsByStudent, getEnrollmentsByClass, createEnrollment, deleteEnrollment };

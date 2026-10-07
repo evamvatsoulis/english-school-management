@@ -23,6 +23,7 @@ function Sidebar() {
                 {user?.role === "admin" &&
                     <>
                         <NavLink to="/healths">Healths</NavLink>
+                        <NavLink to="/enrollments">Enrollments</NavLink>
                         <NavLink to="/users">Users</NavLink>
                     </>
                 }
