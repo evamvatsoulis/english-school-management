@@ -52,6 +52,7 @@ function Healths() {
                 <DataTable
                     columns={healthColumns}
                     data={healths}
+                    isHealthPage={true}
                 />
             }
         </PageLayout>

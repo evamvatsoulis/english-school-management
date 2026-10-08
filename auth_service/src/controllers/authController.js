@@ -1,12 +1,29 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { register: registerRepository, getUsers: getUsersRepository, findUserByUsername } = require('../repositories/authRepository');
+const { register: registerRepository,
+    getUsers: getUsersRepository,
+    findUserByUsername,
+    getUserById,
+    updateUser: updateUserRepository,
+    deleteUser: deleteUserRepository
+} = require('../repositories/authRepository');
+const { userSchema, updateUserSchema } = require('../schemas/userSchema');
 
 const encryptPassword = async (password) => bcrypt.hash(password, 10);
 
 const passwordMatches = async (password, passwordHash) => bcrypt.compare(password, passwordHash);
 
 const notFound = (result) => result.length === 0;
+
+const userAlreadyExists = async (username) => {
+    const result = await findUserByUsername(username);
+    return result;
+};
+
+const userDoesNotExist = async (id) => {
+    const result = await getUserById(id);
+    return !result;
+};
 
 const generateToken = (user) => {
     const token = jwt.sign(
@@ -23,9 +40,27 @@ const generateToken = (user) => {
     return token;
 };
 
+const updatedUserData = async (value, user) => {
+    const username = value.username ?? user.username;
+    const password = value.password ? await encryptPassword(value.password) : user.password_hash;
+    const role = value.role ?? user.role;
+
+    return { username, password, role };
+};
+
 const register = async (req, res) => {
     try {
-        const { username, password, role } = req.body;
+        const { error, value } = userSchema.validate(req.body);
+
+        if (error) {
+            return res.status(400).json({ error: error.details[0].message });
+        }
+
+        const { username, password, role } = value;
+
+        if (await userAlreadyExists(username)) {
+            return res.status(400).json({ error: "This username is already taken" });
+        }
 
         const passwordHash = await encryptPassword(password);
         const result = await registerRepository(username, passwordHash, role);
@@ -33,6 +68,34 @@ const register = async (req, res) => {
         return res.status(201).json({ message: "User added", result });
     } catch (error) {
         return res.status(500).json({ error: "Failed to create user" });
+    }
+};
+
+const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error, value } = updateUserSchema.validate(req.body);
+
+        if (error) {
+            return res.status(400).json({ error: error.details[0].message });
+        }
+
+        const currentUser = await getUserById(id);
+
+        if (!currentUser) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        if (await userAlreadyExists(value.username)) {
+            return res.status(400).json({ error: "This username is already taken" });
+        }
+
+        const { username, password, role } = await updatedUserData(value, currentUser);
+        const result = await updateUserRepository(username, password, role, id);
+
+        return res.status(200).json({ message: "User edited", result });
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to update user" });
     }
 };
 
@@ -71,4 +134,20 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { register, getUsers, login };
+const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (await userDoesNotExist(id)) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        await deleteUserRepository(id);
+
+        return res.status(200).json({ message: "User deleted" });
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to delete user" });
+    }
+}
+
+module.exports = { register, updateUser, getUsers, login, deleteUser };

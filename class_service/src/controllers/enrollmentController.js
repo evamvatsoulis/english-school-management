@@ -1,6 +1,7 @@
 const { enrollmentSchema } = require('../schemas/enrollmentSchema');
 const { getClassById } = require('../repositories/classRepository');
 const {
+    getEnrollments: getEnrollmentsRepository,
     createEnrollment: createEnrollmentRepository,
     getEnrollmentsByStudent: getEnrollmentsByStudentRepository,
     getEnrollmentsByClass: getEnrollmentsByClassRepository,
@@ -18,6 +19,20 @@ const classDoesNotExist = async (classId) => {
 const alreadyExists = async (studentId, classId) => {
     const result = await getEnrollment(studentId, classId);
     return result;
+};
+
+const getEnrollments = async (req, res) => {
+    try {
+        const result = await getEnrollmentsRepository();
+
+        if (notFound(result)) {
+            return res.status(200).json({ message: "There are no enrollments", result: [] });
+        }
+
+        return res.status(200).json({ message: "Enrollments loaded successfully", result });
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to fetch enrollments" });
+    }
 };
 
 const createEnrollment = async (req, res) => {
@@ -98,4 +113,4 @@ const deleteEnrollment = async (req, res) => {
     return res.status(200).json({ message: "Enrollment deleted" });
 };
 
-module.exports = { createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, deleteEnrollment };
+module.exports = { getEnrollments, createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, deleteEnrollment };

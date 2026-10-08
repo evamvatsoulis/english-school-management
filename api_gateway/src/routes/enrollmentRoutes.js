@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, deleteEnrollment } = require('../controllers/enrollmentController');
+const { getEnrollments, createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, deleteEnrollment } = require('../controllers/enrollmentController');
 const{ authenticateToken } = require('../middleware/authMiddleware');
 
 router.use(authenticateToken);
 
+router.get('/', getEnrollments);
 router.post('/', createEnrollment);
 router.get('/student/:studentId', getEnrollmentsByStudent);
 router.get('/class/:classId', getEnrollmentsByClass);

@@ -2,6 +2,16 @@ const config = require('../config/config');
 
 const classServiceUrl = `http://${config.services.class.host}:${config.services.class.port}`;
 
+const getEnrollments = async (req, res) => {
+    try {
+        const response = await fetch(`${classServiceUrl}/enrollments`, { signal: AbortSignal.timeout(5000) });
+        const result = await response.json();
+        return res.status(response.status).json(result);
+    } catch (err) {
+        return res.status(503).json({ error: "Class service is currently unavailable" });
+    }
+};
+
 const createEnrollment = async (req, res) => {
     try {
         const response = await fetch(
@@ -64,4 +74,4 @@ const deleteEnrollment = async (req, res) => {
     }
 };
 
-module.exports = { createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, deleteEnrollment };
+module.exports = { getEnrollments, createEnrollment, getEnrollmentsByStudent, getEnrollmentsByClass, deleteEnrollment };
