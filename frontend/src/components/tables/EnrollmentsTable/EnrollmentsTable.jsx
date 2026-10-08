@@ -1,8 +1,15 @@
+import { useState } from 'react';
 import '../DataTable/DataTable.css';
 
 const formatDate = (date) => new Date(date).toLocaleString('en-US');
 
 function EnrollmentsTable({ enrollments, students }) {
+    const [sort, setSort] = useState(false);
+
+    const displayedEnrollments = sort ?
+        [...enrollments].sort((a, b) => a.name.localeCompare(b.name)) :
+        enrollments;
+
     return (
         <div className="table-section">
             <table className="data-table">
@@ -10,14 +17,19 @@ function EnrollmentsTable({ enrollments, students }) {
                     <tr>
                         <th>First Name</th>
                         <th>Last Name</th>
-                        <th>Class</th>
+                        <th>
+                            Class
+                            <span className="material-symbols-outlined" style={{ position: "relative", top: "5px" }} onClick={() => setSort((current) => !current)}>
+                                {sort ? "filter_alt" : "filter_alt_off"}
+                            </span>
+                        </th>
                         <th>School Year</th>
                         <th>Created at</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {enrollments.map((enrollment) => {
+                    {displayedEnrollments.map((enrollment) => {
                         const student = students.find((student) => student.id === enrollment.student_id);
                         return (
                             student &&
