@@ -213,7 +213,7 @@ function Students() {
     const handleExport = () => {
         const columns = studentColumns;
         const tableData = students;
-        const tableName = "Students 2026-2027";
+        const tableName = selectedClassId ? classes.find((subject) => subject.id === Number(selectedClassId)).name + ' 2026-2027' : "Students 2026-2027";
 
         downloadPdf(tableName, columns, tableData);
     };
