@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getStudents } from '../services/studentService';
 import { getPayments } from '../services/paymentService';
+import { paymentColumns } from '../config/config';
 import PaymentsTable from '../components/tables/PaymentsTable/PaymentsTable';
+import LatestPayments from '../components/tables/LatestPayments/LatestPayments';
 import PageLayout from '../components/PageLayout/PageLayout';
 
 function Payments({ }) {
@@ -78,6 +80,16 @@ function Payments({ }) {
                     <PaymentsTable
                         students={students}
                         payments={payments}
+                    />
+            }
+
+            {studentsLoading ? <p>Loading students...</p> :
+                paymentsLoading ? <p>Loading payments...</p> :
+                    !loadPaymentsError && !loadStudentsError &&
+                    <LatestPayments
+                        students={students}
+                        payments={payments}
+                        paymentColumns={paymentColumns}
                     />
             }
         </PageLayout>
