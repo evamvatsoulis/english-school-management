@@ -4,7 +4,7 @@ const authServiceUrl = `http://${config.services.auth.host}:${config.services.au
 
 const getUsers = async (req, res) => {
     try {
-        const response = await fetch(`${authServiceUrl}/auth/users`);
+        const response = await fetch(`${authServiceUrl}/auth/users`, { signal: AbortSignal.timeout(5000) });
         const result = await response.json();
         return res.status(response.status).json(result);
     } catch (error) {
@@ -18,6 +18,7 @@ const updateUser = async (req, res) => {
         const response = await fetch(
             `${authServiceUrl}/auth/users/${id}`,
             {
+                signal: AbortSignal.timeout(5000),
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -37,6 +38,7 @@ const register = async (req, res) => {
         const response = await fetch(
             `${authServiceUrl}/auth/register`,
             {
+                signal: AbortSignal.timeout(5000),
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -77,6 +79,7 @@ const deleteUser = async (req, res) => {
         const response = await fetch(
             `${authServiceUrl}/auth/users/${id}`,
             {
+                signal: AbortSignal.timeout(5000),
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
