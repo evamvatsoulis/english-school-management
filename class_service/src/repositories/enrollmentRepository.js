@@ -4,7 +4,7 @@ const getEnrollments = async () => {
     const result = await pool.query(
         `SELECT e.id, e.student_id, c.name, c.school_year, e.created_at
         FROM ENROLLMENTS e JOIN classes c on e.class_id = c.id
-        WHERE c.active = TRUE ORDER BY e.created_at DESC`
+        WHERE c.active = TRUE ORDER BY id`
     );
     return result.rows;
 };

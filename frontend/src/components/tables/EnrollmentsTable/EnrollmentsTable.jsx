@@ -4,11 +4,13 @@ import '../DataTable/DataTable.css';
 const formatDate = (date) => new Date(date).toLocaleString('en-US');
 
 function EnrollmentsTable({ enrollments, students }) {
-    const [sort, setSort] = useState(false);
+    const [classSort, setClassSort] = useState(false);
+    const [createdTimeSort, setCreatedTimeSort] = useState(false);
 
-    const displayedEnrollments = sort ?
-        [...enrollments].sort((a, b) => a.name.localeCompare(b.name)) :
-        enrollments;
+    let displayedEnrollments = enrollments
+
+    displayedEnrollments = classSort && [...displayedEnrollments].sort((a, b) => a.name.localeCompare(b.name)) || displayedEnrollments;
+    displayedEnrollments = createdTimeSort && [...displayedEnrollments].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) || displayedEnrollments;
 
     return (
         <div className="table-section">
@@ -19,12 +21,17 @@ function EnrollmentsTable({ enrollments, students }) {
                         <th>Last Name</th>
                         <th>
                             Class
-                            <span className="material-symbols-outlined" style={{ position: "relative", top: "5px" }} onClick={() => setSort((current) => !current)}>
-                                {sort ? "filter_alt" : "filter_alt_off"}
+                            <span className="material-symbols-outlined" style={{ position: "relative", top: "5px" }} onClick={() => setClassSort((current) => !current)}>
+                                {classSort ? "filter_alt" : "filter_alt_off"}
                             </span>
                         </th>
                         <th>School Year</th>
-                        <th>Created at</th>
+                        <th>
+                            Created at
+                            <span className="material-symbols-outlined" style={{ position: "relative", top: "5px" }} onClick={() => setCreatedTimeSort((current) => !current)}>
+                                {createdTimeSort ? "arrow_downward" : "unfold_more"}
+                            </span>
+                        </th>
                     </tr>
                 </thead>
 
