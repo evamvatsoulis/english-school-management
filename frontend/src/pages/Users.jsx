@@ -18,6 +18,9 @@ function Users() {
     const [editUserError, setEditUserError] = useState("");
     const [removeUserError, setRemoveUserError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [addUserLoading, setAddUserLoading] = useState(false);
+    const [editUserLoading, setEditUserLoading] = useState(false);
+    const [removeUserLoading, setRemoveUserLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -51,6 +54,7 @@ function Users() {
 
     const createUser = async (userData) => {
         setCreateUserError("");
+        setAddUserLoading(true);
 
         const response = await register(userData);
 
@@ -62,16 +66,19 @@ function Users() {
         if (!response.ok) {
             setCreateUserError(response.data.error);
             console.error(response.data.error);
+            setAddUserLoading(false);
             return;
         }
 
         console.log(response.data.message);
+        setAddUserLoading(false);
         closeForm();
         loadUsers();
     };
 
     const editUser = async (userId, userData) => {
         setEditUserError("");
+        setEditUserLoading(true);
 
         const response = await updateUser(userId, userData);
 
@@ -83,16 +90,19 @@ function Users() {
         if (!response.ok) {
             setEditUserError(response.data.error);
             console.error(response.data.error);
+            setEditUserLoading(false);
             return;
         }
 
         console.log(response.data.message);
+        setEditUserLoading(false);
         closeForm();
         loadUsers();
     };
 
     const removeUser = async () => {
         setRemoveUserError("");
+        setRemoveUserLoading(true);
 
         const response = await deleteUser(selectedUser.id);
 
@@ -104,10 +114,12 @@ function Users() {
         if (!response.ok) {
             setRemoveUserError(response.data.error);
             console.error(response.data.error);
+            setRemoveUserLoading(false);
             return;
         }
 
         console.log(response.data.message);
+        setRemoveUserLoading(false);
         closeDeleteModal();
         loadUsers();
     };
@@ -158,6 +170,7 @@ function Users() {
                         closeForm={closeForm}
                         formError={selectedUser ? editUserError : createUserError}
                         onSubmit={handleSubmit}
+                        loading={selectedUser ? editUserLoading : addUserLoading}
                     />
                 </ModalOverlay>}
 
@@ -178,6 +191,7 @@ function Users() {
                     message={"Are you sure you want to delete this user ?"}
                     deleteFunction={removeUser}
                     closeModal={closeDeleteModal}
+                    loading={removeUserLoading}
                 />
             }
 
