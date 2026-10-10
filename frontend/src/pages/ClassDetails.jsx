@@ -28,6 +28,8 @@ function ClassDetails() {
     const [classLoading, setClassLoading] = useState(false);
     const [studentsLoading, setStudentsLoading] = useState(false);
     const [enrollmentsLoading, setEnrollmentsLoading] = useState(false);
+    const [addEnrollmentLoading, setAddEnrollmentLoading] = useState(false);
+    const [removeEnrollmentLoading, setRemoveEnrollmentLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -125,6 +127,7 @@ function ClassDetails() {
 
     const addEnrollment = async (studentId) => {
         setAddEnrollmentError("");
+        setAddEnrollmentLoading(true);
 
         const response = await createEnrollment({ studentId, classId });
 
@@ -135,16 +138,19 @@ function ClassDetails() {
 
         if (!response.ok) {
             setAddEnrollmentError(response.data.error);
+            setAddEnrollmentLoading(false);
             alert(response.data.error);
             console.error(response.data.error);
             return;
         }
 
         loadEnrollmentsByClass();
+        setAddEnrollmentLoading(false);
         console.log(response.data.message);
     };
 
     const removeEnrollment = async () => {
+        setRemoveEnrollmentLoading(true);
         const response = await deleteEnrollment(classId, selectedEnrollment.id);
 
         if (response.status === 401) {
@@ -155,11 +161,13 @@ function ClassDetails() {
         if (!response.ok) {
             setRemoveEnrollmentError(response.data.error);
             console.error(response.data.error);
+            setRemoveEnrollmentLoading(false);
             return;
         }
 
         loadEnrollmentsByClass();
         console.log(response.data.message);
+        setRemoveEnrollmentLoading(false);
         closeDeleteModal();
     };
 
@@ -203,6 +211,7 @@ function ClassDetails() {
                     message={"Are you sure you want to delete this student from this class ?"}
                     deleteFunction={removeEnrollment}
                     closeModal={closeDeleteModal}
+                    loading={removeEnrollmentLoading}
                 />
             }
 
@@ -213,7 +222,9 @@ function ClassDetails() {
                     handleSelect={handleSelect}
                 />
 
-                <button className="add-button" onClick={() => addEnrollment(selectedStudentId)}>Add student to class</button>
+                <button className="add-button" onClick={() => addEnrollment(selectedStudentId)}>
+                    {addEnrollmentLoading ? <span className="material-symbols-outlined spinner">progress_activity</span> : "Add student to class"}
+                </button>
             </div>
         </PageLayout>
     );
