@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../../styles/form.css';
 
-function StudentForm({ selectedStudent, closeForm, formError, onSubmit }) {
+function StudentForm({ selectedStudent, closeForm, formError, onSubmit, loading }) {
     const [firstName, setFirstName] = useState(selectedStudent ? selectedStudent.first_name : "");
     const [lastName, setLastName] = useState(selectedStudent ? selectedStudent.last_name : "");
     const [phone, setPhone] = useState(selectedStudent ? selectedStudent.phone : "");
@@ -40,7 +40,9 @@ function StudentForm({ selectedStudent, closeForm, formError, onSubmit }) {
             <p className="form-error">{formError}</p>
 
             <div className="form-actions">
-                <button className="form-save" type="submit">Save</button>
+                <button className="form-save" type="submit">
+                    {loading ? <span className="material-symbols-outlined spinner">progress_activity</span> : "Save"}
+                </button>
                 <button type="button" className="form-cancel" onClick={closeForm}>Cancel</button>
             </div>
         </form>

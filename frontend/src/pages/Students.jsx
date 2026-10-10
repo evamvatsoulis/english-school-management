@@ -28,6 +28,9 @@ function Students() {
     const [loadStudentsByClassError, setLoadStudentsByClassError] = useState("");
     const [downloadPdfError, setDownloadPdfError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [addStudentLoading, setAddStudentLoading] = useState(false);
+    const [editStudentLoading, setEditStudentLoading] = useState(false);
+    const [deleteStudentLoading, setDeleteStudentLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -62,6 +65,7 @@ function Students() {
 
     const addStudent = async (studentData) => {
         setAddStudentError("");
+        setAddStudentLoading(true);
 
         const response = await createStudent(studentData);
 
@@ -73,10 +77,12 @@ function Students() {
         if (!response.ok) {
             console.error(response.data.error);
             setAddStudentError(response.data.error);
+            setAddStudentLoading(false);
             return;
         }
 
         console.log(response.data.message);
+        setAddStudentLoading(false);
 
         selectedClassId ? loadEnrollmentsByClass(selectedClassId) :
             loadStudents();
@@ -85,6 +91,7 @@ function Students() {
 
     const editStudent = async (studentData) => {
         setEditStudentError("");
+        setEditStudentLoading(true);
 
         const response = await updateStudent(selectedStudent.id, studentData);
 
@@ -96,16 +103,19 @@ function Students() {
         if (!response.ok) {
             console.error(response.data.error);
             setEditStudentError(response.data.error);
+            setEditStudentLoading(false);
             return;
         }
 
         console.log(response.data.message);
+        setEditStudentLoading(false);
 
         loadStudents();
         closeForm();
     };
 
     const deleteStudent = async () => {
+        setDeleteStudentLoading(true);
         const response = await deactivateStudent(selectedStudent.id);
 
         if (response.status === 401) {
@@ -116,10 +126,12 @@ function Students() {
         if (!response.ok) {
             console.error(response.data.error);
             setDeactivateStudentError(response.data.error);
+            setDeleteStudentLoading(false);
             return;
         }
 
         console.log(response.data.message);
+        setDeleteStudentLoading(false);
         closeDeleteModal();
         selectedClassId ? loadEnrollmentsByClass(selectedClassId) :
             loadStudents();
@@ -288,6 +300,7 @@ function Students() {
                         closeForm={closeForm}
                         formError={selectedStudent ? editStudentError : addStudentError}
                         onSubmit={handleSubmit}
+                        loading={selectedStudent ? editStudentLoading : addStudentLoading}
                     />
                 </ModalOverlay>
             )}
@@ -311,6 +324,7 @@ function Students() {
                     message={"Are you sure you want to delete this student ?"}
                     deleteFunction={deleteStudent}
                     closeModal={closeDeleteModal}
+                    loading={deleteStudentLoading}
                 />
             )}
         </PageLayout>
