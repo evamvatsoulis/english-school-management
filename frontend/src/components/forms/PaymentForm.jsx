@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../../styles/form.css';
 
-function PaymentForm({ studentId, selectedMonth, selectedPayment, closeForm, formError, onSubmit }) {
+function PaymentForm({ studentId, selectedMonth, selectedPayment, closeForm, formError, onSubmit, loading }) {
     const formatDate = (date) => new Date(date).toLocaleDateString('en-CA');
 
     const [paymentMonth, setPaymentMonth] = useState(selectedPayment ? selectedPayment.payment_month : selectedMonth.month);
@@ -62,7 +62,9 @@ function PaymentForm({ studentId, selectedMonth, selectedPayment, closeForm, for
             <p className="form-error">{formError}</p>
 
             <div className="form-actions">
-                <button className="form-save" type="submit">Save</button>
+                <button className="form-save" type="submit">
+                    {loading ? <span className="material-symbols-outlined spinner">progress_activity</span> : "Save"}
+                </button>
                 <button type="button" className="form-cancel" onClick={closeForm}>Cancel</button>
             </div>
         </form>

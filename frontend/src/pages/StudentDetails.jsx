@@ -32,6 +32,9 @@ function StudentDetails() {
   const [studentLoading, setStudentLoading] = useState(false);
   const [paymentsLoading, setPaymentsLoading] = useState(false);
   const [enrollmentLoading, setEnrollmentLoading] = useState(false);
+  const [addPaymentLoading, setAddPaymentLoading] = useState(false);
+  const [editPaymentLoading, setEditPaymentLoading] = useState(false);
+  const [removePaymentLoading, setRemovePaymentLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -88,6 +91,8 @@ function StudentDetails() {
 
   const addPayment = async (paymentData, sendEmail) => {
     setAddPaymentError("");
+    setAddPaymentLoading(true);
+
     let response;
     const notificationData = { email: student.email };
 
@@ -105,10 +110,12 @@ function StudentDetails() {
     if (!response.ok) {
       setAddPaymentError(response.data.error);
       console.error(response.data.error);
+      setAddPaymentLoading(false);
       return;
     }
 
     console.log(response.data.message);
+    setAddPaymentLoading(false);
 
     setTimeout(() => {
       alert(response.data.emailStatus);
@@ -120,6 +127,8 @@ function StudentDetails() {
 
   const editPayment = async (paymentData) => {
     setEditPaymentError("");
+    setEditPaymentLoading(true);
+
     const response = await updatePayment(selectedPayment.id, paymentData);
 
     if (response.status === 401) {
@@ -130,15 +139,18 @@ function StudentDetails() {
     if (!response.ok) {
       setEditPaymentError(response.data.error);
       console.error(response.data.error);
+      setEditPaymentLoading(false);
       return;
     }
 
     console.log(response.data.message);
+    setEditPaymentLoading(false);
     loadPaymentsByStudentId(id);
     closeForm();
   };
 
   const removePayment = async () => {
+    setRemovePaymentLoading(true);
     const response = await deletePayment(selectedPayment.id);
 
     if (response.status === 401) {
@@ -149,10 +161,12 @@ function StudentDetails() {
     if (!response.ok) {
       console.error(response.data.error);
       setDeletePaymentError(response.data.error);
+      setRemovePaymentLoading(false);
       return;
     }
 
     console.log(response.data.message);
+    setRemovePaymentLoading(false);
     closeDeleteModal();
     loadPaymentsByStudentId();
   };
@@ -296,6 +310,7 @@ function StudentDetails() {
             closeForm={closeForm}
             onSubmit={handleSubmit}
             formError={selectedPayment ? editPaymentError : addPaymentError}
+            loading={selectedPayment ? editPaymentLoading : addPaymentLoading}
           />
         </ModalOverlay>
       }
@@ -305,6 +320,7 @@ function StudentDetails() {
           message={"Are you sure you want to delete this payment ?"}
           deleteFunction={removePayment}
           closeModal={closeDeleteModal}
+          loading={removePaymentLoading}
         />
       }
     </PageLayout>
