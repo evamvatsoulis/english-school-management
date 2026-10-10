@@ -18,6 +18,9 @@ function Classes() {
     const [editClassError, setEditClassError] = useState("");
     const [deleteClassError, setDeleteClassError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [addClassLoading, setAddClassLoading] = useState(false);
+    const [editClassLoading, setEditClassLoading] = useState(false);
+    const [deleteClassLoading, setDeleteClassLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -52,6 +55,7 @@ function Classes() {
 
     const addClass = async (classData) => {
         setAddClassError("");
+        setAddClassLoading(true);
 
         const response = await createClass(classData);
 
@@ -63,16 +67,19 @@ function Classes() {
         if (!response.ok) {
             console.error(response.data.error);
             setAddClassError(response.data.error);
+            setAddClassLoading(false);
             return;
         }
 
         loadClasses();
         closeForm();
         console.log(response.data.message);
+        setAddClassLoading(false);
     };
 
     const editClass = async (classData) => {
         setEditClassError("");
+        setEditClassLoading(true);
 
         const response = await updateClass(selectedClass.id, classData);
 
@@ -84,15 +91,18 @@ function Classes() {
         if (!response.ok) {
             console.error(response.data.error);
             setEditClassError(response.data.error);
+            setEditClassLoading(false);
             return;
         }
 
         loadClasses();
         closeForm();
         console.log(response.data.message);
+        setEditClassLoading(false);
     };
 
     const deleteClass = async () => {
+        setDeleteClassLoading(true);
         const response = await deactivateClass(selectedClass.id);
 
         if (response.status === 401) {
@@ -102,12 +112,14 @@ function Classes() {
         if (!response.ok) {
             console.error(response.data.error);
             setDeleteClassError(response.data.error);
+            setDeleteClassLoading(false);
             return;
         }
 
         console.log(response.data.message);
         loadClasses();
         setShowDeleteModal(false);
+        setDeleteClassLoading(false);
     };
 
     const openCreateForm = () => {
@@ -176,6 +188,7 @@ function Classes() {
                         closeForm={closeForm}
                         onSubmit={handleSubmit}
                         formError={selectedClass ? editClassError : addClassError}
+                        loading={selectedClass ? editClassLoading : addClassLoading}
                     />
                 </ModalOverlay>
             )}
@@ -185,6 +198,7 @@ function Classes() {
                     message={"Are you sure you want to delete this class ?"}
                     deleteFunction={deleteClass}
                     closeModal={closeDeleteModal}
+                    loading={deleteClassLoading}
                 />
             )}
         </PageLayout>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../../styles/form.css';
 
-function ClassForm({ selectedClass, closeForm, onSubmit, formError }) {
+function ClassForm({ selectedClass, closeForm, onSubmit, formError, loading }) {
     const [name, setName] = useState(selectedClass ? selectedClass.name : "");
     const [schoolYear, setSchoolYear] = useState(selectedClass ? selectedClass.school_year : "");
 
@@ -27,7 +27,9 @@ function ClassForm({ selectedClass, closeForm, onSubmit, formError }) {
             <p className="form-error">{formError}</p>
 
             <div className="form-actions">
-                <button className="form-save" type="submit">Save</button>
+                <button className="form-save" type="submit">
+                    {loading ? <span className="material-symbols-outlined spinner">progress_activity</span> : "Save"}
+                </button>
                 <button type="button" className="form-cancel" onClick={closeForm}>Cancel</button>
             </div>
         </form>
