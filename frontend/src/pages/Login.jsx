@@ -7,6 +7,7 @@ function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -14,14 +15,17 @@ function Login() {
         event.preventDefault();
 
         try {
+            setLoading(true);
             const response = await login(username, password);
 
             if (!response.ok) {
                 console.error(response.data.error);
                 setError(response.data.error);
+                setLoading(false);
             } else {
                 localStorage.setItem("token", response.data.token);
                 console.log(response.data.message);
+                setLoading(false);
                 navigate("/students");
             }
         } catch (error) {
@@ -37,6 +41,7 @@ function Login() {
             setPassword={setPassword}
             error={error}
             handleSubmit={handleSubmit}
+            loading={loading}
         />
     );
 }

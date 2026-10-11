@@ -1,7 +1,7 @@
 import './LoginCard.css';
 import '../../styles/form.css';
 
-function LoginCard({ username, password, setUsername, setPassword, error, handleSubmit }) {
+function LoginCard({ username, password, setUsername, setPassword, error, handleSubmit, loading }) {
     return (
         <div className="login-page">
             <div className="login-card">
@@ -31,7 +31,9 @@ function LoginCard({ username, password, setUsername, setPassword, error, handle
                     </div>
                     {error && <p className="login-error">{error}</p>}
 
-                    <button className="login-button" type="submit">Login</button>
+                    <button className="login-button" type="submit">
+                        {loading ? <span className="material-symbols-outlined spinner">progress_activity</span> : "Login"}
+                    </button>
                 </form>
             </div>
         </div>
