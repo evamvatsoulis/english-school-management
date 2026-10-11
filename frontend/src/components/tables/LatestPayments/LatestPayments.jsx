@@ -13,13 +13,15 @@ const isAdmin = () => {
 };
 
 function LatestPayments({ payments, students, paymentColumns }) {
-    const [sort, setSort] = useState(false);
+    const [monthSort, setMonthSort] = useState("");
 
     const sortedPayments = [...payments].sort((a, b) => new Date(b.payment_date) - new Date(a.payment_date));
 
-    const displayedPayments = sort ?
+    const displayedPayments = monthSort === "asc" ?
         [...sortedPayments].sort((a, b) => a.payment_year - b.payment_year || a.payment_month - b.payment_month) :
-        sortedPayments;
+        monthSort === "desc" ?
+            [...sortedPayments].sort((a, b) => b.payment_year - a.payment_year || b.payment_month - a.payment_month) :
+            sortedPayments;
 
     return (
         <div className="table-section">
@@ -35,8 +37,13 @@ function LatestPayments({ payments, students, paymentColumns }) {
                             column.key === "payment_month" ?
                                 <th key={column.key}>
                                     {column.label}
-                                    <span className="material-symbols-outlined" style={{ position: "relative", top: "5px" }} onClick={() => setSort((current) => !current)}>
-                                        {sort ? "filter_alt" : "filter_alt_off"}
+                                    <span className="material-symbols-outlined" style={{ position: "relative", top: "5px" }}
+                                        onClick={() => setMonthSort((current) => (
+                                            current === "" ? "asc" :
+                                                current === "asc" ? "desc" : ""
+                                        ))}>
+                                        {monthSort === "asc" ? "arrow_upward" :
+                                            monthSort === "desc" ? "arrow_downward" : "unfold_more"}
                                     </span>
                                 </th> :
                                 <th key={column.key}>{column.label}</th>
