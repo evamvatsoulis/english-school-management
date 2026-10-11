@@ -226,7 +226,7 @@ function StudentDetails() {
   const handleExport = () => {
     const columns = pdfPaymentsColumns;
     const tableData = payments;
-    const tableName = `${student.first_name} ${student.last_name} payments history`;
+    const tableName = `${student?.first_name} ${student?.last_name} payments history`;
 
     downloadPdf(tableName, columns, tableData);
   };
