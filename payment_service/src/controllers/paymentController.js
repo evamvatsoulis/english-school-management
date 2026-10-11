@@ -23,6 +23,10 @@ const doesNotExist = async (id) => {
 
 const sendEmail = async (emailData) => {
     try {
+        if (emailData.to === "student-service-error") {
+            return { ok: false, error: "Failed to sent email" }
+        }
+
         const response = await fetch(
             `${notificationServiceUrl}/notification/email`,
             {

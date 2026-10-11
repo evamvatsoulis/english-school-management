@@ -94,7 +94,7 @@ function StudentDetails() {
     setAddPaymentLoading(true);
 
     let response;
-    const notificationData = { email: student.email };
+    const notificationData = { email: student ? student.email : "student-service-error" };
 
     if (sendEmail) {
       response = await createPayment(paymentData, notificationData);
