@@ -5,12 +5,16 @@ const formatDate = (date) => new Date(date).toLocaleString('en-US');
 
 function EnrollmentsTable({ enrollments, students }) {
     const [classSort, setClassSort] = useState(false);
-    const [createdTimeSort, setCreatedTimeSort] = useState(false);
+    const [createdTimeSort, setCreatedTimeSort] = useState("asc");
 
-    let displayedEnrollments = enrollments
+    let displayedEnrollments = enrollments;
+
+
+    displayedEnrollments = createdTimeSort === "asc" ?
+        [...displayedEnrollments].sort((a, b) => new Date(a.created_at) - new Date(b.created_at)) :
+        [...displayedEnrollments].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
     displayedEnrollments = classSort && [...displayedEnrollments].sort((a, b) => a.name.localeCompare(b.name)) || displayedEnrollments;
-    displayedEnrollments = createdTimeSort && [...displayedEnrollments].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) || displayedEnrollments;
 
     return (
         <div className="table-section">
@@ -28,8 +32,9 @@ function EnrollmentsTable({ enrollments, students }) {
                         <th>School Year</th>
                         <th>
                             Created at
-                            <span className="material-symbols-outlined" style={{ position: "relative", top: "5px" }} onClick={() => setCreatedTimeSort((current) => !current)}>
-                                {createdTimeSort ? "arrow_downward" : "unfold_more"}
+                            <span className="material-symbols-outlined" style={{ position: "relative", top: "5px" }}
+                                onClick={() => setCreatedTimeSort((current) => (current === "asc" ? "desc" : "asc"))}>
+                                {createdTimeSort === "asc" ? "arrow_upward" : "arrow_downward"}
                             </span>
                         </th>
                     </tr>
