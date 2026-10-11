@@ -206,6 +206,7 @@ function StudentDetails() {
 
     if (!response.ok) {
       console.error(response.data.error);
+      alert(response.data.error);
       setDownloadPdfError(response.data.error);
       return;
     }
