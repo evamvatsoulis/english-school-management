@@ -1,6 +1,10 @@
+const path = require('path');
+const fs = require('fs');
 const pdfMake = require('pdfmake/build/pdfmake');
 const pdfFonts = require('pdfmake/build/vfs_fonts');
-const { logoBase64 } = require('../utils/base64');
+
+const logoPath = path.resolve(__dirname, '../../assets/logo.jpg');
+const logoBase64 = `data:image/jpeg;base64,${fs.readFileSync(logoPath).toString('base64')}`;
 
 pdfMake.addVirtualFileSystem(pdfFonts);
 
@@ -80,7 +84,7 @@ const exportToPdf = async (req, res) => {
 
         return res.status(200).send(buffer);
     } catch (err) {
-        return res.status(500).json({ error: "Failed to export to pdf" });
+        return res.status(500).json({ error: err.message });
     }
 };
 
