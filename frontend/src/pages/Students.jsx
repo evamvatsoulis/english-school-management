@@ -110,7 +110,8 @@ function Students() {
         console.log(response.data.message);
         setEditStudentLoading(false);
 
-        loadStudents();
+        selectedClassId ? loadEnrollmentsByClass(selectedClassId) :
+            loadStudents();
         closeForm();
     };
 
@@ -157,7 +158,10 @@ function Students() {
     };
 
     const loadEnrollmentsByClass = async (classId) => {
+        setLoadEnrollmentsByClassError("");
+        setLoadStudentsByClassError("");
         setStudents([]);
+        setLoading(true);
         const response = await getEnrollmentsByClass(classId);
 
         if (response.status === 401) {
@@ -168,14 +172,17 @@ function Students() {
         if (!response.ok) {
             console.error(response.data.error);
             setLoadEnrollmentsByClassError(response.data.error);
+            setLoading(false);
             return;
         }
 
-        loadStudentsByClass(response.data.result);
         console.log(response.data.message);
+        await loadStudentsByClass(response.data.result);
+        setLoading(false);
     };
 
     const loadStudentsByClass = async (enrollments) => {
+        setLoading(true);
         const studentsIds = enrollments.map((enrollment) => enrollment.student_id);
         const response = await getStudentsByIds(studentsIds);
 
@@ -187,11 +194,13 @@ function Students() {
         if (!response.ok) {
             setLoadStudentsByClassError(response.data.error);
             console.error(response.data.error);
+            setLoading(false);
             return;
         }
 
         setStudents(response.data.result);
         console.log(response.data.message);
+        setLoading(false);
     };
 
     const downloadPdf = async (tableName, columns, tableData) => {
@@ -307,7 +316,7 @@ function Students() {
             )}
 
             {loading ? <p>Loading...</p> :
-                !loadStudentsError &&
+                !(selectedClassId ? loadEnrollmentsByClassError || loadStudentsByClassError : loadStudentsError) &&
                 <DataTable
                     columns={studentColumns}
                     data={students}
