@@ -1,9 +1,9 @@
-const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL;
+import { apiGatewayUrl } from "../config/config";
 
 export const exportToPdf = async (tableName, columns, tableData) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${API_GATEWAY_URL}/export/pdf`, {
+    const response = await fetch(`${apiGatewayUrl}/export/pdf`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

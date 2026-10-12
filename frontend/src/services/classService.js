@@ -1,9 +1,9 @@
-const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL;
+import { apiGatewayUrl } from "../config/config";
 
 const getClasses = async () => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${API_GATEWAY_URL}/classes`,
+    const response = await fetch(`${apiGatewayUrl}/classes`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -19,7 +19,7 @@ const getClasses = async () => {
 const getClassById = async (classId) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${API_GATEWAY_URL}/classes/${classId}`,
+    const response = await fetch(`${apiGatewayUrl}/classes/${classId}`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -36,7 +36,7 @@ const createClass = async (classData) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${API_GATEWAY_URL}/classes`,
+        `${apiGatewayUrl}/classes`,
         {
             method: "POST",
             headers: {
@@ -55,7 +55,7 @@ const updateClass = async (classId, classData) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${API_GATEWAY_URL}/classes/${classId}`,
+        `${apiGatewayUrl}/classes/${classId}`,
         {
             method: "PATCH",
             headers: {
@@ -74,7 +74,7 @@ const deactivateClass = async (classId) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${API_GATEWAY_URL}/classes/${classId}/deactivate`,
+        `${apiGatewayUrl}/classes/${classId}/deactivate`,
         {
             method: "PATCH",
             headers: {

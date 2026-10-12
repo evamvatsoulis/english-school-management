@@ -1,9 +1,9 @@
-const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL;
+import { apiGatewayUrl } from "../config/config";
 
 const getStudents = async () => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${API_GATEWAY_URL}/students`,
+    const response = await fetch(`${apiGatewayUrl}/students`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -19,7 +19,7 @@ const getStudents = async () => {
 const getStudentById = async (studentId) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${API_GATEWAY_URL}/students/${studentId}`,
+    const response = await fetch(`${apiGatewayUrl}/students/${studentId}`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -36,7 +36,7 @@ const getStudentsByIds = async (studentsIds) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${API_GATEWAY_URL}/students/batch`,
+        `${apiGatewayUrl}/students/batch`,
         {
             method: "POST",
             headers: {
@@ -55,7 +55,7 @@ const createStudent = async (studentData) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${API_GATEWAY_URL}/students`,
+        `${apiGatewayUrl}/students`,
         {
             method: "POST",
             headers: {
@@ -74,7 +74,7 @@ const updateStudent = async (studentId, studentData) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${API_GATEWAY_URL}/students/${studentId}`,
+        `${apiGatewayUrl}/students/${studentId}`,
         {
             method: "PATCH",
             headers: {
@@ -93,7 +93,7 @@ const deactivateStudent = async (studentId) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${API_GATEWAY_URL}/students/${studentId}/deactivate`,
+        `${apiGatewayUrl}/students/${studentId}/deactivate`,
         {
             method: "PATCH",
             headers: {

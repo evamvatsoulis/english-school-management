@@ -1,9 +1,9 @@
-const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL;
+import { apiGatewayUrl } from "../config/config";
 
 const getPaymentsByStudentId = async (studentId) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${API_GATEWAY_URL}/payments/students/${studentId}`,
+    const response = await fetch(`${apiGatewayUrl}/payments/students/${studentId}`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -20,7 +20,7 @@ const createPayment = async (paymentData, notificationData) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${API_GATEWAY_URL}/payments`,
+        `${apiGatewayUrl}/payments`,
         {
             method: "POST",
             headers: {
@@ -39,7 +39,7 @@ const updatePayment = async (paymentId, paymentData) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${API_GATEWAY_URL}/payments/${paymentId}`,
+        `${apiGatewayUrl}/payments/${paymentId}`,
         {
             method: "PATCH",
             headers: {
@@ -58,7 +58,7 @@ const deletePayment = async (paymentId) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${API_GATEWAY_URL}/payments/${paymentId}`,
+        `${apiGatewayUrl}/payments/${paymentId}`,
         {
             method: "DELETE",
             headers: {
@@ -75,7 +75,7 @@ const deletePayment = async (paymentId) => {
 const getPayments = async () => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${API_GATEWAY_URL}/payments`,
+    const response = await fetch(`${apiGatewayUrl}/payments`,
         {
             headers: {
                 Authorization: `Bearer ${token}`

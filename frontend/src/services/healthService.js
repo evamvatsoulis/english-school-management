@@ -1,9 +1,9 @@
-const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL;
+import { apiGatewayUrl } from "../config/config";
 
 const getHealths = async () => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${API_GATEWAY_URL}/health`,
+    const response = await fetch(`${apiGatewayUrl}/health`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
