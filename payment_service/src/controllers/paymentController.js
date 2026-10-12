@@ -1,3 +1,5 @@
+const path = require("path");
+const fs = require("fs");
 const config = require('../config/config');
 const { emailBody } = require('../utils/emailBody');
 const { paymentSchema, updatePaymentSchema } = require('../schemas/paymentSchema');
@@ -24,7 +26,7 @@ const doesNotExist = async (id) => {
 const sendEmail = async (emailData) => {
     try {
         if (emailData.to === "student-service-error") {
-            return { ok: false, error: "Failed to sent email" }
+            return { ok: false, error: "Failed to send email" }
         }
 
         const response = await fetch(
@@ -92,14 +94,26 @@ const createPayment = async (req, res) => {
         const { studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes } = value;
         const result = await createPaymentRepository(studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes);
 
+        const logoPath = path.resolve(__dirname, '../../assets/logo.jpg');
+        const logoBase64 = fs.readFileSync(logoPath).toString("base64");
+
         if (req.body.notificationData) {
             const email = req.body.notificationData.email;
-            const htmlBody = `${emailBody(paymentMonth, paymentYear, formatDate(paymentDate))}`;
+            const htmlBody = `${emailBody(paymentMonth, paymentYear, formatDate(paymentDate), "cid:mylogo")}`;
 
             const emailData = {
                 to: email,
                 subject: "Payment Confirmation",
-                html: htmlBody
+                html: htmlBody,
+                attachments: [
+                    {
+                        filename: "logo.jpg",
+                        content: logoBase64,
+                        encoding: "base64",
+                        cid: "mylogo",
+                        contentDisposition: "inline"
+                    }
+                ]
             };
 
             const emailResponse = await sendEmail(emailData);
