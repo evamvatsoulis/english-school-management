@@ -22,9 +22,9 @@ function Sidebar() {
                 <NavLink to="/payments">Payments</NavLink>
                 {user?.role === "admin" &&
                     <>
-                        <NavLink to="/healths">Healths</NavLink>
                         <NavLink to="/enrollments">Enrollments</NavLink>
                         <NavLink to="/users">Users</NavLink>
+                        <NavLink to="/healths">Healths</NavLink>
                     </>
                 }
             </nav>
