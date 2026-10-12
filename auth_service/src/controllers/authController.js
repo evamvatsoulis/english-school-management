@@ -15,9 +15,12 @@ const passwordMatches = async (password, passwordHash) => bcrypt.compare(passwor
 
 const notFound = (result) => result.length === 0;
 
-const userAlreadyExists = async (username) => {
-    const result = await findUserByUsername(username);
-    return result;
+const userAlreadyExists = async (currentUsername, username) => {
+    if (currentUsername !== username) {
+        const result = await findUserByUsername(username);
+        return result;
+    }
+    return false;
 };
 
 const userDoesNotExist = async (id) => {
@@ -58,7 +61,7 @@ const register = async (req, res) => {
 
         const { username, password, role } = value;
 
-        if (await userAlreadyExists(username)) {
+        if (await userAlreadyExists(null, username)) {
             return res.status(400).json({ error: "This username is already taken" });
         }
 
@@ -86,7 +89,7 @@ const updateUser = async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        if (await userAlreadyExists(value.username)) {
+        if (await userAlreadyExists(currentUser.username, value.username)) {
             return res.status(400).json({ error: "This username is already taken" });
         }
 
