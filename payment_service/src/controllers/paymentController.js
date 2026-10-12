@@ -12,7 +12,7 @@ const {
     deletePayment: deletePaymentRepository
 } = require('../repositories/paymentRepository');
 
-const formatDate = (date) => new Date(date).toLocaleDateString('el-GR');
+const formatDate = (date) => new Date(date).toLocaleDateString('en-GB');
 
 const notificationServiceUrl = `http://${config.notificationServiceHost}:${config.notificationServicePort}`;
 

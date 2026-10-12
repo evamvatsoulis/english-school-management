@@ -8,7 +8,7 @@ const logoBase64 = `data:image/jpeg;base64,${fs.readFileSync(logoPath).toString(
 
 pdfMake.addVirtualFileSystem(pdfFonts);
 
-const formatDate = (date) => new Date(date).toLocaleDateString('el-GR');
+const formatDate = (date) => new Date(date).toLocaleDateString('en-GB');
 
 const createTableBody = (columns, data) => {
     const tableColumns = columns.map((column) => column.label);

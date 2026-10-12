@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../DataTable/DataTable.css';
 
-const formatDate = (date) => new Date(date).toLocaleString('en-US');
+const formatDate = (date) => new Date(date).toLocaleString('en-GB');
 
 function EnrollmentsTable({ enrollments, students }) {
     const [classSort, setClassSort] = useState(false);

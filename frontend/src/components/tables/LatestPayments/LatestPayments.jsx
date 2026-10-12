@@ -4,8 +4,8 @@ import '../DataTable/DataTable.css';
 
 const formatDate = (date, key) =>
     key === "payment_date" ?
-        new Date(date).toLocaleDateString('el-GR') :
-        new Date(date).toLocaleString('en-US');
+        new Date(date).toLocaleDateString('en-GB') :
+        new Date(date).toLocaleString('en-GB');
 
 const isAdmin = () => {
     const user = getUserFromToken();

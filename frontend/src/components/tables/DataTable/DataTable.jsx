@@ -9,9 +9,9 @@ const isAdmin = () => {
 
 const formatDate = (date, key) => {
     if (key === "payment_date") {
-        return new Date(date).toLocaleDateString('el-GR');
+        return new Date(date).toLocaleDateString('en-GB');
     } else {
-        return new Date(date).toLocaleString('en-US');
+        return new Date(date).toLocaleString('en-GB');
     }
 };
 
