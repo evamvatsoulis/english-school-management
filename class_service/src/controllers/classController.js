@@ -16,9 +16,12 @@ const doesNotExist = async (id) => {
     return !result;
 };
 
-const alreadyExists = async (name, schoolYear) => {
-    const result = await getClassByNameAndYear(name, schoolYear);
-    return result;
+const alreadyExists = async (currentName, currentSchoolYear, name, schoolYear) => {
+    if (currentName !== name && currentSchoolYear !== schoolYear) {
+        const result = await getClassByNameAndYear(name, schoolYear);
+        return result;
+    }
+    return false;
 };
 
 const updateClassData = (value, className) => {
@@ -38,7 +41,7 @@ const createClass = async (req, res) => {
 
         const { name, schoolYear } = value;
 
-        if (await alreadyExists(name, schoolYear)) {
+        if (await alreadyExists(null, null, name, schoolYear)) {
             return res.status(400).json({ error: "Class already exists" });
         }
 
@@ -91,6 +94,10 @@ const updateClass = async (req, res) => {
 
         if (!currentClass) {
             return res.status(404).json({ error: "Class not found" });
+        }
+
+        if (await alreadyExists(currentClass.name, currentClass.schoolYear, value.name, value.schoolYear)) {
+            return res.status(400).json({ error: "Class already exists" });
         }
 
         const { name, schoolYear } = updateClassData(value, currentClass);
