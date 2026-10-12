@@ -31,7 +31,7 @@ function LoginCard({ username, password, setUsername, setPassword, error, handle
                     </div>
                     {error && <p className="login-error">{error}</p>}
 
-                    <button className="login-button" type="submit">
+                    <button className="login-button" type="submit" disabled={loading}>
                         {loading ? <span className="material-symbols-outlined spinner">progress_activity</span> : "Login"}
                     </button>
                 </form>

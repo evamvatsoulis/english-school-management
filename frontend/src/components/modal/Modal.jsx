@@ -8,7 +8,7 @@ function Modal({ message, deleteFunction, closeModal, loading }) {
 
             {deleteFunction &&
                 <div className="delete-actions">
-                    <button className="yes-button" onClick={deleteFunction}>
+                    <button className="yes-button" onClick={deleteFunction} disabled={loading}>
                         {loading ? <span className="material-symbols-outlined spinner">progress_activity</span> : "Yes"}
                     </button>
                     <button className="no-button" onClick={closeModal}>No</button>

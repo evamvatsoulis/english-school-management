@@ -71,10 +71,10 @@ function Classes() {
             return;
         }
 
-        loadClasses();
-        closeForm();
         console.log(response.data.message);
         setAddClassLoading(false);
+        closeForm();
+        loadClasses();
     };
 
     const editClass = async (classData) => {
@@ -95,10 +95,10 @@ function Classes() {
             return;
         }
 
-        loadClasses();
-        closeForm();
         console.log(response.data.message);
         setEditClassLoading(false);
+        closeForm();
+        loadClasses();
     };
 
     const deleteClass = async () => {
@@ -117,9 +117,9 @@ function Classes() {
         }
 
         console.log(response.data.message);
-        loadClasses();
-        setShowDeleteModal(false);
         setDeleteClassLoading(false);
+        setShowDeleteModal(false);
+        loadClasses();
     };
 
     const openCreateForm = () => {

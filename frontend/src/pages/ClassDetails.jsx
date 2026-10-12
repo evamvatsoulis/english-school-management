@@ -144,8 +144,8 @@ function ClassDetails() {
             return;
         }
 
-        loadEnrollmentsByClass();
         setAddEnrollmentLoading(false);
+        loadEnrollmentsByClass();
         console.log(response.data.message);
     };
 
@@ -165,10 +165,10 @@ function ClassDetails() {
             return;
         }
 
-        loadEnrollmentsByClass();
         console.log(response.data.message);
         setRemoveEnrollmentLoading(false);
         closeDeleteModal();
+        loadEnrollmentsByClass();
     };
 
     const openDeleteModal = (enrollment) => {
@@ -222,7 +222,7 @@ function ClassDetails() {
                     handleSelect={handleSelect}
                 />
 
-                <button className="add-button" onClick={() => addEnrollment(selectedStudentId)}>
+                <button className="add-button" onClick={() => addEnrollment(selectedStudentId)} disabled={addEnrollmentLoading}>
                     {addEnrollmentLoading ? <span className="material-symbols-outlined spinner">progress_activity</span> : "Add student to class"}
                 </button>
             </div>

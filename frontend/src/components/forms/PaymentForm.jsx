@@ -14,6 +14,7 @@ function PaymentForm({ studentId, selectedMonth, selectedPayment, closeForm, for
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (loading) return;
         onSubmit({ studentId, amount, paymentMonth, paymentYear, paymentDate, paymentMethod, notes }, sendEmail);
     };
 
@@ -62,7 +63,7 @@ function PaymentForm({ studentId, selectedMonth, selectedPayment, closeForm, for
             <p className="form-error">{formError}</p>
 
             <div className="form-actions">
-                <button className="form-save" type="submit">
+                <button className="form-save" type="submit" disabled={loading}>
                     {loading ? <span className="material-symbols-outlined spinner">progress_activity</span> : "Save"}
                 </button>
                 <button type="button" className="form-cancel" onClick={closeForm}>Cancel</button>

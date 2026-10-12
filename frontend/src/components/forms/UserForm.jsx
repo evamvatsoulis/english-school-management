@@ -8,7 +8,7 @@ function UserForm({ selectedUser, closeForm, formError, onSubmit, loading }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
+        if (loading) return;
         onSubmit({ username, password, role });
     };
 
@@ -34,7 +34,7 @@ function UserForm({ selectedUser, closeForm, formError, onSubmit, loading }) {
             <p className="form-error">{formError}</p>
 
             <div className="form-actions">
-                <button className="form-save" type="submit">
+                <button className="form-save" type="submit" disabled={loading}>
                     {loading ? <span className="material-symbols-outlined spinner">progress_activity</span> : "Save"}
                 </button>
                 <button type="button" className="form-cancel" onClick={closeForm}>Cancel</button>

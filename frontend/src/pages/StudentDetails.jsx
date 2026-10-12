@@ -117,12 +117,12 @@ function StudentDetails() {
     console.log(response.data.message);
     setAddPaymentLoading(false);
 
+    closeForm();
+    loadPaymentsByStudentId(id);
+
     setTimeout(() => {
       alert(response.data.emailStatus);
     }, 50);
-
-    loadPaymentsByStudentId(id);
-    closeForm();
   };
 
   const editPayment = async (paymentData) => {
@@ -145,8 +145,8 @@ function StudentDetails() {
 
     console.log(response.data.message);
     setEditPaymentLoading(false);
-    loadPaymentsByStudentId(id);
     closeForm();
+    loadPaymentsByStudentId(id);
   };
 
   const removePayment = async () => {
