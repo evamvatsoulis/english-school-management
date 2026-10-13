@@ -15,7 +15,7 @@ const isAdmin = () => {
 function LatestPayments({ payments, students, paymentColumns }) {
     const [monthSort, setMonthSort] = useState("");
 
-    const sortedPayments = [...payments].sort((a, b) => new Date(b.payment_date) - new Date(a.payment_date));
+    const sortedPayments = [...payments].sort((a, b) => new Date(b.payment_date) - new Date(a.payment_date) || new Date(b.created_at) - new Date(a.created_at));
 
     const displayedPayments = monthSort === "asc" ?
         [...sortedPayments].sort((a, b) => a.payment_year - b.payment_year || a.payment_month - b.payment_month) :
