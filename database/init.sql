@@ -1,0 +1,52 @@
+CREATE TABLE students (
+  id SERIAL PRIMARY KEY,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  phone VARCHAR(30),
+  email VARCHAR(150),
+  active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE payments (
+  id SERIAL PRIMARY KEY,
+  student_id INTEGER NOT NULL,
+  amount NUMERIC(10, 2) NOT NULL,
+  payment_month INTEGER NOT NULL,
+  payment_year INTEGER NOT NULL,
+  payment_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  payment_method VARCHAR(50),
+  notes TEXT,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(100) UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  role VARCHAR(30) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE classes (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  school_year VARCHAR(9) NOT NULL,
+  active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE enrollments (
+  id SERIAL PRIMARY KEY,
+  student_id INTEGER NOT NULL,
+  class_id INTEGER NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE classes
+ADD CONSTRAINT unique_class
+UNIQUE (name, school_year);
+
+ALTER TABLE enrollments
+ADD CONSTRAINT unique_student_class
+UNIQUE (student_id, class_id);
