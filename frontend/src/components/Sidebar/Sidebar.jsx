@@ -24,7 +24,7 @@ function Sidebar() {
                     <>
                         <NavLink to="/enrollments">Enrollments</NavLink>
                         <NavLink to="/users">Users</NavLink>
-                        <NavLink to="/healths">Healths</NavLink>
+                        <NavLink to="/health">Health</NavLink>
                     </>
                 }
             </nav>
