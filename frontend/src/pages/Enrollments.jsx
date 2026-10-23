@@ -75,7 +75,7 @@ function Enrollments() {
 
     return (
         <PageLayout>
-            <h1>Enrollments</h1>
+            <h1>Enrollments 2026-2027</h1>
 
             {enrollmentsLoading ? <p>Loading enrollments...</p> :
                 studentsLoading ? <p>Loading students...</p> :
