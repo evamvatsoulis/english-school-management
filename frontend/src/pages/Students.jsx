@@ -296,7 +296,7 @@ function Students() {
             <div className="page-actions">
                 <Filter
                     data={loadClassesError ? [] : classes}
-                    item={"class"}
+                    item={"Class"}
                     handleFilter={handleFilter}
                 />
 

@@ -3,7 +3,7 @@ import '../Select/Select.css';
 function Filter({ data, item, handleFilter }) {
     return (
         <div className="select-section">
-            <label htmlFor="item">Sort by {item}:</label>
+            <label htmlFor="item">{item}:</label>
 
             <select id="item" onChange={(event) => handleFilter(event.target.value)}>
                 <option value={"--"} key={"--"}>--</option>
