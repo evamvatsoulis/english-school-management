@@ -1,9 +1,7 @@
-import { apiGatewayUrl } from "../config/config";
-
 const getHealths = async () => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${apiGatewayUrl}/health`,
+    const response = await fetch(`/api/health`,
         {
             headers: {
                 Authorization: `Bearer ${token}`

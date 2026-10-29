@@ -1,9 +1,7 @@
-import { apiGatewayUrl } from "../config/config";
-
 const getStudents = async () => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${apiGatewayUrl}/students`,
+    const response = await fetch(`/api/students`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -19,7 +17,7 @@ const getStudents = async () => {
 const getStudentById = async (studentId) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${apiGatewayUrl}/students/${studentId}`,
+    const response = await fetch(`/api/students/${studentId}`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -36,7 +34,7 @@ const getStudentsByIds = async (studentsIds) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${apiGatewayUrl}/students/batch`,
+        `/api/students/batch`,
         {
             method: "POST",
             headers: {
@@ -55,7 +53,7 @@ const createStudent = async (studentData) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${apiGatewayUrl}/students`,
+        `/api/students`,
         {
             method: "POST",
             headers: {
@@ -74,7 +72,7 @@ const updateStudent = async (studentId, studentData) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${apiGatewayUrl}/students/${studentId}`,
+        `/api/students/${studentId}`,
         {
             method: "PATCH",
             headers: {
@@ -93,7 +91,7 @@ const deactivateStudent = async (studentId) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${apiGatewayUrl}/students/${studentId}/deactivate`,
+        `/api/students/${studentId}/deactivate`,
         {
             method: "PATCH",
             headers: {

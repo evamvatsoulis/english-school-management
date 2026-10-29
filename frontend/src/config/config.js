@@ -1,7 +1,3 @@
-const apiGatewayPort = import.meta.env.VITE_API_GATEWAY_PORT;
-
-export const apiGatewayUrl = `http://${window.location.hostname}:${apiGatewayPort}`;
-
 export const studentColumns = [
     { key: "first_name", label: "First Name" },
     { key: "last_name", label: "Last Name" },

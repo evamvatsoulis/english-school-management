@@ -1,9 +1,7 @@
-import { apiGatewayUrl } from "../config/config";
-
 const getEnrollments = async () => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${apiGatewayUrl}/enrollments`,
+    const response = await fetch(`/api/enrollments`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -19,7 +17,7 @@ const getEnrollments = async () => {
 const getEnrollmentsByStudent = async (studentId) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${apiGatewayUrl}/enrollments/student/${studentId}`,
+    const response = await fetch(`/api/enrollments/student/${studentId}`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -35,7 +33,7 @@ const getEnrollmentsByStudent = async (studentId) => {
 const getEnrollmentsByClass = async (classId) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${apiGatewayUrl}/enrollments/class/${classId}`,
+    const response = await fetch(`/api/enrollments/class/${classId}`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -52,7 +50,7 @@ const createEnrollment = async (enrollmentData) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${apiGatewayUrl}/enrollments`,
+        `/api/enrollments`,
         {
             method: "POST",
             headers: {
@@ -71,7 +69,7 @@ const deleteEnrollment = async (classId, studentId) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${apiGatewayUrl}/enrollments/class/${classId}/student/${studentId}`,
+        `/api/enrollments/class/${classId}/student/${studentId}`,
         {
             method: "DELETE",
             headers: {

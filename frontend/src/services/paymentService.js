@@ -1,9 +1,7 @@
-import { apiGatewayUrl } from "../config/config";
-
 const getPaymentsByStudentId = async (studentId) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${apiGatewayUrl}/payments/students/${studentId}`,
+    const response = await fetch(`/api/payments/students/${studentId}`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -20,7 +18,7 @@ const createPayment = async (paymentData, notificationData) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${apiGatewayUrl}/payments`,
+        `/api/payments`,
         {
             method: "POST",
             headers: {
@@ -39,7 +37,7 @@ const updatePayment = async (paymentId, paymentData) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${apiGatewayUrl}/payments/${paymentId}`,
+        `/api/payments/${paymentId}`,
         {
             method: "PATCH",
             headers: {
@@ -58,7 +56,7 @@ const deletePayment = async (paymentId) => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${apiGatewayUrl}/payments/${paymentId}`,
+        `/api/payments/${paymentId}`,
         {
             method: "DELETE",
             headers: {
@@ -75,7 +73,7 @@ const deletePayment = async (paymentId) => {
 const getPayments = async () => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${apiGatewayUrl}/payments`,
+    const response = await fetch(`/api/payments`,
         {
             headers: {
                 Authorization: `Bearer ${token}`

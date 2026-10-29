@@ -1,7 +1,5 @@
-import { apiGatewayUrl } from "../config/config";
-
 export const login = async (username, password) => {
-    const response = await fetch(`${apiGatewayUrl}/auth/login`, {
+    const response = await fetch(`/api/auth/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -20,7 +18,7 @@ export const login = async (username, password) => {
 export const getUsers = async () => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${apiGatewayUrl}/auth/users`,
+    const response = await fetch(`/api/auth/users`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -36,7 +34,7 @@ export const getUsers = async () => {
 export const register = async (userData) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${apiGatewayUrl}/auth/register`, {
+    const response = await fetch(`/api/auth/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -53,7 +51,7 @@ export const register = async (userData) => {
 export const updateUser = async (userId, userData) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${apiGatewayUrl}/auth/users/${userId}`, {
+    const response = await fetch(`/api/auth/users/${userId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -70,7 +68,7 @@ export const updateUser = async (userId, userData) => {
 export const deleteUser = async (userId) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${apiGatewayUrl}/auth/users/${userId}`, {
+    const response = await fetch(`/api/auth/users/${userId}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
