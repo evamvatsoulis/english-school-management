@@ -116,8 +116,6 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    env_file:
-      - ./frontend/.env
 
   nginx:
     image: nginx:alpine

@@ -76,8 +76,6 @@ services:
       dockerfile: Dockerfile.prod
     container_name: frontend_container
     restart: unless-stopped
-    env_file:
-      - ./frontend/.env
 
   nginx:
     image: nginx:alpine
