@@ -1,5 +1,4 @@
 const express = require("express");
-const cors = require("cors");
 const config = require("./config/config");
 const healthRoutes = require('./routes/healthRoutes');
 const studentRoutes = require('./routes/studentRoutes');
@@ -10,8 +9,6 @@ const authRoutes = require('./routes/authRoutes');
 const exportRoutes = require('./routes/exportRoutes');
 
 const app = express();
-
-app.use(cors({ origin: [`http://localhost:${config.frontendPort}`, `http://${config.frontendHost}:${config.frontendPort}`] }));
 
 app.use(express.json());
 app.use('/health', healthRoutes);
