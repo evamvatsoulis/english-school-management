@@ -29,42 +29,21 @@ Access to protected routes and administrative operations is controlled through J
 
 ## 📸 Screenshots
 
-### Student Management
-![Students](screenshots/students.png)
-
-### Student Details
-![Student Details](screenshots/student-details.png)
-
-### Class Management
-![Classes](screenshots/classes.png)
-
-### Class Details
-![Class Details](screenshots/class-details.png)
-
-### Payments
-![Payments](screenshots/payments.png)
-
-### Enrollments
-![Enrollments](screenshots/enrollments.png)
-
-### Login
-![Login](screenshots/login.png)
-
-<!-- | Student Management | Student Details |
-| --- | --- |
+| Student Management | Student Details |
+| :---: | :---: |
 | ![Students](screenshots/students.png) | ![Student Details](screenshots/student-details.png) |
 
 | Class Management | Class Details |
-| --- | --- |
+| :---: | :---: |
 | ![Classes](screenshots/classes.png) | ![Class Details](screenshots/class-details.png) |
 
 | Payments | Enrollments |
-| --- | --- |
+| :---: | :---: |
 | ![Payments](screenshots/payments.png) | ![Enrollments](screenshots/enrollments.png) |
 
 | Health | Login |
-| --- | --- |
-| ![Health](screenshots/health.png) | ![Login](screenshots/login.png) | -->
+| :---: | :---: |
+| ![Health](screenshots/health.png) | ![Login](screenshots/login.png) |
 
 ## 🛠️ Tech Stack
 
@@ -257,21 +236,21 @@ The following endpoints are exposed through the API Gateway and accessed via the
 | Method | Endpoint | Description |
 | --- | --- | --- |
 | GET | `/students` | Retrieves all students |
-| GET | `/students/:id` | Retrieves a student by ID |
 | POST | `/students` | Creates a new student |
-| POST | `/students/batch` | Retrieves multiple students by their IDs |
+| GET | `/students/:id` | Retrieves a student by ID |
 | PATCH | `/students/:id `| Updates an existing student's information |
+| POST | `/students/batch` | Retrieves multiple students by their IDs |
 | PATCH | `/students/:id/deactivate` | Deactivates a student|
 
 ### Payment Management
 | Method | Endpoint | Description |
 | --- | --- | --- |
 | GET | `/payments` | Retrieves all payments |
-| GET | `/payments/:id` | Retrieves a payment by ID |
-| GET | `/payments/students/:studentId` | Retrieves all payments for a specific student |
 | POST | `/payments` | Creates a new payment |
+| GET | `/payments/:id` | Retrieves a payment by ID |
 | PATCH | `/payments/:id` | Updates an existing payment's information |
 | DELETE | `/payments/:id` | Deletes a payment |
+| GET | `/payments/students/:studentId` | Retrieves all payments for a specific student |
 
 ### Class & Enrollment Management
 
@@ -279,8 +258,8 @@ The following endpoints are exposed through the API Gateway and accessed via the
 | Method | Endpoint | Description |
 | --- | --- | --- |
 | GET | `/classes` | Retrieves all classes |
-| GET | `/classes/:id` | Retrieves a class by ID |
 | POST | `/classes` | Creates a new class |
+| GET | `/classes/:id` | Retrieves a class by ID |
 | PATCH | `/classes/:id` | Updates an existing class's information |
 | PATCH | `/classes/:id/deactivate` | Deactivates a class |
 
@@ -288,9 +267,9 @@ The following endpoints are exposed through the API Gateway and accessed via the
 | Method | Endpoint | Description |
 | --- | --- | --- |
 | GET | `/enrollments` | Retrieves all enrollments |
+| POST | `/enrollments` | Creates a new enrollment |
 | GET | `/enrollments/class/:classId` | Retrieves all enrollments for a specific class |
 | GET | `/enrollments/student/:studentId` | Retrieves all enrollments for a specific student |
-| POST | `/enrollments` | Creates a new enrollment |
 | DELETE | `/enrollments/class/:classId/student/:studentId` | Deletes an enrollment |
 
 ### PDF Export
