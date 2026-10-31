@@ -28,7 +28,29 @@ Admins have access to teacher functionalities along with additional capabilities
 Access to protected routes and administrative operations is controlled through JWT authentication and role-based authorization.
 
 ## 📸 Screenshots
-| Student Management | Student Details |
+
+### Student Management
+![Students](screenshots/students.png)
+
+### Student Details
+![Student Details](screenshots/student-details.png)
+
+### Class Management
+![Classes](screenshots/classes.png)
+
+### Class Details
+![Class Details](screenshots/class-details.png)
+
+### Payments
+![Payments](screenshots/payments.png)
+
+### Enrollments
+![Enrollments](screenshots/enrollments.png)
+
+### Login
+![Login](screenshots/login.png)
+
+<!-- | Student Management | Student Details |
 | --- | --- |
 | ![Students](screenshots/students.png) | ![Student Details](screenshots/student-details.png) |
 
@@ -42,7 +64,7 @@ Access to protected routes and administrative operations is controlled through J
 
 | Health | Login |
 | --- | --- |
-| ![Health](screenshots/health.png) | ![Login](screenshots/login.png) |
+| ![Health](screenshots/health.png) | ![Login](screenshots/login.png) | -->
 
 ## 🛠️ Tech Stack
 
